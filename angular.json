@@ -1,8 +1,8 @@
 {
   "version": 2,
   "projects": {
-    "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
+    "sp-api": "apps/sp-api",
     "sp-web": "apps/sp-web",
     "sp-web-e2e": "apps/sp-web-e2e"
   }
