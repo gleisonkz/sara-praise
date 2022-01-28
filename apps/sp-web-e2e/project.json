@@ -1,0 +1,28 @@
+{
+  "root": "apps/sp-web-e2e",
+  "sourceRoot": "apps/sp-web-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nrwl/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/sp-web-e2e/cypress.json",
+        "devServerTarget": "sp-web:serve:development"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "sp-web:serve:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/sp-web-e2e/**/*.{js,ts}"]
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["sp-web"]
+}

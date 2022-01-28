@@ -1,0 +1,94 @@
+{
+  "projectType": "application",
+  "root": "apps/sp-web",
+  "sourceRoot": "apps/sp-web/src",
+  "prefix": "sara-praise",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/sp-web",
+        "index": "apps/sp-web/src/index.html",
+        "main": "apps/sp-web/src/main.ts",
+        "polyfills": "apps/sp-web/src/polyfills.ts",
+        "tsConfig": "apps/sp-web/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": ["apps/sp-web/src/favicon.ico", "apps/sp-web/src/assets"],
+        "styles": ["apps/sp-web/src/styles.scss"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/sp-web/src/environments/environment.ts",
+              "with": "apps/sp-web/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "sp-web:build:production"
+        },
+        "development": {
+          "browserTarget": "sp-web:build:development"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "proxyConfig": "apps/sp-web/proxy.conf.json"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "sp-web:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/sp-web/src/**/*.ts",
+          "apps/sp-web/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/sp-web"],
+      "options": {
+        "jestConfig": "apps/sp-web/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}
