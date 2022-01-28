@@ -15,7 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@sara-praise/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@sp/shared-interfaces": ["libs/api-interfaces/src/index.ts"],
+
+      "@sp/api/mocks": ["apps/sp-api/src/app/mocks"],
+      "@sp/api/controllers": ["apps/sp-api/src/app/controllers"]
     }
   },
   "exclude": ["node_modules", "tmp"]
