@@ -1,8 +1,4 @@
 {
-  "/api": {
-    "target": "http://localhost:3333",
-    "secure": false
-  },
   "/sp-api-api": {
     "target": "http://localhost:3333",
     "secure": false
