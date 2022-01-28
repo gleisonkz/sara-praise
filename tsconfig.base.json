@@ -18,7 +18,8 @@
       "@sp/shared-interfaces": ["libs/api-interfaces/src/index.ts"],
 
       "@sp/api/mocks": ["apps/sp-api/src/app/mocks"],
-      "@sp/api/controllers": ["apps/sp-api/src/app/controllers"]
+      "@sp/api/controllers": ["apps/sp-api/src/app/controllers"],
+      "@sp/api/services": ["apps/sp-api/src/app/services"]
     }
   },
   "exclude": ["node_modules", "tmp"]
