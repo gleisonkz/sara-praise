@@ -1,20 +1,13 @@
-import { BehaviorSubject, Observable } from 'rxjs';
-
 import { Controller, Get, Param } from '@nestjs/common';
-import { MINISTRY_LIST_ITEM_MOCK } from '@sp/api/mocks';
-import { MinistryListItem } from '@sp/shared-interfaces';
+import { MinistryService } from '@sp/api/services';
 
 @Controller('ministry')
 export class MinistryController {
-  private ministriesListItems$$ = new BehaviorSubject<MinistryListItem[]>(
-    MINISTRY_LIST_ITEM_MOCK
-  );
+  constructor(private readonly ministryService: MinistryService) {}
 
-  @Get()
-  getMinistriesListItems(
-    @Param('id') id: string
-  ): Observable<MinistryListItem[]> {
-    console.log(id);
-    return this.ministriesListItems$$.asObservable();
+  @Get('/:id?')
+  async getMinistriesListItems(@Param('id') id?: string) {
+    const ministries = this.ministryService.getMinistriesListItems(id);
+    return ministries;
   }
 }
