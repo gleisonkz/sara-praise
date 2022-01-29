@@ -1,13 +1,17 @@
 {
-  "cSpell.words": [],
+  "cSpell.words": ["ministerios"],
   "importSorter.sortConfiguration.customOrderingRules.rules": [
     {
-      "regex": "^@angular|^@ionic|^rxjs|^[a-zA-Z]|^[^@dmc.]",
+      "regex": "^@angular/(?!material).+",
       "orderLevel": 5
     },
     {
-      "regex": "^@sp",
+      "regex": "^@angular/material",
       "orderLevel": 10
+    },
+    {
+      "regex": "^@sp",
+      "orderLevel": 15
     },
     {
       "regex": "^[.]",
