@@ -3,27 +3,25 @@ import { Injectable } from '@angular/core';
 
 import { MinistryListItemResponse } from '@sp/shared-interfaces';
 
-import { BehaviorSubject, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MinistryService {
   private ministryListItems$$ = new BehaviorSubject<MinistryListItemResponse[]>([]);
+  private readonly BASE_URL = '/api/ministry';
 
   constructor(private readonly http: HttpClient) {}
 
   ministryListItems$ = this.ministryListItems$$.asObservable();
 
-  getMinistryListItems(ministryID?: number): void {
-    const url = `/api/ministry${ministryID ? `/${ministryID}` : ''}`;
+  getMinistryListItems(ministryID?: number): Observable<MinistryListItemResponse[]> {
+    const idParamPath = ministryID ? `/${ministryID}` : '';
+    const url = `${this.BASE_URL}/list-item${idParamPath}`;
 
-    this.http
+    return this.http
       .get<MinistryListItemResponse[]>(url)
-      .pipe(
-        tap((items) => console.log('ministryListItems', items)),
-        tap((ministryListItems) => this.ministryListItems$$.next(ministryListItems))
-      )
-      .subscribe();
+      .pipe(tap((ministryListItems) => this.ministryListItems$$.next(ministryListItems)));
   }
 }
