@@ -15,11 +15,19 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@sp/shared-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@sp/web/components": ["apps/sp-web/src/app/components"],
+      "@sp/web/directives": ["apps/sp-web/src/app/directives"],
+      "@sp/web/mocks": ["apps/sp-web/src/app/mocks"],
+      "@sp/web/models": ["apps/sp-web/src/app/models"],
+      "@sp/web/pages": ["apps/sp-web/src/app/pages"],
+      "@sp/web/pipes": ["apps/sp-web/src/app/pipes"],
+      "@sp/web/services": ["apps/sp-web/src/app/services"],
 
       "@sp/api/mocks": ["apps/sp-api/src/app/mocks"],
       "@sp/api/controllers": ["apps/sp-api/src/app/controllers"],
-      "@sp/api/services": ["apps/sp-api/src/app/services"]
+      "@sp/api/services": ["apps/sp-api/src/app/services"],
+
+      "@sp/shared-interfaces": ["libs/api-interfaces/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
