@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { MinistryListItemResponse } from '@sp/shared-interfaces';
+import { MinistryListItemRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 

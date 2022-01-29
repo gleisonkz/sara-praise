@@ -3,7 +3,7 @@ export interface MinistryListItemResponse {
   name: string;
 }
 
-export interface MinistryRequest {
+export interface MinistryListItemRequest {
   name: string;
   ownerID: number;
 }
