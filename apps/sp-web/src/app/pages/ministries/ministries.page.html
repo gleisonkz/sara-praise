@@ -16,8 +16,8 @@
 
 <div class="cards">
   <mat-card
-    *ngFor="let ministry of ministryService.ministryListItems$ | async"
-    (click)="goToMinistryDetail(ministry)"
+    *ngFor="let ministry of ministryListItems$ | async"
+    [routerLink]="['/ministerios', ministry.ministryID]"
   >
     <mat-card-header>
       <mat-card-title>{{ ministry.name }}</mat-card-title>

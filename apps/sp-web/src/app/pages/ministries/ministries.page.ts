@@ -3,7 +3,9 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
-import { AuthService, MinistryService } from '@sp/web/services';
+
+import { Observable } from 'rxjs';
+import { AuthService, MinistryService } from '../../services';
 
 @Component({
   templateUrl: './ministries.page.html',
@@ -13,6 +15,8 @@ import { AuthService, MinistryService } from '@sp/web/services';
 export class MinistriesPage implements OnInit {
   ministryNameControl = new FormControl();
 
+  ministryListItems$: Observable<MinistryListItemResponse[]>;
+
   constructor(
     public readonly ministryService: MinistryService,
     private readonly authService: AuthService,
@@ -20,7 +24,7 @@ export class MinistriesPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.ministryService.getMinistryListItems();
+    this.ministryListItems$ = this.ministryService.getMinistryListItems();
   }
 
   createMinistry() {
@@ -31,9 +35,5 @@ export class MinistriesPage implements OnInit {
 
     // this.ministryService.createMinistry(ministry);
     this.ministryNameControl.setValue('');
-  }
-
-  goToMinistryDetail(ministryListItem: MinistryListItemResponse) {
-    this.router.navigate(['/ministerios', ministryListItem.ministryID]);
   }
 }
