@@ -16,6 +16,14 @@ export class MinistryService {
 
   ministryListItems$ = this.ministryListItems$$.asObservable();
 
+  createMinistryListItem(ministry: MinistryListItemRequest): Observable<MinistryListItemResponse> {
+    return this.http
+      .post<MinistryListItemResponse>(`${this.BASE_URL}/list-item`, ministry)
+      .pipe(
+        tap((ministryListItem) => this.ministryListItems$$.next([...this.ministryListItems$$.value, ministryListItem]))
+      );
+  }
+
   getMinistryListItems(ministryID?: number): Observable<MinistryListItemResponse[]> {
     const idParamPath = ministryID ? `/${ministryID}` : '';
     const url = `${this.BASE_URL}/list-item${idParamPath}`;

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { MinistryListItemResponse } from '@sp/shared-interfaces';
+import { MinistryListItemRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 
 import { MINISTRY_LIST_ITEM_MOCK } from '../mocks';
 
@@ -14,5 +14,16 @@ export class MinistryService {
       return ministries;
     }
     return this.ministriesListItems;
+  }
+
+  createMinistryListItem(ministryListItem: MinistryListItemRequest): MinistryListItemResponse {
+    const ministryListItemResponse: MinistryListItemResponse = {
+      ministryID: this.ministriesListItems.length + 1,
+      name: ministryListItem.name,
+    };
+
+    this.ministriesListItems.push(ministryListItemResponse);
+
+    return ministryListItemResponse;
   }
 }

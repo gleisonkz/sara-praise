@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
 
 import { MinistryListItemRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 
@@ -17,14 +16,11 @@ export class MinistriesPage implements OnInit {
 
   ministryListItems$: Observable<MinistryListItemResponse[]>;
 
-  constructor(
-    public readonly ministryService: MinistryService,
-    private readonly authService: AuthService,
-    private readonly router: Router
-  ) {}
+  constructor(public readonly ministryService: MinistryService, private readonly authService: AuthService) {}
 
   ngOnInit(): void {
-    this.ministryListItems$ = this.ministryService.getMinistryListItems();
+    this.ministryListItems$ = this.ministryService.ministryListItems$;
+    this.ministryService.getMinistryListItems().subscribe();
   }
 
   createMinistry() {
@@ -33,7 +29,8 @@ export class MinistriesPage implements OnInit {
       ownerID: this.authService.user.userID,
     };
 
-    // this.ministryService.createMinistry(ministry);
-    this.ministryNameControl.setValue('');
+    this.ministryService.createMinistryListItem(ministry).subscribe(() => {
+      this.ministryNameControl.setValue('');
+    });
   }
 }
