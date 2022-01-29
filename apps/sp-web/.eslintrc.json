@@ -4,16 +4,19 @@
   "overrides": [
     {
       "files": ["*.ts"],
-      "extends": [
-        "plugin:@nrwl/nx/angular",
-        "plugin:@angular-eslint/template/process-inline-templates"
-      ],
+      "extends": ["plugin:@nrwl/nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
       "rules": {
+        "@angular-eslint/component-class-suffix": [
+          "error",
+          {
+            "suffixes": ["Component", "Page"]
+          }
+        ],
         "@angular-eslint/directive-selector": [
           "error",
           {
             "type": "attribute",
-            "prefix": "saraPraise",
+            "prefix": "sp",
             "style": "camelCase"
           }
         ],
@@ -21,7 +24,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "sara-praise",
+            "prefix": "sp",
             "style": "kebab-case"
           }
         ]
