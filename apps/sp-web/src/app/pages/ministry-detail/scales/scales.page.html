@@ -1,0 +1,20 @@
+<div class="scale" *ngFor="let scale of scaleListItems$ | async">
+  <div class="date">
+    <span>{{scale.date | date : 'EEEE'}}</span>
+    <span>{{scale.date | date : 'dd/MMM'}}</span>
+    <span>{{scale.date | date : 'HH:mm'}}</span>
+  </div>
+  <div class="main">
+    <span>{{scale.title}}</span>
+    <p>{{scale.notes}}</p>
+
+    <div class="container-image">
+      <img *ngFor="let url of scale.imagesUrl" [src]="url" alt="user image" />
+    </div>
+  </div>
+
+  <div class="songs-quantity">
+    <mat-icon>music_note</mat-icon>
+    <span>{{ scale.songsQuantity }}</span>
+  </div>
+</div>

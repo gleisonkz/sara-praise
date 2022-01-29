@@ -1,0 +1,52 @@
+:host {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+
+  .scale {
+    background-color: #424242;
+    border-radius: 5px;
+    color: #fff;
+    display: flex;
+    padding: 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: #616161;
+    }
+  }
+
+  .date {
+    display: grid;
+    color: #fff;
+    padding-right: 20px;
+    text-align: center;
+  }
+
+  .main {
+    flex: 1;
+  }
+
+  img {
+    border-radius: 50%;
+    width: 50px;
+  }
+
+  .songs-quantity {
+    display: flex;
+    justify-content: center;
+
+    align-self: end;
+    color: rgb(255, 255, 255);
+    font-size: 1.2rem;
+
+    mat-icon {
+      font-size: 20px;
+      transform: translateX(5px);
+    }
+  }
+}
