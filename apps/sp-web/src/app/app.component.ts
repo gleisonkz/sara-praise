@@ -1,13 +1,11 @@
-import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Message } from '@sara-praise/api-interfaces';
+import { Component } from '@angular/core';
 
 @Component({
-  selector: 'sara-praise-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  selector: 'sp-root',
+  template: ` <router-outlet></router-outlet> `,
 })
 export class AppComponent {
-  hello$ = this.http.get<Message>('/api/hello');
+  hello$ = this.http.get('/api/ministry');
   constructor(private http: HttpClient) {}
 }

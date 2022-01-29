@@ -1,0 +1,26 @@
+<h1 style="display: flex">Ministérios</h1>
+
+<div>
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Nome </mat-label>
+    <input
+      matInput
+      placeholder="Ex. Lagoinha"
+      value="Sushi"
+      [formControl]="ministryNameControl"
+    />
+  </mat-form-field>
+
+  <button (click)="createMinistry()" mat-raised-button color="primary">New</button>
+</div>
+
+<div class="cards">
+  <mat-card
+    *ngFor="let ministry of ministryService.ministryListItems$ | async"
+    (click)="goToMinistryDetail(ministry)"
+  >
+    <mat-card-header>
+      <mat-card-title>{{ ministry.name }}</mat-card-title>
+    </mat-card-header>
+  </mat-card>
+</div>
