@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { MinistryController } from '@sp/api/controllers';
-import { MinistryService } from '@sp/api/services';
+
+import { MinistryController } from './controllers';
+import { MinistryService } from './services';
 
 @Module({
   imports: [],

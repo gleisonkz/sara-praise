@@ -1,7 +1,8 @@
-import { MINISTRY_LIST_ITEM_MOCK } from '@sp/api/mocks';
+import { Injectable } from '@nestjs/common';
+
 import { MinistryListItemResponse } from '@sp/shared-interfaces';
 
-import { Injectable } from '@nestjs/common';
+import { MINISTRY_LIST_ITEM_MOCK } from '../mocks';
 
 @Injectable()
 export class MinistryService {
