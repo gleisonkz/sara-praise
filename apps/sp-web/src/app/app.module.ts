@@ -20,10 +20,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MinistriesPage } from './pages';
+import { MinistriesPage, MinistryDetailPage } from './pages';
 
 @NgModule({
-  declarations: [AppComponent, MinistriesPage],
+  declarations: [AppComponent, MinistriesPage, MinistryDetailPage],
   imports: [
     AppRoutingModule,
     BrowserModule,
