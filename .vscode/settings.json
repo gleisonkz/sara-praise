@@ -6,6 +6,10 @@
       "orderLevel": 5
     },
     {
+      "regex": "^@nest",
+      "orderLevel": 5
+    },
+    {
       "regex": "^@angular/material",
       "orderLevel": 10
     },
