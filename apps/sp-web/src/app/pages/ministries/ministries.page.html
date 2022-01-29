@@ -11,7 +11,14 @@
     />
   </mat-form-field>
 
-  <button (click)="createMinistry()" mat-raised-button color="primary">New</button>
+  <button
+    [disabled]="!ministryNameControl.valid"
+    (click)="createMinistry()"
+    mat-raised-button
+    color="primary"
+  >
+    New
+  </button>
 </div>
 
 <div class="cards">
