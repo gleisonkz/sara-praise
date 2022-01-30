@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 
 import {
-    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse
+    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { Response } from 'express';
@@ -22,6 +22,20 @@ export class MinistryController {
     try {
       const scales = this.ministryService.getScales(+id);
       return scales;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
+  }
+
+  @Get('/:id/songs')
+  getSongs(@Param('id') id: number, @Res({ passthrough: true }) res: Response): SongListItemResponse[] {
+    try {
+      const songs = this.ministryService.getSongs(+id);
+      return songs;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
         return res.status(HttpStatus.BAD_REQUEST).send(error.message);

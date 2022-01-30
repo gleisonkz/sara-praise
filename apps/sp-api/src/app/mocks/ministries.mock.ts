@@ -16,20 +16,26 @@ const SNT_SONGS: Song[] = [
   {
     songID: 1,
     title: 'Cantar de Deus',
-    artistName: 'João da Silva',
+    artist: {
+      artistID: 1,
+      name: 'Sample Artist',
+    },
     bpm: 120,
     key: eSongKey.A,
     tags: ['teste', 'teste2'],
     observation: 'Teste de observação',
     audioLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-    chordsLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    chordsLink: '',
     lyricLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
   },
   {
     songID: 2,
     title: 'Cantar de Deus 2',
-    artistName: 'João da Silva',
+    artist: {
+      artistID: 1,
+      name: 'Sample Artist',
+    },
     bpm: 120,
     key: eSongKey.A,
     tags: ['teste', 'teste2'],
@@ -42,13 +48,16 @@ const SNT_SONGS: Song[] = [
   {
     songID: 3,
     title: 'Cantar de Deus 3',
-    artistName: 'João da Silva',
+    artist: {
+      artistID: 1,
+      name: 'Sample Artist',
+    },
     bpm: 120,
     key: eSongKey.A,
     tags: ['teste', 'teste2'],
     observation: 'Teste de observação',
     audioLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-    chordsLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+    chordsLink: '',
     lyricLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
     youtubeLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
   },
@@ -141,7 +150,10 @@ export const MINISTRIES_MOCK: Ministry[] = [
       {
         songID: 1,
         title: 'Cantar de Deus',
-        artistName: 'João da Silva',
+        artist: {
+          artistID: 1,
+          name: 'Sample Artist',
+        },
         bpm: 120,
         key: eSongKey.A,
         tags: ['teste', 'teste2'],
@@ -154,7 +166,10 @@ export const MINISTRIES_MOCK: Ministry[] = [
       {
         songID: 2,
         title: 'Cantar de Deus 2',
-        artistName: 'João da Silva',
+        artist: {
+          artistID: 1,
+          name: 'Sample Artist',
+        },
         bpm: 120,
         key: eSongKey.A,
         tags: ['teste', 'teste2'],

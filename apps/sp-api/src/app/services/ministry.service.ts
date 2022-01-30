@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { Ministry, Scale } from '@sp/api/models';
 import {
-    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse
+    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { MINISTRIES_MOCK } from '../mocks';
@@ -36,7 +36,6 @@ export class MinistryService {
 
   getScales(ministryID: number): ScaleListItemResponse[] {
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
-
     if (!ministry) throw new MinistryNotFoundError(ministryID);
 
     const imageUrlMapFn = (scale: Scale) => scale.members.map((member) => member.user.imageUrl);
@@ -55,6 +54,28 @@ export class MinistryService {
     });
 
     return scales;
+  }
+
+  getSongs(ministryID: number) {
+    const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
+    if (!ministry) throw new MinistryNotFoundError(ministryID);
+
+    const songs: SongListItemResponse[] = ministry.songs.map((song) => {
+      const songListItem: SongListItemResponse = {
+        songID: song.songID,
+        title: song.title,
+        artistName: song.artist.name,
+        hasAudioLink: !!song.audioLink,
+        hasChordsLink: !!song.chordsLink,
+        hasLyricLink: !!song.lyricLink,
+        hasYoutubeLink: !!song.youtubeLink,
+        key: song.key,
+      };
+
+      return songListItem;
+    });
+
+    return songs;
   }
 
   createMinistry(ministryListItem: MinistryRequest): MinistryListItemResponse {

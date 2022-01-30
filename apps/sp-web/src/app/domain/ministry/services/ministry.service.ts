@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
-    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse
+    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
@@ -38,5 +38,10 @@ export class MinistryService {
   getScaleListItems(ministryID: number): Observable<ScaleListItemResponse[]> {
     const url = `${this.BASE_URL}/${ministryID}/scales`;
     return this.http.get<ScaleListItemResponse[]>(url);
+  }
+
+  getSongListItems(ministryID: number): Observable<SongListItemResponse[]> {
+    const url = `${this.BASE_URL}/${ministryID}/songs`;
+    return this.http.get<SongListItemResponse[]>(url);
   }
 }

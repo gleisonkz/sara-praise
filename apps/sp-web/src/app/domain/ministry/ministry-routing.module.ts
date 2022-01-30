@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import {
     KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
 } from './pages';
+import { MinistryDetailRouteService } from './services/ministry-detail-route.service';
 
 const routes: Routes = [
   { path: '', component: MinistriesPage },
@@ -23,5 +24,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
+  providers: [MinistryDetailRouteService],
 })
 export class MinistryRoutingModule {}

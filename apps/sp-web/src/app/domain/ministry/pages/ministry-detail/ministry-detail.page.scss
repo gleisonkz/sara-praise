@@ -1,5 +1,13 @@
 :host {
   display: block;
+  padding: 20px;
+}
+
+mat-toolbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
 }
 
 .example-header-image {
@@ -9,4 +17,9 @@
 
 .example-spacer {
   flex: 1 1 auto;
+}
+
+nav {
+  margin-top: 50px;
+  margin-bottom: 20px;
 }

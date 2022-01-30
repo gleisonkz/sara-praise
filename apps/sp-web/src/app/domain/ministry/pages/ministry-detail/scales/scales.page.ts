@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ScaleListItemResponse } from '@sp/shared-interfaces';
 
+import {
+    MinistryDetailRouteService
+} from 'apps/sp-web/src/app/domain/ministry/services/ministry-detail-route.service';
 import { MinistryService } from 'apps/sp-web/src/app/shared/services';
 import { Observable, of } from 'rxjs';
 
@@ -34,12 +37,13 @@ export const SCALE_LISTE_ITEMS_MOCK: ScaleListItemResponse[] = [
 export class ScalesPage implements OnInit {
   scaleListItems$: Observable<ScaleListItemResponse[]> = of(SCALE_LISTE_ITEMS_MOCK);
 
-  constructor(private readonly ministryService: MinistryService, private readonly activatedRoute: ActivatedRoute) {}
+  constructor(
+    private readonly ministryDetailRouteService: MinistryDetailRouteService,
+    private readonly ministryService: MinistryService,
+    private readonly activatedRoute: ActivatedRoute
+  ) {}
   ngOnInit(): void {
-    const parentActivatedRoute = this.activatedRoute.parent;
-    if (!parentActivatedRoute) throw new Error('parentActivatedRoute is undefined');
-
-    const { id: ministryID } = parentActivatedRoute.snapshot.params;
+    const ministryID = this.ministryDetailRouteService.getMinistryID(this.activatedRoute);
     this.scaleListItems$ = this.ministryService.getScaleListItems(+ministryID);
   }
 }
