@@ -1,25 +1,36 @@
-<mat-list>
-  <mat-list-item *ngFor="let song of songListItems$ | async">
-    <mat-icon mat-list-icon>music_note</mat-icon>
-    <div mat-line>
-      <span> {{song.artistName}}</span>
-    </div>
-    <div mat-line>
-      <span> {{song.title}}</span>
-    </div>
-    <div mat-line>
-      <span> Tom: {{song.key}} </span>
-    </div>
+<ng-container *ngIf="songListItems$ | async as songs">
+  <ng-container *ngIf="songs.length; else noSongsTemplate">
+    <mat-list>
+      <mat-list-item *ngFor="let song of songListItems$ | async">
+        <mat-icon mat-list-icon>music_note</mat-icon>
+        <div mat-line>
+          <span> {{song.artistName}}</span>
+        </div>
+        <div mat-line>
+          <span> {{song.title}}</span>
+        </div>
+        <div mat-line>
+          <span> Tom: {{song.key}} </span>
+        </div>
 
-    <div class="links">
-      <mat-icon [ngStyle]="{color: song.hasLyricLink ? 'yellow': ''}"
-        >format_color_text</mat-icon
-      >
-      <mat-icon [ngStyle]="{color: song.hasChordsLink ? 'green': ''}"
-        >format_indent_increase</mat-icon
-      >
-      <mat-icon [ngStyle]="{color: song.hasYoutubeLink ? 'red': ''}">live_tv</mat-icon>
-      <mat-icon [ngStyle]="{color: song.hasAudioLink ? 'blue': ''}">music_note</mat-icon>
-    </div>
-  </mat-list-item>
-</mat-list>
+        <div class="links">
+          <mat-icon [ngStyle]="{color: song.hasLyricLink ? 'yellow': ''}"
+            >format_color_text</mat-icon
+          >
+          <mat-icon [ngStyle]="{color: song.hasChordsLink ? 'green': ''}"
+            >format_indent_increase</mat-icon
+          >
+          <mat-icon [ngStyle]="{color: song.hasYoutubeLink ? 'red': ''}"
+            >live_tv</mat-icon
+          >
+          <mat-icon [ngStyle]="{color: song.hasAudioLink ? 'blue': ''}"
+            >music_note</mat-icon
+          >
+        </div>
+      </mat-list-item>
+    </mat-list>
+  </ng-container>
+  <ng-template #noSongsTemplate>
+    <p>Ainda não foi cadastrada nenhuma música</p>
+  </ng-template>
+</ng-container>
