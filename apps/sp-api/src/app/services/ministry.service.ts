@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { Ministry, Scale } from '@sp/api/models';
 import {
-    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse, SongListItemResponse
+    MemberListItemResponse, MinistryListItemResponse, MinistryRequest, ScaleListItemResponse,
+    SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { MINISTRIES_MOCK } from '../mocks';
@@ -34,7 +35,7 @@ export class MinistryService {
     return ministriesListItems;
   }
 
-  getScales(ministryID: number): ScaleListItemResponse[] {
+  async getScales(ministryID: number) {
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
     if (!ministry) throw new MinistryNotFoundError(ministryID);
 
@@ -56,7 +57,7 @@ export class MinistryService {
     return scales;
   }
 
-  getSongs(ministryID: number) {
+  async getSongs(ministryID: number) {
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
     if (!ministry) throw new MinistryNotFoundError(ministryID);
 
@@ -76,6 +77,23 @@ export class MinistryService {
     });
 
     return songs;
+  }
+
+  async getMembers(ministryID: number) {
+    const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
+    if (!ministry) throw new MinistryNotFoundError(ministryID);
+
+    const members: MemberListItemResponse[] = ministry.members.map((member) => {
+      const memberListItem: MemberListItemResponse = {
+        memberID: member.memberID,
+        name: member.user.name,
+        roles: member.roles,
+      };
+
+      return memberListItem;
+    });
+
+    return members;
   }
 
   createMinistry(ministryListItem: MinistryRequest): MinistryListItemResponse {

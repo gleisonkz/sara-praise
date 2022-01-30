@@ -1,7 +1,7 @@
 <ng-container *ngIf="songListItems$ | async as songs">
   <ng-container *ngIf="songs.length; else noSongsTemplate">
     <mat-list>
-      <mat-list-item *ngFor="let song of songListItems$ | async">
+      <mat-list-item *ngFor="let song of songs">
         <mat-icon mat-list-icon>music_note</mat-icon>
         <div mat-line>
           <span> {{song.artistName}}</span>

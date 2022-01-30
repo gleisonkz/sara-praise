@@ -15,6 +15,7 @@ export const DEFAULT_ROLES: Role[] = [
   },
   {
     roleID: 4,
+
     name: 'Back Vocal',
   },
 ];

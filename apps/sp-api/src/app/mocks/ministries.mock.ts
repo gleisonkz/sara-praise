@@ -1,4 +1,4 @@
-import { eSongKey } from '@sp/api/enums';
+import { eMinistryRole, eSongKey } from '@sp/api/enums';
 import { Member, Ministry, Song } from '@sp/api/models';
 
 import { User } from 'apps/sp-api/src/app/models/user.model';
@@ -68,7 +68,7 @@ const SNT_MEMBERS: Member[] = [
     memberID: 1,
     user: DEFAULT_USER,
     name: 'Renato',
-    roles: [],
+    roles: [eMinistryRole.BASS, eMinistryRole.GUITAR],
     permissions: [],
   },
   {
@@ -81,7 +81,7 @@ const SNT_MEMBERS: Member[] = [
       password: '',
     },
     name: 'Jane',
-    roles: [],
+    roles: [eMinistryRole.BASS, eMinistryRole.GUITAR, eMinistryRole.MINISTER],
     permissions: [],
   },
 ];
@@ -122,7 +122,7 @@ export const MINISTRIES_MOCK: Ministry[] = [
         memberID: 1,
         user: DEFAULT_USER,
         name: 'Renato',
-        roles: [],
+        roles: [eMinistryRole.BASS, eMinistryRole.GUITAR],
         permissions: [],
       },
     ],

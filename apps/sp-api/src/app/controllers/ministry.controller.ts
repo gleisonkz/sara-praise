@@ -1,7 +1,8 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 
 import {
-    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse, SongListItemResponse
+    MemberListItemResponse, MinistryListItemResponse, MinistryRequest, ScaleListItemResponse,
+    SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { Response } from 'express';
@@ -18,9 +19,12 @@ export class MinistryController {
   }
 
   @Get('/:id/scales')
-  getScales(@Param('id') id: number, @Res({ passthrough: true }) res: Response): ScaleListItemResponse[] {
+  async getScales(
+    @Param('id') id: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<ScaleListItemResponse[]> {
     try {
-      const scales = this.ministryService.getScales(+id);
+      const scales = await this.ministryService.getScales(+id);
       return scales;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
@@ -32,10 +36,27 @@ export class MinistryController {
   }
 
   @Get('/:id/songs')
-  getSongs(@Param('id') id: number, @Res({ passthrough: true }) res: Response): SongListItemResponse[] {
+  async getSongs(@Param('id') id: number, @Res({ passthrough: true }) res: Response): Promise<SongListItemResponse[]> {
     try {
-      const songs = this.ministryService.getSongs(+id);
+      const songs = await this.ministryService.getSongs(+id);
       return songs;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
+  }
+
+  @Get('/:id/members')
+  async getMembers(
+    @Param('id') id: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<MemberListItemResponse[]> {
+    try {
+      const members = await this.ministryService.getMembers(+id);
+      return members;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
         return res.status(HttpStatus.BAD_REQUEST).send(error.message);

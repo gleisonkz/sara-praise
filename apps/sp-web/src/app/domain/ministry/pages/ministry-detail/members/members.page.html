@@ -1,13 +1,13 @@
 <mat-list>
-  <mat-list-item *ngFor="let folder of [1,2,3]">
+  <mat-list-item *ngFor="let member of memberListItems$ | async">
     <img
       matListAvatar
       src="https://randomuser.me/api/portraits/men/92.jpg"
       alt="member avatar"
     />
-    <div mat-line>Renato</div>
+    <div mat-line>{{member.name}}</div>
     <div mat-line>
-      <span *ngFor="let role of ['Vocalist','Guitar']"> {{ role }} </span>
+      <span *ngFor="let role of member.roles"> {{ role }} </span>
     </div>
 
     <button
