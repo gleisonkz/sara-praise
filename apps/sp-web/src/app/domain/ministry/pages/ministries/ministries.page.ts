@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { MinistryListItemResponse } from '@sp/shared-interfaces';
+import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 
 import { Observable } from 'rxjs';
-import { AuthService, MinistryService } from '../../services';
+import { AuthService, MinistryService } from '../../../../shared/services';
 
 @Component({
   templateUrl: './ministries.page.html',
@@ -26,13 +26,13 @@ export class MinistriesPage implements OnInit {
   createMinistry() {
     if (!this.ministryNameControl.valid) return;
 
-    // const ministry: MinistryRequest = {
-    //   name: this.ministryNameControl.value,
-    //   ownerID: this.authService.user.userID,
-    // };
+    const ministry: MinistryRequest = {
+      name: this.ministryNameControl.value,
+      ownerID: 1,
+    };
 
-    // this.ministryService.createMinistryListItem(ministry).subscribe(() => {
-    //   this.ministryNameControl.setValue('');
-    // });
+    this.ministryService.createMinistry(ministry).subscribe(() => {
+      this.ministryNameControl.setValue('');
+    });
   }
 }

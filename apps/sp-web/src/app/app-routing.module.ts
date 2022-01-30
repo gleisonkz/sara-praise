@@ -1,23 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import {
-    KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
-} from './pages';
-
 const routes: Routes = [
   { path: '', redirectTo: 'ministerios', pathMatch: 'full' },
-  { path: 'ministerios', component: MinistriesPage },
   {
-    path: 'ministerios/:id',
-    component: MinistryDetailPage,
-    children: [
-      { path: '', redirectTo: 'escalas', pathMatch: 'full' },
-      { path: 'escalas', component: ScalesPage },
-      { path: 'musicas', component: SongsPage },
-      { path: 'membros', component: MembersPage },
-      { path: 'tonalidades', component: KeysPage },
-    ],
+    path: 'ministerios',
+    loadChildren: async () => (await import('./domain/ministry/ministry.domain.module')).MinistryDomainModule,
   },
   { path: 'auth', loadChildren: async () => (await import('./domain/auth/auth.domain.module')).AuthDomainModule },
 ];

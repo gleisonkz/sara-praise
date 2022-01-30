@@ -16,9 +16,9 @@ export class MinistryService {
 
   ministryListItems$ = this.ministryListItems$$.asObservable();
 
-  createMinistryListItem(ministry: MinistryRequest): Observable<MinistryListItemResponse> {
+  createMinistry(ministry: MinistryRequest): Observable<MinistryListItemResponse> {
     return this.http
-      .post<MinistryListItemResponse>(`${this.BASE_URL}/list-item`, ministry)
+      .post<MinistryListItemResponse>(this.BASE_URL, ministry)
       .pipe(
         tap((ministryListItem) => this.ministryListItems$$.next([...this.ministryListItems$$.value, ministryListItem]))
       );

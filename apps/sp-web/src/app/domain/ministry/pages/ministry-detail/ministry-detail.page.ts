@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MinistryListItemResponse } from '@sp/shared-interfaces';
 
 import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
-import { MinistryService } from '../../services/ministry.service';
+import { MinistryService } from '../../ministry.service';
 
 @Component({
   templateUrl: './ministry-detail.page.html',
