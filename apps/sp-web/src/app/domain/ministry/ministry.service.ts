@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
+import {
+    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse
+} from '@sp/shared-interfaces';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
@@ -31,5 +33,10 @@ export class MinistryService {
     return this.http
       .get<MinistryListItemResponse[]>(url)
       .pipe(tap((ministryListItems) => this.ministryListItems$$.next(ministryListItems)));
+  }
+
+  getScaleListItems(ministryID: number): Observable<ScaleListItemResponse[]> {
+    const url = `${this.BASE_URL}/${ministryID}/scales`;
+    return this.http.get<ScaleListItemResponse[]>(url);
   }
 }

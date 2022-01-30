@@ -1,8 +1,11 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 
-import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
+import {
+    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse
+} from '@sp/shared-interfaces';
 
-import { MinistryService } from '../services';
+import { Response } from 'express';
+import { MinistryNotFoundError, MinistryService } from '../services';
 
 @Controller('ministry')
 export class MinistryController {
@@ -11,17 +14,26 @@ export class MinistryController {
   @Get('/list-item/:id?')
   getMinistriesListItems(@Param('id') id?: string): MinistryListItemResponse[] {
     const ministries = this.ministryService.getMinistriesListItems(id);
-    console.log('ministries', ministries);
     return ministries;
+  }
+
+  @Get('/:id/scales')
+  getScales(@Param('id') id: number, @Res({ passthrough: true }) res: Response): ScaleListItemResponse[] {
+    try {
+      const scales = this.ministryService.getScales(+id);
+      return scales;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
   }
 
   @Post()
   createMinistry(@Body() ministryRequest: MinistryRequest): MinistryListItemResponse {
-    console.log('ministryListItem', ministryRequest);
-
     const ministryListItem = this.ministryService.createMinistry(ministryRequest);
-
-    console.log('ministryListItemResponse', ministryListItem);
     return ministryListItem;
   }
 }

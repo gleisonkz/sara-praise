@@ -1,9 +1,17 @@
 import { Injectable } from '@nestjs/common';
 
 import { Ministry } from '@sp/api/models';
-import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
+import {
+    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse
+} from '@sp/shared-interfaces';
 
 import { MINISTRIES_MOCK } from '../mocks';
+
+export class MinistryNotFoundError extends Error {
+  constructor(public ministryID: number) {
+    super(`Ministry with ID ${ministryID} not found`);
+  }
+}
 
 @Injectable()
 export class MinistryService {
@@ -24,6 +32,29 @@ export class MinistryService {
     });
 
     return ministriesListItems;
+  }
+
+  getScales(ministryID: number): ScaleListItemResponse[] {
+    const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
+
+    if (!ministry) throw new MinistryNotFoundError(ministryID);
+
+    const imagesUrl = ministry.members.map((member) => member.user.imageUrl);
+
+    const scales: ScaleListItemResponse[] = ministry.scales.map((scale) => {
+      const scaleListItem: ScaleListItemResponse = {
+        scaleID: scale.scaleID,
+        title: scale.title,
+        date: scale.date,
+        imagesUrl,
+        notes: scale.notes,
+        songsQuantity: scale.songs.length,
+      };
+
+      return scaleListItem;
+    });
+
+    return scales;
   }
 
   createMinistry(ministryListItem: MinistryRequest): MinistryListItemResponse {

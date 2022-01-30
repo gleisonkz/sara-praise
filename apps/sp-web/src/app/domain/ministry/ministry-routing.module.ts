@@ -6,10 +6,9 @@ import {
 } from './pages';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'ministerios', pathMatch: 'full' },
-  { path: 'ministerios', component: MinistriesPage },
+  { path: '', component: MinistriesPage },
   {
-    path: 'ministerios/:id',
+    path: ':id',
     component: MinistryDetailPage,
     children: [
       { path: '', redirectTo: 'escalas', pathMatch: 'full' },
