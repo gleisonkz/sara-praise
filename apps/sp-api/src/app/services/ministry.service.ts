@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Ministry } from '@sp/api/models';
+import { Ministry, Scale } from '@sp/api/models';
 import {
     MinistryListItemResponse, MinistryRequest, ScaleListItemResponse
 } from '@sp/shared-interfaces';
@@ -39,14 +39,14 @@ export class MinistryService {
 
     if (!ministry) throw new MinistryNotFoundError(ministryID);
 
-    const imagesUrl = ministry.members.map((member) => member.user.imageUrl);
+    const imageUrlMapFn = (scale: Scale) => scale.members.map((member) => member.user.imageUrl);
 
     const scales: ScaleListItemResponse[] = ministry.scales.map((scale) => {
       const scaleListItem: ScaleListItemResponse = {
         scaleID: scale.scaleID,
         title: scale.title,
         date: scale.date,
-        imagesUrl,
+        imagesUrl: imageUrlMapFn(scale),
         notes: scale.notes,
         songsQuantity: scale.songs.length,
       };
