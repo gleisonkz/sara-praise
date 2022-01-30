@@ -3,8 +3,7 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { TokenService } from '@sp/web/services';
-
+import { TokenService } from 'apps/sp-web/src/app/shared/services';
 import { Observable } from 'rxjs';
 
 const TOKEN_HEADER_KEY = 'Authorization'; // for Spring Boot back-end

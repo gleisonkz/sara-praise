@@ -4,17 +4,31 @@
       <mat-card-title>Log in</mat-card-title>
     </mat-card-header>
 
-    <form class="example-form">
+    <form [formGroup]="userForm" class="example-form">
       <mat-card-content>
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Username" />
+          <input formControlName="email" matInput placeholder="Email" />
         </mat-form-field>
 
         <mat-form-field class="example-full-width">
-          <input matInput placeholder="Password" />
+          <input
+            type="password"
+            formControlName="password"
+            matInput
+            placeholder="Password"
+          />
         </mat-form-field>
       </mat-card-content>
-      <button mat-stroked-button color="primary" class="btn-block">Log in</button>
+
+      <button
+        [disabled]="!userForm.valid"
+        (click)="submit()"
+        mat-stroked-button
+        color="primary"
+        class="btn-block"
+      >
+        Log in
+      </button>
       <button
         routerLink="/auth/sign-up"
         mat-stroked-button
