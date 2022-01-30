@@ -19,6 +19,7 @@ const routes: Routes = [
       { path: 'tonalidades', component: KeysPage },
     ],
   },
+  { path: 'auth', loadChildren: async () => (await import('./domain/auth/auth.domain.module')).AuthDomainModule },
 ];
 
 @NgModule({
