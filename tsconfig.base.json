@@ -25,6 +25,7 @@
 
       "@sp/api/mocks": ["apps/sp-api/src/app/mocks"],
       "@sp/api/enums": ["apps/sp-api/src/app/enums"],
+      "@sp/api/models": ["apps/sp-api/src/app/models"],
       "@sp/api/controllers": ["apps/sp-api/src/app/controllers"],
       "@sp/api/services": ["apps/sp-api/src/app/services"],
 
