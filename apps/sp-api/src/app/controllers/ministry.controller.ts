@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
-import { MinistryListItemRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
+import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 
 import { MinistryService } from '../services';
 
@@ -15,14 +15,13 @@ export class MinistryController {
     return ministries;
   }
 
-  @Post('/list-item')
-  createMinistryListItem(@Body() ministryListItem: MinistryListItemRequest): MinistryListItemResponse {
-    console.log('ministryListItem', ministryListItem);
+  @Post()
+  createMinistry(@Body() ministryRequest: MinistryRequest): MinistryListItemResponse {
+    console.log('ministryListItem', ministryRequest);
 
-    const ministryListItemResponse: MinistryListItemResponse =
-      this.ministryService.createMinistryListItem(ministryListItem);
+    const ministryListItem = this.ministryService.createMinistry(ministryRequest);
 
-    console.log('ministryListItemResponse', ministryListItemResponse);
-    return ministryListItemResponse;
+    console.log('ministryListItemResponse', ministryListItem);
+    return ministryListItem;
   }
 }

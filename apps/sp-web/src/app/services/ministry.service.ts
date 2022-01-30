@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { MinistryListItemRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
+import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
@@ -16,7 +16,7 @@ export class MinistryService {
 
   ministryListItems$ = this.ministryListItems$$.asObservable();
 
-  createMinistryListItem(ministry: MinistryListItemRequest): Observable<MinistryListItemResponse> {
+  createMinistryListItem(ministry: MinistryRequest): Observable<MinistryListItemResponse> {
     return this.http
       .post<MinistryListItemResponse>(`${this.BASE_URL}/list-item`, ministry)
       .pipe(

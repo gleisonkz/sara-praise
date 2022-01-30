@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { MinistryListItemRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
+import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 
 import { Observable } from 'rxjs';
 import { AuthService, MinistryService } from '../../services';
@@ -26,7 +26,7 @@ export class MinistriesPage implements OnInit {
   createMinistry() {
     if (!this.ministryNameControl.valid) return;
 
-    const ministry: MinistryListItemRequest = {
+    const ministry: MinistryRequest = {
       name: this.ministryNameControl.value,
       ownerID: this.authService.user.userID,
     };
