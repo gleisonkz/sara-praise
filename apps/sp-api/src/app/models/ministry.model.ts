@@ -1,3 +1,4 @@
+import { Key } from './key.model';
 import { Member } from './member.model';
 import { Role } from './role.model';
 import { Scale } from './scale.model';
@@ -11,4 +12,5 @@ export interface Ministry {
   scales: Scale[];
   songs: Song[];
   roles: Role[];
+  keys: Key[];
 }

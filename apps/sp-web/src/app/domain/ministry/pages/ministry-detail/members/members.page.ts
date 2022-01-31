@@ -1,20 +1,18 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { MemberListItemResponse } from '@sp/shared-interfaces';
 
-import {
-    MinistryDetailRouteService
-} from 'apps/sp-web/src/app/domain/ministry/services/ministry-detail-route.service';
-import { MinistryService } from 'apps/sp-web/src/app/shared/services';
 import { Observable } from 'rxjs';
+import { MinistryDetailRouteService } from '../../../services/ministry-detail-route.service';
+import { MinistryService } from '../../../services/ministry.service';
 
 @Component({
   templateUrl: './members.page.html',
   styleUrls: ['./members.page.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MembersPage {
+export class MembersPage implements OnInit {
   memberListItems$: Observable<MemberListItemResponse[]>;
 
   constructor(

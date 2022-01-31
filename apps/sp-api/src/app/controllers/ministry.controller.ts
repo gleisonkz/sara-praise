@@ -5,6 +5,7 @@ import {
     SongListItemResponse
 } from '@sp/shared-interfaces';
 
+import { KeyListItemResponse } from 'apps/sp-api/src/app/models/key.model';
 import { Response } from 'express';
 import { MinistryNotFoundError, MinistryService } from '../services';
 
@@ -70,5 +71,22 @@ export class MinistryController {
   createMinistry(@Body() ministryRequest: MinistryRequest): MinistryListItemResponse {
     const ministryListItem = this.ministryService.createMinistry(ministryRequest);
     return ministryListItem;
+  }
+
+  @Get('/:id/keys')
+  async getKeys(
+    @Param('id') ministryID: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<KeyListItemResponse[]> {
+    try {
+      const keys = this.ministryService.getKeys(+ministryID);
+      return keys;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
   }
 }

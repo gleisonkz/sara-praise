@@ -14,6 +14,10 @@ const HTTP_OPTIONS = {
 export class AuthService {
   constructor(private http: HttpClient) {}
 
+  isLoggedIn() {
+    return true;
+  }
+
   login(username: string, password: string): Observable<any> {
     const url = environment.apiUrl + '/auth/sign-in';
     return this.http.post(

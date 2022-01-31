@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
-    MemberListItemResponse, MinistryListItemResponse, MinistryRequest, ScaleListItemResponse,
-    SongListItemResponse
+    KeyListItemResponse, MemberListItemResponse, MinistryListItemResponse, MinistryRequest,
+    ScaleListItemResponse, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { BehaviorSubject, Observable, tap } from 'rxjs';
@@ -49,5 +49,10 @@ export class MinistryService {
   getMemberListItems(ministryID: number): Observable<MemberListItemResponse[]> {
     const url = `${this.BASE_URL}/${ministryID}/members`;
     return this.http.get<MemberListItemResponse[]>(url);
+  }
+
+  getKeys(ministryID: number): Observable<KeyListItemResponse[]> {
+    const url = `${this.BASE_URL}/${ministryID}/keys`;
+    return this.http.get<KeyListItemResponse[]>(url);
   }
 }

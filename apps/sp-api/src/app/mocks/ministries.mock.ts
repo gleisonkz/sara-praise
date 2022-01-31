@@ -6,7 +6,7 @@ import { DEFAULT_ROLES } from './roles.mock';
 
 const DEFAULT_USER: User = {
   userID: 1,
-  name: 'João da Silva',
+  name: 'Renato da Silva',
   email: '',
   imageUrl: 'https://randomuser.me/api/portraits/men/92.jpg',
   password: '',
@@ -75,7 +75,7 @@ const SNT_MEMBERS: Member[] = [
     memberID: 2,
     user: {
       userID: 2,
-      name: 'João da Silva',
+      name: 'Renata da Silva',
       email: '',
       imageUrl: 'https://randomuser.me/api/portraits/women/92.jpg',
       password: '',
@@ -92,6 +92,18 @@ export const MINISTRIES_MOCK: Ministry[] = [
     name: 'Sara Nossa Terra',
     ownerId: 1,
     members: SNT_MEMBERS,
+    keys: [
+      {
+        keyID: 1,
+        songID: 1,
+        memberID: 1,
+      },
+      {
+        keyID: 2,
+        songID: 2,
+        memberID: 1,
+      },
+    ],
     roles: DEFAULT_ROLES,
     scales: [
       {
@@ -117,6 +129,7 @@ export const MINISTRIES_MOCK: Ministry[] = [
     ministryID: 2,
     name: 'Lagoinha',
     ownerId: 2,
+    keys: [],
     members: [
       {
         memberID: 1,
@@ -135,6 +148,7 @@ export const MINISTRIES_MOCK: Ministry[] = [
     ministryID: 3,
     name: 'Getsemani',
     ownerId: 3,
+    keys: [],
     members: [
       {
         memberID: 1,

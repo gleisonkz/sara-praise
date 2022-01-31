@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { Ministry, Scale } from '@sp/api/models';
 import {
-    MemberListItemResponse, MinistryListItemResponse, MinistryRequest, ScaleListItemResponse,
-    SongListItemResponse
+    KeyListItemResponse, MemberListItemResponse, MinistryListItemResponse, MinistryRequest,
+    ScaleListItemResponse, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { MINISTRIES_MOCK } from '../mocks';
@@ -87,6 +87,7 @@ export class MinistryService {
       const memberListItem: MemberListItemResponse = {
         memberID: member.memberID,
         name: member.user.name,
+        imageUrl: member.user.imageUrl,
         roles: member.roles,
       };
 
@@ -94,6 +95,29 @@ export class MinistryService {
     });
 
     return members;
+  }
+
+  async getKeys(ministryID: number) {
+    const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
+    if (!ministry) throw new MinistryNotFoundError(ministryID);
+
+    const keys: KeyListItemResponse[] = ministry.keys.map((key) => {
+      const song = ministry.songs.find((song) => song.songID === key.songID);
+      const member = ministry.members.find((member) => member.memberID === key.memberID);
+
+      const keyListItem: KeyListItemResponse = {
+        keyID: key.keyID,
+        memberName: member.user.name,
+        songTitle: song.title,
+        artistName: song.artist.name,
+        memberImageUrl: member.user.imageUrl,
+        songKey: song.key,
+      };
+
+      return keyListItem;
+    });
+
+    return keys;
   }
 
   createMinistry(ministryListItem: MinistryRequest): MinistryListItemResponse {
@@ -105,6 +129,7 @@ export class MinistryService {
       roles: [],
       scales: [],
       songs: [],
+      keys: [],
     };
 
     const ministryListItemResponse: MinistryListItemResponse = {

@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 
 @Injectable()
 export class MinistryDetailRouteService {
-  getMinistryID(activatedRoute: ActivatedRoute): void {
+  getMinistryID(activatedRoute: ActivatedRoute): number {
     const parentActivatedRoute = activatedRoute.parent;
     if (!parentActivatedRoute) throw new Error('parentActivatedRoute is undefined');
 
     const { id: ministryID } = parentActivatedRoute.snapshot.params;
-    return ministryID;
+    return +ministryID;
   }
 }
