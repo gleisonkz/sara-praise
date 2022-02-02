@@ -9,7 +9,7 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   providedIn: 'root',
 })
 export class LogService {
-  private readonly IS_DEV = environment.production;
+  private readonly IS_PROD = environment.production;
 
   private readonly METHOD_COLORS = {
     GET: '#61affe',
@@ -52,7 +52,7 @@ export class LogService {
     httpMethod: HttpMethod,
     headers: HttpHeaders
   ) {
-    if (!this.IS_DEV) return;
+    if (this.IS_PROD) return;
 
     const methodStyle = this.buildHttpLogStyle(httpMethod);
     const method = `%c${httpMethod.toUpperCase()}`;
