@@ -1,29 +1,9 @@
 :host {
-  display: block;
-}
-
-mat-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   grid-gap: 20px;
 }
 
-mat-list-item {
-  background-color: #424242;
-  border-radius: 5px;
-  color: #fff;
-  display: flex;
-  padding: 15px;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-
-  &:hover {
-    background-color: #616161;
-  }
-}
-
-.links {
-  display: grid;
-  grid-gap: 5px;
-  grid-template-columns: repeat(2, 1fr);
+.font-color {
+  color: #fff !important;
 }
