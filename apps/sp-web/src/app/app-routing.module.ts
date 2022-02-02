@@ -8,6 +8,7 @@ const routes: Routes = [
   {
     path: 'ministerios',
     canLoad: [AuthGuard],
+    canActivateChild: [AuthGuard],
     loadChildren: async () => (await import('./domain/ministry/ministry.domain.module')).MinistryDomainModule,
   },
   { path: 'auth', loadChildren: async () => (await import('./domain/auth/auth.domain.module')).AuthDomainModule },
