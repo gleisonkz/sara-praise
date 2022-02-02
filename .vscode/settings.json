@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["Getsemani", "Lagoinha", "ministerios"],
+  "cSpell.words": ["Fernandinho", "Getsemani", "Getsêmani", "Lagoinha", "ministerios"],
   "importSorter.sortConfiguration.customOrderingRules.rules": [
     {
       "regex": "^@angular/(?!material).+",
@@ -102,6 +102,9 @@
         },
         {
           "label": "lib/interfaces"
+        },
+        {
+          "label": "spell-check"
         }
       ]
     },
