@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 
-import { Ministry, Scale } from '@sp/api/models';
+import { eMinistryRole } from '@sp/api/enums';
+import { Member, Ministry, Scale, Song } from '@sp/api/models';
 import {
     KeyListItemResponse, MemberListItemResponse, MinistryListItemResponse, MinistryRequest,
-    ScaleListItemResponse, SongListItemResponse
+    ScaleDetailResponse, ScaleListItemResponse, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { MINISTRIES_MOCK } from '../mocks';
@@ -65,6 +66,7 @@ export class MinistryService {
       const songListItem: SongListItemResponse = {
         songID: song.songID,
         title: song.title,
+        tags: song.tags,
         artistName: song.artist.name,
         hasAudioLink: !!song.audioLink,
         hasChordsLink: !!song.chordsLink,
@@ -130,6 +132,7 @@ export class MinistryService {
       scales: [],
       songs: [],
       keys: [],
+      ministryKeys: [],
     };
 
     const ministryListItemResponse: MinistryListItemResponse = {
@@ -139,5 +142,72 @@ export class MinistryService {
 
     this.ministries.push(ministry);
     return ministryListItemResponse;
+  }
+
+  getScaleDetails(scaleID: number) {
+    const ministry = this.ministries.find((ministry) => ministry.scales.find((scale) => scale.scaleID === scaleID));
+    if (!ministry) throw new MinistryNotFoundError(scaleID);
+
+    const scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
+
+    const members: MemberListItemResponse[] = scale.members.map((member) => {
+      const memberListItem: MemberListItemResponse = {
+        memberID: member.memberID,
+        name: member.user.name,
+        imageUrl: member.user.imageUrl,
+        roles: member.roles,
+      };
+
+      return memberListItem;
+    });
+
+    const minister = scale.members.find((member) => member.roles.includes(eMinistryRole.MINISTER));
+
+    const songs: SongListItemResponse[] = scale.songs.map((song) => {
+      const ministryKey = this.getMinistryKey(ministry, song, minister);
+
+      const songListItem: SongListItemResponse = {
+        songID: song.songID,
+        title: song.title,
+        artistName: song.artist.name,
+        tags: song.tags,
+        hasAudioLink: !!song.audioLink,
+        hasChordsLink: !!song.chordsLink,
+        hasLyricLink: !!song.lyricLink,
+        hasYoutubeLink: !!song.youtubeLink,
+        key: ministryKey,
+      };
+
+      return songListItem;
+    });
+
+    const scaleDetail: ScaleDetailResponse = {
+      scaleID: scaleID,
+      date: scale.date,
+      participants: members,
+      songs: songs,
+    };
+
+    return scaleDetail;
+  }
+
+  private getMinistryKey(ministry: Ministry, song: Song, minister: Member) {
+    if (!minister) return null;
+
+    const ministryKey = ministry.ministryKeys.find((ministryKey) => {
+      const hasMinistryKey =
+        ministryKey.songID === song.songID &&
+        ministryKey.memberID === minister.memberID &&
+        ministryKey.ministryID === ministry.ministryID;
+
+      return hasMinistryKey;
+    });
+
+    if (!ministryKey) return `Não possui tom cadastrado para o ministro(a) ${minister.name}`;
+
+    const key = ministry.keys.find((key) => ministryKey.keyID === key.keyID);
+    const ministerSongKey = key.keyLabel;
+
+    return ministerSongKey;
   }
 }

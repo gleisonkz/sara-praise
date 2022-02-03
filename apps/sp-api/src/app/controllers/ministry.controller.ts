@@ -1,11 +1,10 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 
 import {
-    MemberListItemResponse, MinistryListItemResponse, MinistryRequest, ScaleListItemResponse,
-    SongListItemResponse
+    KeyListItemResponse, MemberListItemResponse, MinistryListItemResponse, MinistryRequest,
+    ScaleListItemResponse, SongListItemResponse
 } from '@sp/shared-interfaces';
 
-import { KeyListItemResponse } from 'apps/sp-api/src/app/models/key.model';
 import { Response } from 'express';
 import { MinistryNotFoundError, MinistryService } from '../services';
 
@@ -81,6 +80,20 @@ export class MinistryController {
     try {
       const keys = this.ministryService.getKeys(+ministryID);
       return keys;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
+  }
+
+  @Get('/scales/:scaleID')
+  async getScaleDetails(@Param('scaleID') scaleID: number, @Res({ passthrough: true }) res: Response) {
+    try {
+      const scaleDetails = await this.ministryService.getScaleDetails(+scaleID);
+      return scaleDetails;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
         return res.status(HttpStatus.BAD_REQUEST).send(error.message);

@@ -95,13 +95,24 @@ export const MINISTRIES_MOCK: Ministry[] = [
     keys: [
       {
         keyID: 1,
+        keyLabel: 'C',
         songID: 1,
         memberID: 1,
       },
       {
         keyID: 2,
+        keyLabel: 'E',
         songID: 2,
         memberID: 1,
+      },
+    ],
+    ministryKeys: [
+      {
+        ministryKeyID: 1,
+        keyID: 1,
+        memberID: 1,
+        ministryID: 1,
+        songID: 1,
       },
     ],
     roles: DEFAULT_ROLES,
@@ -130,6 +141,7 @@ export const MINISTRIES_MOCK: Ministry[] = [
     name: 'Lagoinha',
     ownerId: 2,
     keys: [],
+    ministryKeys: [],
     members: [
       {
         memberID: 1,
@@ -149,6 +161,7 @@ export const MINISTRIES_MOCK: Ministry[] = [
     name: 'Getsemani',
     ownerId: 3,
     keys: [],
+    ministryKeys: [],
     members: [
       {
         memberID: 1,
@@ -163,10 +176,10 @@ export const MINISTRIES_MOCK: Ministry[] = [
     songs: [
       {
         songID: 1,
-        title: 'Cantar de Deus',
+        title: 'Todo mundo pulando',
         artist: {
           artistID: 1,
-          name: 'Sample Artist',
+          name: 'Fernandinho',
         },
         bpm: 120,
         key: eSongKey.A,
@@ -179,10 +192,10 @@ export const MINISTRIES_MOCK: Ministry[] = [
       },
       {
         songID: 2,
-        title: 'Cantar de Deus 2',
+        title: 'Os anjos te louvam',
         artist: {
           artistID: 1,
-          name: 'Sample Artist',
+          name: 'Eli Soares',
         },
         bpm: 120,
         key: eSongKey.A,
