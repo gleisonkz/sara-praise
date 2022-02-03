@@ -17,10 +17,21 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
+import {
+    EmptyListNoMessageWidgetModule
+} from 'apps/sp-web/src/app/widget/components/empty-list-no-message/empty-list-no-message.widget.module';
+import { SpForDirectiveWidgetModule } from 'apps/sp-web/src/app/widget/directives/for.directive';
+import {
+    MediaIfDirectiveWidgetModule
+} from 'apps/sp-web/src/app/widget/directives/media-if/media-if.widget.module';
+import { SongListItemComponent } from './components/song-list-item/song-list-item.component';
 import { MinistryRoutingModule } from './ministry-routing.module';
 import {
     KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
 } from './pages';
+import { MemberDetailPage } from './pages/member-detail/member-detail.page';
+import { ScaleDetailPage } from './pages/scale-detail/scale-detail.page';
+import { SongDetailPage } from './pages/song-detail/song-detail.page';
 
 @NgModule({
   declarations: [
@@ -32,10 +43,17 @@ import {
     MinistryDetailPage,
     MembersPage,
     KeysPage,
+    ScaleDetailPage,
+    SongDetailPage,
+    MemberDetailPage,
+    SongListItemComponent,
   ],
   imports: [
     CommonModule,
+    EmptyListNoMessageWidgetModule,
     MatSelectModule,
+    MediaIfDirectiveWidgetModule,
+    SpForDirectiveWidgetModule,
     ReactiveFormsModule,
     MinistryRoutingModule,
     MatFormFieldModule,

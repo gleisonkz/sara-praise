@@ -2,14 +2,15 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import {
-    KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
+    KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScaleDetailPage, ScalesPage,
+    SongsPage
 } from './pages';
 import { MinistryDetailRouteService } from './services/ministry-detail-route.service';
 
 const routes: Routes = [
   { path: '', component: MinistriesPage },
   {
-    path: ':id',
+    path: ':ministryID',
     component: MinistryDetailPage,
     children: [
       { path: '', redirectTo: 'escalas', pathMatch: 'full' },
@@ -18,6 +19,11 @@ const routes: Routes = [
       { path: 'membros', component: MembersPage },
       { path: 'tonalidades', component: KeysPage },
     ],
+  },
+
+  {
+    path: ':ministryID/escalas/:scaleID',
+    component: ScaleDetailPage,
   },
 ];
 

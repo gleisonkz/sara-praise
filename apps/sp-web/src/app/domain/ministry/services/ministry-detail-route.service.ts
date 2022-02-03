@@ -7,7 +7,7 @@ export class MinistryDetailRouteService {
     const parentActivatedRoute = activatedRoute.parent;
     if (!parentActivatedRoute) throw new Error('parentActivatedRoute is undefined');
 
-    const { id: ministryID } = parentActivatedRoute.snapshot.params;
+    const { ministryID } = parentActivatedRoute.snapshot.params;
     return +ministryID;
   }
 }

@@ -1,0 +1,47 @@
+mat-toolbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 65px;
+  margin-bottom: 40px;
+
+  h1 {
+    flex: 1;
+    text-align: center;
+  }
+}
+
+.scale-info {
+  padding-top: 84px;
+  display: flex;
+  justify-content: center;
+
+  .icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+
+    mat-icon {
+      margin-right: 5px;
+    }
+  }
+}
+
+mat-divider {
+  margin-top: 10px;
+}
+
+mat-tab-group {
+}
+
+::ng-deep mat-tab-body {
+  margin-top: 20px;
+}
+
+mat-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-gap: 20px;
+}
