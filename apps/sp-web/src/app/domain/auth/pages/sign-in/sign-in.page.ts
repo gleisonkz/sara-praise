@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { AuthService } from '../../auth.service';
 
 @Component({
   templateUrl: './sign-in.page.html',
@@ -9,12 +12,21 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 export class SignInPage implements OnInit {
   userForm: FormGroup;
 
+  constructor(private readonly authService: AuthService, private readonly router: Router) {}
+
   ngOnInit(): void {
     this.createForm();
   }
 
   submit() {
-    console.log(this.userForm.value);
+    if (!this.userForm.valid) return;
+
+    const user = this.userForm.value;
+    this.authService.login(user.email, user.password).subscribe((isLoggedIn) => {
+      if (!isLoggedIn) return this.userForm.reset();
+
+      this.router.navigate(['/']);
+    });
   }
 
   createForm(): void {
