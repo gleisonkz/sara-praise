@@ -1,6 +1,11 @@
 <ng-container *ngIf="scaleListItems$ | async as scales">
   <ng-container *ngIf="scales.length; else noScalesTemplate">
-    <div class="scale" *ngFor="let scale of scales">
+    <div
+      @fadeAnimation
+      [routerLink]="['./', scale.scaleID]"
+      class="scale"
+      *ngFor="let scale of scales"
+    >
       <div class="date">
         <span>{{scale.date | date : 'EEEE'}}</span>
         <span>{{scale.date | date : 'dd/MMM'}}</span>

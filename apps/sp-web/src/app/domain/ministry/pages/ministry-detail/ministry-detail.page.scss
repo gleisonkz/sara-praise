@@ -3,11 +3,19 @@
   padding: 20px;
 }
 
-mat-toolbar {
+mat-toolbar.top {
   position: absolute;
   left: 0;
   right: 0;
   top: 0;
+
+  h1 {
+    flex-grow: 1;
+  }
+}
+
+.toolbar-spacer {
+  margin-top: 50px;
 }
 
 .example-header-image {
@@ -20,6 +28,39 @@ mat-toolbar {
 }
 
 nav {
-  margin-top: 50px;
   margin-bottom: 20px;
+}
+
+footer {
+  .toolbarNav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-around;
+    padding: 2em;
+    background: whitesmoke;
+
+    button {
+      background: whitesmoke;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      span {
+        display: block;
+      }
+    }
+  }
+
+  button:hover,
+  .active-link {
+    color: blueviolet;
+
+    mat-icon {
+      transform: scale(1.6);
+    }
+  }
 }

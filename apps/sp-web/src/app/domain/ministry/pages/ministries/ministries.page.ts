@@ -4,7 +4,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 
 import { Observable } from 'rxjs';
-import { AuthService, MinistryService } from '../../../../shared/services';
+import { MinistryService } from '../../services/ministry.service';
 
 @Component({
   templateUrl: './ministries.page.html',
@@ -16,7 +16,7 @@ export class MinistriesPage implements OnInit {
 
   ministryListItems$: Observable<MinistryListItemResponse[]>;
 
-  constructor(public readonly ministryService: MinistryService, private readonly authService: AuthService) {}
+  constructor(public readonly ministryService: MinistryService) {}
 
   ngOnInit(): void {
     this.ministryListItems$ = this.ministryService.ministryListItems$;

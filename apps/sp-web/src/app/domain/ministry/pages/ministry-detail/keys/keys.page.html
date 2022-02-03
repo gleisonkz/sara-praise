@@ -1,44 +1,39 @@
-<ng-container *ngIf="keysListItems$ | async as keys">
-  <ng-container *ngIf="keys.length; else noKeysTemplate">
-    <mat-list>
-      <mat-list-item *ngFor="let key of keys">
-        <img
-          matListAvatar
-          src="https://randomuser.me/api/portraits/men/92.jpg"
-          alt="member avatar"
-        />
-        <div mat-line>{{key.memberName}}</div>
-        <div mat-line>
-          <span> {{key.artistName}}</span>
-        </div>
-        <div mat-line>
-          <span> {{key.songTitle}} </span>
-        </div>
-        <div mat-line>
-          <span> Tom: {{key.songKey}} </span>
-        </div>
+<mat-list>
+  <mat-list-item
+    *spFor="let key of keysListItems$ else 'Ainda não foi cadastrado nenhuma tonalidade'"
+  >
+    <img
+      matListAvatar
+      src="https://randomuser.me/api/portraits/men/92.jpg"
+      alt="member avatar"
+    />
+    <div mat-line>{{key.memberName}}</div>
+    <div mat-line>
+      <span> {{key.artistName}}</span>
+    </div>
+    <div mat-line>
+      <span> {{key.songTitle}} </span>
+    </div>
+    <div mat-line>
+      <span> Tom: {{key.songKey}} </span>
+    </div>
 
-        <button
-          mat-icon-button
-          [matMenuTriggerFor]="menu"
-          aria-label="Example icon-button with a menu"
-        >
-          <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item>
-            <mat-icon>edit</mat-icon>
-            <span>Editar</span>
-          </button>
-          <button mat-menu-item>
-            <mat-icon>delete</mat-icon>
-            <span>Remover</span>
-          </button>
-        </mat-menu>
-      </mat-list-item>
-    </mat-list>
-  </ng-container>
-  <ng-template #noKeysTemplate>
-    <p style="text-align: center">Ainda não foi cadastrado nenhuma tonalidade</p>
-  </ng-template>
-</ng-container>
+    <button
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="Example icon-button with a menu"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>edit</mat-icon>
+        <span>Editar</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>delete</mat-icon>
+        <span>Remover</span>
+      </button>
+    </mat-menu>
+  </mat-list-item>
+</mat-list>

@@ -26,8 +26,6 @@
     *ngFor="let ministry of ministryListItems$ | async"
     [routerLink]="['/ministerios', ministry.ministryID]"
   >
-    <mat-card-header>
-      <mat-card-title>{{ ministry.name }}</mat-card-title>
-    </mat-card-header>
+    <mat-card-title>{{ ministry.name }}</mat-card-title>
   </mat-card>
 </div>

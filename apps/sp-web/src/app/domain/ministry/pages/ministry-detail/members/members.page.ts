@@ -9,7 +9,7 @@ import { MinistryService } from '../../../services/ministry.service';
 
 @Component({
   templateUrl: './members.page.html',
-  styleUrls: ['./members.page.sass'],
+  styleUrls: ['./members.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MembersPage implements OnInit {

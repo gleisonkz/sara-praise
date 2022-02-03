@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MinistryListItemResponse } from '@sp/shared-interfaces';
 
-import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap, take } from 'rxjs';
 import { MinistryService } from '../../services/ministry.service';
 
 @Component({
@@ -25,14 +25,14 @@ export class MinistryDetailPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const param$ = this.activatedRoute.params.pipe(map(({ id }) => +id));
-
     const url = this.router.url.split('/');
     this.activeLink = url[url.length - 1];
 
+    const param$ = this.activatedRoute.params.pipe(map(({ id }) => +id));
     const previousMinistriesListItems$ = this.ministryService.ministryListItems$;
 
     this.ministryListItem$ = combineLatest([param$, previousMinistriesListItems$]).pipe(
+      take(1),
       switchMap(([id, ministriesListItems]) => {
         this.ministryID = id;
         const ministryListItem = ministriesListItems.find(({ ministryID }) => ministryID === id);

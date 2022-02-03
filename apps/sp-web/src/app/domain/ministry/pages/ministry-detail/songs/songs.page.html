@@ -1,5 +1,4 @@
 <sp-song-list-item
-  [@listAnimation]="length"
   [song]="song"
   *spFor="let song of songListItems$ else 'Ainda não foi cadastrada nenhuma música' let length=length"
 >

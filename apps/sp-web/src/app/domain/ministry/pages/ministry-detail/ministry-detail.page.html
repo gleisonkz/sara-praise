@@ -1,19 +1,35 @@
-<mat-toolbar>
-  <button mat-icon-button [routerLink]="['/']" aria-label="Example icon-button with menu icon">
+<mat-toolbar class="top">
+  <button
+    mat-icon-button
+    [routerLink]="['/']"
+    aria-label="Example icon-button with menu icon"
+  >
     <mat-icon>arrow_back</mat-icon>
   </button>
 
-  <span *ngIf="ministryListItem$ | async as ministryListItem"> {{ ministryListItem.name }} </span>
-  <span class="example-spacer"></span>
-  <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+  <h1 *ngIf="ministryListItem$ | async as ministryListItem">
+    {{ ministryListItem.name }}
+  </h1>
+
+  <button
+    mat-icon-button
+    class="example-icon favorite-icon"
+    aria-label="Example icon-button with heart icon"
+  >
     <mat-icon>favorite</mat-icon>
   </button>
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+  <button
+    mat-icon-button
+    class="example-icon"
+    aria-label="Example icon-button with share icon"
+  >
     <mat-icon>share</mat-icon>
   </button>
 </mat-toolbar>
 
-<nav mat-tab-nav-bar>
+<div class="toolbar-spacer"></div>
+
+<nav mat-tab-nav-bar mat-stretch-tabs *spMediaIf="510; mode 'gt'">
   <a
     mat-tab-link
     *ngFor="let link of links"
@@ -26,3 +42,20 @@
 </nav>
 
 <router-outlet></router-outlet>
+
+<footer *spMediaIf="510; mode 'lt'">
+  <mat-toolbar class="toolbarNav">
+    <button mat-flat-button routerLink="escalas" routerLinkActive="active-link">
+      <mat-icon>today</mat-icon>
+    </button>
+    <button mat-flat-button routerLink="musicas" routerLinkActive="active-link">
+      <mat-icon>library_music </mat-icon>
+    </button>
+    <button mat-flat-button routerLink="membros" routerLinkActive="active-link">
+      <mat-icon>church</mat-icon>
+    </button>
+    <button mat-flat-button routerLink="tonalidades" routerLinkActive="active-link">
+      <mat-icon>music_note</mat-icon>
+    </button>
+  </mat-toolbar>
+</footer>

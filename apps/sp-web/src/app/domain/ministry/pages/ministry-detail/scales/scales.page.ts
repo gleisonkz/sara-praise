@@ -7,13 +7,15 @@ import { ScaleListItemResponse } from '@sp/shared-interfaces';
 import {
     MinistryDetailRouteService
 } from 'apps/sp-web/src/app/domain/ministry/services/ministry-detail-route.service';
-import { MinistryService } from 'apps/sp-web/src/app/shared/services';
+import { FADE_ANIMATION } from 'apps/sp-web/src/app/shared/animations/fade.animation';
 import { Observable } from 'rxjs';
+import { MinistryService } from '../../../services/ministry.service';
 
 @Component({
   templateUrl: './scales.page.html',
   styleUrls: ['./scales.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [FADE_ANIMATION],
 })
 export class ScalesPage implements OnInit {
   scaleListItems$: Observable<ScaleListItemResponse[]>;
