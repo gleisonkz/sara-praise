@@ -27,6 +27,11 @@
     grid-template-columns: max-content 1fr;
     width: 100%;
 
+    .key {
+      max-width: 200px;
+      font-size: 14px;
+    }
+
     span {
       grid-column: 1;
     }

@@ -12,7 +12,7 @@ import { SongListItemResponse } from '@sp/shared-interfaces';
     <div class="description">
       <span> {{ song.artistName }}</span>
       <span> {{ song.title }}</span>
-      <span> Tom: {{ song.key }} </span>
+      <span class="key"> Tom: {{ song.key }} </span>
     </div>
 
     <div class="links">
