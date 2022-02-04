@@ -2,7 +2,7 @@ import { eMinistryRole, eSongKey } from '@sp/api/enums';
 import { Member, Ministry, Song } from '@sp/api/models';
 
 import { User } from 'apps/sp-api/src/app/models/user.model';
-import { DEFAULT_ROLES } from './roles.mock';
+import { DEFAULT_ROLES, MOCK_ROLES } from './roles.mock';
 
 const DEFAULT_USER: User = {
   userID: 1,
@@ -68,7 +68,7 @@ const SNT_MEMBERS: Member[] = [
     memberID: 1,
     user: DEFAULT_USER,
     name: 'Renato',
-    roles: [eMinistryRole.BASS, eMinistryRole.GUITAR],
+    roles: [MOCK_ROLES[eMinistryRole.BASS], MOCK_ROLES[eMinistryRole.GUITAR]],
     permissions: [],
   },
   {
@@ -81,7 +81,7 @@ const SNT_MEMBERS: Member[] = [
       password: '',
     },
     name: 'Jane',
-    roles: [eMinistryRole.BASS, eMinistryRole.GUITAR, eMinistryRole.MINISTER],
+    roles: [MOCK_ROLES[eMinistryRole.BASS], MOCK_ROLES[eMinistryRole.GUITAR], MOCK_ROLES[eMinistryRole.MINISTER]],
     permissions: [],
   },
 ];
@@ -147,7 +147,7 @@ export const MINISTRIES_MOCK: Ministry[] = [
         memberID: 1,
         user: DEFAULT_USER,
         name: 'Renato',
-        roles: [eMinistryRole.BASS, eMinistryRole.GUITAR],
+        roles: [MOCK_ROLES[eMinistryRole.BASS], MOCK_ROLES[eMinistryRole.GUITAR]],
         permissions: [],
       },
     ],

@@ -78,7 +78,7 @@
           <img matListAvatar [src]="participant.imageUrl" alt="member avatar" />
           <div mat-line>{{participant.name}}</div>
           <div mat-line>
-            <span *ngFor="let role of participant.roles"> {{ role }} </span>
+            <span *ngFor="let role of participant.roles"> {{ role.name }} </span>
           </div>
         </mat-list-item>
       </mat-list>

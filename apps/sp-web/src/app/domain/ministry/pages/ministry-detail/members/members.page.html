@@ -5,7 +5,7 @@
         <img matListAvatar [src]="member.imageUrl" alt="member avatar" />
         <div mat-line>{{member.name}}</div>
         <div mat-line>
-          <span *ngFor="let role of member.roles"> {{ role }} </span>
+          <span *ngFor="let role of member.roles"> {{ role.name }} </span>
         </div>
 
         <button

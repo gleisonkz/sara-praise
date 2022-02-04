@@ -169,7 +169,10 @@ export class MinistryService {
       return memberListItem;
     });
 
-    const minister = scale.members.find((member) => member.roles.includes(eMinistryRole.MINISTER));
+    const minister = scale.members.find((member) => {
+      const isMinister = member.roles.find(({ roleID }) => roleID === eMinistryRole.MINISTER);
+      return isMinister;
+    });
 
     const songs: SongListItemResponse[] = scale.songs.map((song) => {
       const ministryKey = this.getMinistryKey(ministry, song, minister);
