@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { MinistryListItemResponse } from '@sp/shared-interfaces';
 
@@ -15,20 +15,10 @@ export class MinistryDetailPage implements OnInit {
   ministryListItem$: Observable<MinistryListItemResponse>;
   ministryID: number;
 
-  links = ['escalas', 'musicas', 'membros', 'tonalidades'];
-  activeLink: string;
-
-  constructor(
-    public readonly ministryService: MinistryService,
-    private activatedRoute: ActivatedRoute,
-    private readonly router: Router
-  ) {}
+  constructor(public readonly ministryService: MinistryService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
-    const url = this.router.url.split('/');
-    this.activeLink = url[url.length - 1];
-
-    const param$ = this.activatedRoute.params.pipe(map(({ id }) => +id));
+    const param$ = this.activatedRoute.params.pipe(map(({ ministryID }) => +ministryID));
     const previousMinistriesListItems$ = this.ministryService.ministryListItems$;
 
     this.ministryListItem$ = combineLatest([param$, previousMinistriesListItems$]).pipe(
@@ -38,7 +28,10 @@ export class MinistryDetailPage implements OnInit {
         const ministryListItem = ministriesListItems.find(({ ministryID }) => ministryID === id);
 
         if (ministryListItem) return of(ministryListItem);
-        return this.ministryService.getMinistryListItems(id).pipe(map(([ministry]) => ministry));
+        const ministryListItem$ = this.ministryService
+          .getMinistryListItems(id)
+          .pipe(map(([ministryListItem]) => ministryListItem));
+        return ministryListItem$;
       })
     );
   }

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -20,17 +21,18 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import {
     EmptyListNoMessageWidgetModule
 } from 'apps/sp-web/src/app/widget/components/empty-list-no-message/empty-list-no-message.widget.module';
+import {
+    SongListItemWidgetModule
+} from 'apps/sp-web/src/app/widget/components/song-list-item/song-list-item.widget.module';
 import { SpForDirectiveWidgetModule } from 'apps/sp-web/src/app/widget/directives/for.directive';
 import {
     MediaIfDirectiveWidgetModule
 } from 'apps/sp-web/src/app/widget/directives/media-if/media-if.widget.module';
-import { SongListItemComponent } from './components/song-list-item/song-list-item.component';
 import { MinistryRoutingModule } from './ministry-routing.module';
 import {
     KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
 } from './pages';
 import { MemberDetailPage } from './pages/member-detail/member-detail.page';
-import { ScaleDetailPage } from './pages/scale-detail/scale-detail.page';
 import { SongDetailPage } from './pages/song-detail/song-detail.page';
 
 @NgModule({
@@ -43,18 +45,18 @@ import { SongDetailPage } from './pages/song-detail/song-detail.page';
     MinistryDetailPage,
     MembersPage,
     KeysPage,
-    ScaleDetailPage,
     SongDetailPage,
     MemberDetailPage,
-    SongListItemComponent,
   ],
   imports: [
     CommonModule,
+    MatBadgeModule,
     EmptyListNoMessageWidgetModule,
     MatSelectModule,
     MediaIfDirectiveWidgetModule,
     SpForDirectiveWidgetModule,
     ReactiveFormsModule,
+    SongListItemWidgetModule,
     MinistryRoutingModule,
     MatFormFieldModule,
     MatCardModule,

@@ -5,11 +5,72 @@
   align-items: center;
   flex-direction: column;
 
+  mat-toolbar {
+    display: flex;
+    height: 65px;
+    margin-bottom: 40px;
+    width: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    h1 {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  mat-divider {
+    padding-top: 75px;
+  }
+
+  .top-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    mat-form-field {
+      width: 100%;
+      padding-right: 10px;
+    }
+
+    button {
+      width: 60px;
+    }
+  }
+
   mat-card {
     cursor: pointer;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    transition: background-color 0.2s ease-in-out;
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: #e9e3e3;
+      }
+    }
+
+    mat-card-content {
+      margin-top: 25px;
+      display: flex;
+      width: 100%;
+      justify-content: space-around;
+    }
+
+    mat-card-title-group {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        border-radius: 50%;
+      }
+    }
   }
 
   .cards {
@@ -23,5 +84,12 @@
   button {
     width: 144px;
     margin-left: 5px;
+  }
+
+  .tab-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 }

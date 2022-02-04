@@ -2,8 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import {
-    KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScaleDetailPage, ScalesPage,
-    SongsPage
+    KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
 } from './pages';
 import { MinistryDetailRouteService } from './services/ministry-detail-route.service';
 
@@ -23,7 +22,7 @@ const routes: Routes = [
 
   {
     path: ':ministryID/escalas/:scaleID',
-    component: ScaleDetailPage,
+    loadChildren: () => import('@sp/web/domain/scale').then((m) => m.ScaleDomainModule),
   },
 ];
 

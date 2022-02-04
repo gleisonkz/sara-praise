@@ -1,6 +1,10 @@
-<h1 style="display: flex">Ministérios</h1>
+<mat-toolbar>
+  <h1>Ministérios</h1>
+</mat-toolbar>
 
-<div>
+<mat-divider></mat-divider>
+
+<div class="top-container">
   <mat-form-field class="example-full-width" appearance="fill">
     <mat-label>Nome </mat-label>
     <input
@@ -14,10 +18,10 @@
   <button
     [disabled]="!ministryNameControl.valid"
     (click)="createMinistry()"
-    mat-raised-button
-    color="primary"
+    mat-fab
+    aria-label="Example icon-button with a heart icon"
   >
-    New
+    <mat-icon>add</mat-icon>
   </button>
 </div>
 
@@ -26,6 +30,29 @@
     *ngFor="let ministry of ministryListItems$ | async"
     [routerLink]="['/ministerios', ministry.ministryID]"
   >
-    <mat-card-title>{{ ministry.name }}</mat-card-title>
+    <mat-card-title-group>
+      <img
+        mat-card-sm-image
+        src="https://material.angular.io/assets/img/examples/shiba2.jpg"
+      />
+      <mat-card-title>{{ ministry.name }}</mat-card-title>
+    </mat-card-title-group>
+
+    <mat-card-content>
+      <div class="tab-label">
+        <mat-icon [matBadge]="ministry.musicsQuantity">library_music</mat-icon>
+        <span class="tab-label-text">Músicas</span>
+      </div>
+
+      <div class="tab-label">
+        <mat-icon [matBadge]="ministry.membersQuantity">people</mat-icon>
+        <span class="tab-label-text">Membros</span>
+      </div>
+
+      <div class="tab-label">
+        <mat-icon [matBadge]="ministry.scalesQuantity">people</mat-icon>
+        <span class="tab-label-text">Escalas</span>
+      </div>
+    </mat-card-content>
   </mat-card>
 </div>
