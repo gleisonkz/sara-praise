@@ -23,6 +23,7 @@
   }
 
   .description {
+    text-align: start;
     display: grid;
     grid-template-columns: max-content 1fr;
     width: 100%;
