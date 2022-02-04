@@ -5,6 +5,9 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { HotToastModule } from '@ngneat/hot-toast';
+import {
+    HttpErrorInterceptor
+} from 'apps/sp-web/src/app/shared/interceptors/http-error.interceptor';
 import { LogInterceptor } from 'apps/sp-web/src/app/shared/interceptors/log.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,7 +22,10 @@ import { AppComponent } from './app.component';
     BrowserAnimationsModule,
     ReactiveFormsModule,
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: LogInterceptor, multi: true }],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: LogInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 import { HttpMethod, LogService } from '@sp/web/shared/services';
 
 import { HotToastService } from '@ngneat/hot-toast';
-import { catchError, EMPTY, Observable, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable()
 export class LogInterceptor implements HttpInterceptor {
@@ -24,10 +24,6 @@ export class LogInterceptor implements HttpInterceptor {
           const responseData = event.body;
           this.logService.logHttp(path, payload, responseData, method, headers);
         }
-      }),
-      catchError(() => {
-        this.toastService.error('Ocorreu um erro ao processar a requisição.');
-        return EMPTY;
       })
     );
   }
