@@ -28,6 +28,10 @@ export class MinistryService {
       const ministryListItem: MinistryListItemResponse = {
         ministryID: ministry.ministryID,
         name: ministry.name,
+        musicsQuantity: ministry.songs.length,
+        membersQuantity: ministry.members.length,
+        scalesQuantity: ministry.scales.length,
+        keysQuantity: ministry.keys.length,
       };
 
       return ministryListItem;
@@ -138,6 +142,10 @@ export class MinistryService {
     const ministryListItemResponse: MinistryListItemResponse = {
       ministryID: ministry.ministryID,
       name: ministry.name,
+      musicsQuantity: ministry.songs.length,
+      membersQuantity: ministry.members.length,
+      scalesQuantity: ministry.scales.length,
+      keysQuantity: ministry.keys.length,
     };
 
     this.ministries.push(ministry);
