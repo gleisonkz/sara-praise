@@ -41,3 +41,18 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   padding: 0 20px;
 }
+
+mat-toolbar.absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 65px;
+  margin-bottom: 40px;
+
+  h1 {
+    flex: 1;
+    text-align: center;
+  }
+}
