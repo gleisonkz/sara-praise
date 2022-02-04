@@ -28,6 +28,7 @@
 
       "@sp/web/domain/auth": ["apps/sp-web/src/app/domain/auth"],
       "@sp/web/domain/ministry": ["apps/sp-web/src/app/domain/ministry"],
+      "@sp/web/domain/scale": ["apps/sp-web/src/app/domain/scale"],
 
       "@sp/web/mocks": ["apps/sp-web/src/app/mocks"],
       "@sp/web/models": ["apps/sp-web/src/app/models"],

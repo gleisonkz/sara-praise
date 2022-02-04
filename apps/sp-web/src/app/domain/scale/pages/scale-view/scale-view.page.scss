@@ -1,0 +1,34 @@
+.scale-info {
+  padding-top: 84px;
+  display: flex;
+  justify-content: center;
+
+  .icon-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+
+    mat-icon {
+      margin-right: 5px;
+    }
+  }
+}
+
+mat-divider {
+  margin-top: 10px;
+}
+
+::ng-deep mat-tab-body {
+  margin-top: 20px;
+}
+
+mat-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-gap: 20px;
+}
+
+mat-list-item.member {
+  text-align: start;
+}

@@ -1,0 +1,73 @@
+<mat-toolbar class="absolute">
+  <button routerLink="../view" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <h1>Editar Escala</h1>
+</mat-toolbar>
+
+<mat-divider></mat-divider>
+
+<form *ngIf="scale$ |async as scale">
+  <mat-tab-group mat-stretch-tabs>
+    <mat-tab label="Info">
+      <ng-template mat-tab-label>
+        <div class="tab-label">
+          <mat-icon>info</mat-icon>
+          <span class="tab-label-text">Info</span>
+        </div>
+      </ng-template>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Title *</mat-label>
+        <mat-icon matPrefix>mode_edit</mat-icon>
+        <input type="tel" matInput placeholder="555-555-1234" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <input type="datetime-local" matInput [matDatepicker]="datePicker" disabled />
+        <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
+        <mat-datepicker #datePicker disabled="false"></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Observações</mat-label>
+        <textarea
+          matInput
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="5"
+          cdkAutosizeMaxRows="5"
+        ></textarea>
+      </mat-form-field>
+    </mat-tab>
+    <mat-tab label="Participantes">
+      <ng-template mat-tab-label>
+        <div class="tab-label">
+          <mat-icon>people</mat-icon>
+          <span class="tab-label-text">Membros</span>
+        </div>
+      </ng-template>
+
+      <button (click)="addMember()" type="button" mat-raised-button color="primary">
+        <mat-icon>add</mat-icon> Adicionar Participante
+      </button>
+
+      <p>A escala ainda não possui nenhum membro</p>
+    </mat-tab>
+    <mat-tab label="Músicas">
+      <ng-template mat-tab-label>
+        <div class="tab-label">
+          <mat-icon>library_music</mat-icon>
+          <span class="tab-label-text">Músicas</span>
+        </div>
+      </ng-template>
+
+      <button (click)="addMember()" type="button" mat-raised-button color="primary">
+        <mat-icon>add</mat-icon> Adicionar Música
+      </button>
+
+      <p>A escala ainda não possui nenhuma música</p>
+    </mat-tab>
+  </mat-tab-group>
+</form>

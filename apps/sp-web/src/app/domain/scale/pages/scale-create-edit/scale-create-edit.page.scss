@@ -1,0 +1,38 @@
+:host {
+  display: block;
+}
+
+mat-divider {
+  padding-top: 70px;
+}
+
+.tab-label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  &-text {
+    margin-top: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #8c8c8c;
+  }
+}
+
+form {
+  margin-top: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+form {
+  margin: 0;
+}
+
+::ng-deep mat-tab-body {
+  margin-top: 20px;
+  text-align: center;
+}
