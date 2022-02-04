@@ -27,14 +27,11 @@
 
 <div class="cards">
   <mat-card
-    *ngFor="let ministry of ministryListItems$ | async"
+    *ngFor="let ministry of ministryListItems$ | async; let i = index"
     [routerLink]="['/ministerios', ministry.ministryID]"
   >
     <mat-card-title-group>
-      <img
-        mat-card-sm-image
-        src="https://material.angular.io/assets/img/examples/shiba2.jpg"
-      />
+      <img mat-card-sm-image src="https://picsum.photos/{{i}}00" />
       <mat-card-title>{{ ministry.name }}</mat-card-title>
     </mat-card-title-group>
 

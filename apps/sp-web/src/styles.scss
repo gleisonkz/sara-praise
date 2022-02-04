@@ -1,45 +1,12 @@
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-@use '@angular/material' as mat;
-// Plus imports for other components in your app.
-
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$sp-web-primary: mat.define-palette(mat.$indigo-palette);
-$sp-web-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-
-// The warn palette is optional (defaults to red).
-$sp-web-warn: mat.define-palette(mat.$red-palette);
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$sp-web-theme: mat.define-light-theme(
-  (
-    color: (
-      primary: $sp-web-primary,
-      accent: $sp-web-accent,
-      warn: $sp-web-warn,
-    ),
-  )
-);
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-@include mat.all-component-themes($sp-web-theme);
-
-/* You can add global styles to this file, and also import other style files */
+@import 'custom-theme';
+@import 'mixins';
 
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   padding: 0 20px;
+  background-color: $dark-background;
+  color: #fff;
 }
 
 mat-toolbar.absolute {
@@ -55,4 +22,26 @@ mat-toolbar.absolute {
     flex: 1;
     text-align: center;
   }
+}
+
+mat-card.mat-card {
+  background: $dark-bg-lighter-10 !important;
+  transition: filter 0.2s ease-in-out;
+
+  @include hover;
+}
+
+.mat-menu-panel {
+  background: $dark-bg-lighter-10 !important;
+}
+
+.mat-dialog-container {
+  background: $dark-bg-lighter-10 !important;
+}
+
+.mat-flat-button.mat-primary,
+.mat-raised-button.mat-primary,
+.mat-fab.mat-primary,
+.mat-mini-fab.mat-primary {
+  color: rgba(56, 55, 55, 0.87);
 }

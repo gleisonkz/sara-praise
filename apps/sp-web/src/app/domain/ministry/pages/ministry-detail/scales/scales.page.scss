@@ -1,3 +1,6 @@
+@import 'custom-theme';
+@import 'mixins';
+
 :host {
   display: grid;
   gap: 20px;
@@ -6,17 +9,14 @@
   grid-template-columns: repeat(auto-fit, minmax(304px, 1fr));
 
   .scale {
-    background-color: #424242;
     border-radius: 5px;
     color: #fff;
     display: flex;
     padding: 15px;
     cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    transition: opacity 0.2s ease-in-out;
 
-    &:hover {
-      background-color: #616161;
-    }
+    @include hover;
   }
 
   .date {

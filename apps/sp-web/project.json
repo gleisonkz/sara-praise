@@ -16,6 +16,9 @@
         "inlineStyleLanguage": "scss",
         "assets": ["apps/sp-web/src/favicon.ico", "apps/sp-web/src/assets"],
         "styles": ["apps/sp-web/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["apps/sp-web/src/scss"]
+        },
         "scripts": []
       },
       "configurations": {
@@ -75,10 +78,7 @@
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/sp-web/src/**/*.ts",
-          "apps/sp-web/src/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/sp-web/src/**/*.ts", "apps/sp-web/src/**/*.html"]
       }
     },
     "test": {

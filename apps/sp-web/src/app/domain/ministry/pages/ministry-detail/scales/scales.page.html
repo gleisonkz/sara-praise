@@ -1,6 +1,6 @@
 <ng-container *ngIf="scaleListItems$ | async as scales">
   <ng-container *ngIf="scales.length; else noScalesTemplate">
-    <div
+    <mat-card
       @fadeAnimation
       [routerLink]="['./', scale.scaleID]"
       class="scale"
@@ -24,7 +24,7 @@
         <mat-icon>music_note</mat-icon>
         <span>{{ scale.songsQuantity }}</span>
       </div>
-    </div>
+    </mat-card>
   </ng-container>
   <ng-template #noScalesTemplate>
     <p style="text-align: center">Ainda não foi cadastrada nenhuma escala</p>

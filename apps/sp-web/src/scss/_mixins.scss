@@ -1,0 +1,7 @@
+@mixin hover {
+  @media (hover: hover) {
+    &:hover {
+      filter: brightness(1.2);
+    }
+  }
+}
