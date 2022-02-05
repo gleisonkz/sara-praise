@@ -1,10 +1,14 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
-
 import {
-    KeyListItemResponse, MemberListItemResponse, MinistryListItemResponse, MinistryRequest,
-    ScaleListItemResponse, SongListItemResponse
+  KeyListItemResponse,
+  KeyResponse,
+  MemberListItemResponse,
+  MinistryKeyRequest,
+  MinistryListItemResponse,
+  MinistryRequest,
+  ScaleListItemResponse,
+  SongListItemResponse,
 } from '@sp/shared-interfaces';
-
 import { Response } from 'express';
 import { MinistryNotFoundError, MinistryService } from '../services';
 
@@ -71,14 +75,33 @@ export class MinistryController {
     const ministryListItem = this.ministryService.createMinistry(ministryRequest);
     return ministryListItem;
   }
+  @Post('/:id/keys')
+  createMinistryKey(@Body() ministryKeyRequest: MinistryKeyRequest, @Param('id') ministryID: number) {
+    const ministryKey = this.ministryService.createMinistryKey(ministryKeyRequest, +ministryID);
+    return ministryKey;
+  }
 
   @Get('/:id/keys')
-  async getKeys(
+  async getKeyListItems(
     @Param('id') ministryID: number,
     @Res({ passthrough: true }) res: Response
   ): Promise<KeyListItemResponse[]> {
     try {
-      const keys = this.ministryService.getKeys(+ministryID);
+      const keys = this.ministryService.getKeyListItems(+ministryID);
+      return keys;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
+  }
+
+  @Get('keys')
+  async getKeys(@Res({ passthrough: true }) res: Response): Promise<KeyResponse[]> {
+    try {
+      const keys = await this.ministryService.getKeys();
       return keys;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {

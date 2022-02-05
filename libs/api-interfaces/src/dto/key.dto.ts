@@ -1,8 +1,4 @@
-export interface KeyListItemResponse {
+export interface KeyResponse {
   keyID: number;
-  memberImageUrl: string;
-  memberName: string;
-  artistName: string;
-  songTitle: string;
-  songKey: string;
+  key: string;
 }
