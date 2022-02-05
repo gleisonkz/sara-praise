@@ -38,9 +38,9 @@ export class ScaleCreateEditPage implements OnInit {
   addMember() {
     this.matDialog.open(ScaleMembersDialog, {
       data: this.scaleId,
-      maxWidth: '600px',
+      maxWidth: '800px',
       width: '100%',
-      panelClass: 'full-screen-modal',
+      panelClass: 'sp-scale-modal',
     });
   }
 }
