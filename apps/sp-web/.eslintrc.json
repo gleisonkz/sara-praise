@@ -1,11 +1,13 @@
 {
   "extends": ["../../.eslintrc.json"],
   "ignorePatterns": ["!**/*"],
+  "plugins": ["@ngneat/reactive-forms"],
   "overrides": [
     {
       "files": ["*.ts"],
       "extends": ["plugin:@nrwl/nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
       "rules": {
+        "@ngneat/reactive-forms/no-angular-forms-imports": "error",
         "eslint@typescript-eslint/no-explicit-any": "off",
         "@angular-eslint/no-input-rename": "off",
         "@angular-eslint/component-class-suffix": [
