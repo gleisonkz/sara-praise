@@ -1,5 +1,6 @@
 @import 'custom-theme';
 @import 'mixins';
+@import 'colors';
 
 body {
   margin: 0;
@@ -9,8 +10,17 @@ body {
   color: #fff;
 }
 
+mat-toolbar {
+  background-color: $dark-bg-lighter-10 !important;
+}
+
+mat-flat-button {
+  // background-color: $dark-bg-lighter-10 !important;
+}
+
 mat-toolbar.absolute {
   position: absolute;
+
   top: 0;
   left: 0;
   right: 0;
