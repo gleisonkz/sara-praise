@@ -1,14 +1,10 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+
 import {
-  KeyListItemResponse,
-  KeyResponse,
-  MemberListItemResponse,
-  MinistryKeyRequest,
-  MinistryListItemResponse,
-  MinistryRequest,
-  ScaleListItemResponse,
-  SongListItemResponse,
+    KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
+    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse, SongListItemResponse
 } from '@sp/shared-interfaces';
+
 import { Response } from 'express';
 import { MinistryNotFoundError, MinistryService } from '../services';
 
@@ -73,10 +69,15 @@ export class MinistryController {
   @Post()
   createMinistry(@Body() ministryRequest: MinistryRequest): MinistryListItemResponse {
     const ministryListItem = this.ministryService.createMinistry(ministryRequest);
+
     return ministryListItem;
   }
+
   @Post('/:id/keys')
-  createMinistryKey(@Body() ministryKeyRequest: MinistryKeyRequest, @Param('id') ministryID: number) {
+  createMinistryKey(
+    @Body() ministryKeyRequest: MinistryKeyRequest,
+    @Param('id') ministryID: number
+  ): MinistryKeyListItemResponse {
     const ministryKey = this.ministryService.createMinistryKey(ministryKeyRequest, +ministryID);
     return ministryKey;
   }
@@ -85,7 +86,7 @@ export class MinistryController {
   async getKeyListItems(
     @Param('id') ministryID: number,
     @Res({ passthrough: true }) res: Response
-  ): Promise<KeyListItemResponse[]> {
+  ): Promise<MinistryKeyListItemResponse[]> {
     try {
       const keys = this.ministryService.getKeyListItems(+ministryID);
       return keys;

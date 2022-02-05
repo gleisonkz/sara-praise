@@ -1,5 +1,5 @@
-export interface KeyListItemResponse {
-  keyID: number;
+export interface MinistryKeyListItemResponse {
+  ministryKeyID: number;
   memberImageUrl: string;
   memberName: string;
   artistName: string;

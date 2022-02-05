@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MinistryKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, map, Observable, of, switchMap, take } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, switchMap, take } from 'rxjs';
 import {
     MinistryKeyDialogComponent
 } from '../../components/ministry-key-dialog/ministry-key-dialog.component';
@@ -52,11 +52,13 @@ export class MinistryDetailPage implements OnInit {
 
     const dialogRef = this.dialog.open(MinistryKeyDialogComponent, {
       data: this.ministryID,
+      width: '100%',
+      maxWidth: '600px',
     });
 
     dialogRef
       .afterClosed()
-      .pipe(untilDestroyed(this))
+      .pipe(untilDestroyed(this), filter(Boolean))
       .subscribe((result: MinistryKeyRequest) => {
         this.ministryService.createMinistryKey(this.ministryID, result).subscribe((ministryKey) => {
           console.log(ministryKey);

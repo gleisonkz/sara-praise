@@ -10,12 +10,30 @@ body {
   color: #fff;
 }
 
-mat-toolbar {
-  background-color: $dark-bg-lighter-10 !important;
+@media (hover: hover) {
+  .mat-button,
+  .mat-flat-button,
+  .mat-raised-button,
+  .mat-icon-button,
+  .mat-stroked-button,
+  .mat-fab,
+  .mat-mini-fab,
+  .mat-button.mat-accent,
+  .mat-flat-button.mat-accent,
+  .mat-raised-button.mat-accent,
+  .mat-icon-button,
+  .mat-fab.mat-accent,
+  .mat-mini-fab.mat-accent {
+    transition: filter 0.2s ease-in-out, background-color 0.2s ease-in-out, color 0.2s ease-in-out !important;
+  }
+
+  :is(.mat-button, .mat-raised-button, .mat-icon-button, .mat-stroked-button, .mat-flat-button, .mat-fab, .mat-mini-fab):hover {
+    filter: brightness(1.2);
+  }
 }
 
-mat-flat-button {
-  // background-color: $dark-bg-lighter-10 !important;
+mat-toolbar {
+  background-color: $dark-bg-lighter-10 !important;
 }
 
 mat-toolbar.absolute {

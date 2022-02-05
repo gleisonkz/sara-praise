@@ -1,16 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import {
-  KeyListItemResponse,
-  KeyResponse,
-  MemberListItemResponse,
-  MinistryKeyRequest,
-  MinistryListItemResponse,
-  MinistryRequest,
-  ScaleDetailResponse,
-  ScaleListItemResponse,
-  SongListItemResponse,
+    KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
+    MinistryListItemResponse, MinistryRequest, ScaleDetailResponse, ScaleListItemResponse,
+    SongListItemResponse
 } from '@sp/shared-interfaces';
+
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -18,11 +14,14 @@ import { BehaviorSubject, Observable, tap } from 'rxjs';
 })
 export class MinistryService {
   private ministryListItems$$ = new BehaviorSubject<MinistryListItemResponse[]>([]);
+  private ministryKeyListItems$$ = new BehaviorSubject<MinistryKeyListItemResponse[]>([]);
+
   private readonly BASE_URL = '/api/ministry';
 
   constructor(private readonly http: HttpClient) {}
 
   ministryListItems$ = this.ministryListItems$$.asObservable();
+  ministryKeyListItems$ = this.ministryKeyListItems$$.asObservable();
 
   createMinistry(ministry: MinistryRequest): Observable<MinistryListItemResponse> {
     return this.http
@@ -31,9 +30,13 @@ export class MinistryService {
         tap((ministryListItem) => this.ministryListItems$$.next([...this.ministryListItems$$.value, ministryListItem]))
       );
   }
-  createMinistryKey(ministryID: number, key: MinistryKeyRequest): Observable<MinistryKeyRequest> {
+
+  createMinistryKey(ministryID: number, key: MinistryKeyRequest): Observable<MinistryKeyListItemResponse> {
     const url = `${this.BASE_URL}/${ministryID}/keys`;
-    return this.http.post<MinistryKeyRequest>(url, key);
+    return this.http.post<MinistryKeyListItemResponse>(url, key).pipe(
+      tap((ministryKeyListItem) => console.log(ministryKeyListItem)),
+      tap((ministryKey) => this.ministryKeyListItems$$.next([...this.ministryKeyListItems$$.value, ministryKey]))
+    );
   }
 
   getMinistryListItems(ministryID?: number): Observable<MinistryListItemResponse[]> {
@@ -65,10 +68,13 @@ export class MinistryService {
     return this.http.get<MemberListItemResponse[]>(url);
   }
 
-  getKeyListItem(ministryID: number): Observable<KeyListItemResponse[]> {
+  getKeyListItem(ministryID: number): Observable<MinistryKeyListItemResponse[]> {
     const url = `${this.BASE_URL}/${ministryID}/keys`;
-    return this.http.get<KeyListItemResponse[]>(url);
+    return this.http
+      .get<MinistryKeyListItemResponse[]>(url)
+      .pipe(tap((ministryKeyListItems) => this.ministryKeyListItems$$.next(ministryKeyListItems)));
   }
+
   getKeys(): Observable<KeyResponse[]> {
     const url = `${this.BASE_URL}/keys`;
     return this.http.get<KeyResponse[]>(url);

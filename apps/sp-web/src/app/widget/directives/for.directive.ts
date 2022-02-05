@@ -24,7 +24,10 @@ export class SpForDirective<T> implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.items$.pipe(takeUntil(this.destroy$)).subscribe((items) => {
       const hasNoItems = !items || items.length === 0;
-      if (hasNoItems) this.renderNoMessage();
+
+      this.viewContainer.clear();
+
+      if (hasNoItems) return this.renderNoMessage();
 
       items.forEach((item) => {
         this.viewContainer.createEmbeddedView(this.templateRef, {
@@ -44,6 +47,7 @@ export class SpForDirective<T> implements OnInit, OnDestroy {
   renderNoMessage(): void {
     const componentRef = this.viewContainer.createComponent(EmptyListNoMessageComponent);
     componentRef.instance.message = this.emptyMessage;
+    this.changeDetector.detectChanges();
   }
 }
 

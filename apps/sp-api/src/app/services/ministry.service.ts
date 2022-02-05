@@ -1,17 +1,14 @@
 import { Injectable } from '@nestjs/common';
+
 import { eMinistryRole } from '@sp/api/enums';
 import { Member, Ministry, Scale, Song } from '@sp/api/models';
 import {
-  KeyListItemResponse,
-  KeyResponse,
-  MemberListItemResponse,
-  MinistryKeyRequest,
-  MinistryListItemResponse,
-  MinistryRequest,
-  ScaleDetailResponse,
-  ScaleListItemResponse,
-  SongListItemResponse,
+    KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
+    MinistryListItemResponse, MinistryRequest, ScaleDetailResponse, ScaleListItemResponse,
+    SongListItemResponse
 } from '@sp/shared-interfaces';
+
+import { MinistryKey } from 'apps/sp-api/src/app/models/ministry-key.model';
 import { MINISTRIES_MOCK } from '../mocks';
 import { KEYS } from '../mocks/keys.mock';
 
@@ -23,24 +20,42 @@ export class MinistryNotFoundError extends Error {
 
 @Injectable()
 export class MinistryService {
+  private ministries: Ministry[] = MINISTRIES_MOCK;
+
   private getMinistryById(ministryID: number): Ministry {
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
 
     if (!ministry) throw new MinistryNotFoundError(ministryID);
-
     return ministry;
   }
-  createMinistryKey(ministryKeyRequest: MinistryKeyRequest, id: number) {
+
+  createMinistryKey(ministryKeyRequest: MinistryKeyRequest, id: number): MinistryKeyListItemResponse {
     const ministry = this.getMinistryById(id);
-    const ministryKey = {
+
+    const song: Song = ministry.songs.find((song) => song.songID === ministryKeyRequest.songID);
+    const member: Member = ministry.members.find((member) => member.memberID === ministryKeyRequest.memberID);
+
+    const ministryKey: MinistryKey = {
       ministryID: ministry.ministryID,
       ministryKeyID: ministry.ministryKeys.length + 1,
-      ...ministryKeyRequest,
+      songID: song.songID,
+      memberID: member.memberID,
+      keyID: ministryKeyRequest.keyID,
     };
+
+    const ministryKeyListItem: MinistryKeyListItemResponse = {
+      ministryKeyID: ministry.ministryKeys.length + 1,
+      artistName: song.artist.name,
+      songKey: song.key,
+      songTitle: song.title,
+      memberName: member.user.name,
+      memberImageUrl: member.user.imageUrl,
+    };
+
     ministry.ministryKeys.push(ministryKey);
-    return ministryKey;
+
+    return ministryKeyListItem;
   }
-  private ministries: Ministry[] = MINISTRIES_MOCK;
 
   getMinistriesListItems(ministryID?: string): MinistryListItemResponse[] {
     const ministryPredicate = (ministry: Ministry) => ministry.ministryID === Number(ministryID);
@@ -54,7 +69,7 @@ export class MinistryService {
         musicsQuantity: ministry.songs.length,
         membersQuantity: ministry.members.length,
         scalesQuantity: ministry.scales.length,
-        keysQuantity: ministry.keys.length,
+        keysQuantity: ministry.ministryKeys.length,
       };
 
       return ministryListItem;
@@ -130,12 +145,14 @@ export class MinistryService {
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
     if (!ministry) throw new MinistryNotFoundError(ministryID);
 
-    const keys: KeyListItemResponse[] = ministry.keys.map((key) => {
-      const song = ministry.songs.find((song) => song.songID === key.songID);
-      const member = ministry.members.find((member) => member.memberID === key.memberID);
+    console.log(ministry.ministryKeys);
 
-      const keyListItem: KeyListItemResponse = {
-        keyID: key.keyID,
+    const keys: MinistryKeyListItemResponse[] = ministry.ministryKeys.map((ministryKey) => {
+      const song = ministry.songs.find((song) => song.songID === ministryKey.songID);
+      const member = ministry.members.find((member) => member.memberID === ministryKey.memberID);
+
+      const keyListItem: MinistryKeyListItemResponse = {
+        ministryKeyID: ministryKey.ministryKeyID,
         memberName: member.user.name,
         songTitle: song.title,
         artistName: song.artist.name,
@@ -162,7 +179,6 @@ export class MinistryService {
       roles: [],
       scales: [],
       songs: [],
-      keys: [],
       ministryKeys: [],
     };
 
@@ -172,7 +188,7 @@ export class MinistryService {
       musicsQuantity: ministry.songs.length,
       membersQuantity: ministry.members.length,
       scalesQuantity: ministry.scales.length,
-      keysQuantity: ministry.keys.length,
+      keysQuantity: ministry.ministryKeys.length,
     };
 
     this.ministries.push(ministry);
@@ -202,7 +218,7 @@ export class MinistryService {
     });
 
     const songs: SongListItemResponse[] = scale.songs.map((song) => {
-      const ministryKey = this.getMinistryKey(ministry, song, minister);
+      const ministryKey = this.getMinistryKeyName(ministry, song, minister);
 
       const songListItem: SongListItemResponse = {
         songID: song.songID,
@@ -229,7 +245,7 @@ export class MinistryService {
     return scaleDetail;
   }
 
-  private getMinistryKey(ministry: Ministry, song: Song, minister: Member) {
+  private getMinistryKeyName(ministry: Ministry, song: Song, minister: Member) {
     if (!minister) return null;
 
     const ministryKey = ministry.ministryKeys.find((ministryKey) => {
@@ -241,11 +257,9 @@ export class MinistryService {
       return hasMinistryKey;
     });
 
-    if (!ministryKey) return `Não possui tom cadastrado para o ministro(a) ${minister.name}`;
+    if (!ministryKey) return `Não possui tom cadastrado para o ministro(a) ${minister.user.name}`;
 
-    const key = ministry.keys.find((key) => ministryKey.keyID === key.keyID);
-    const ministerSongKey = key.keyLabel;
-
-    return ministerSongKey;
+    const keyName = KEYS.find((key) => key.keyID === ministryKey.keyID).key;
+    return keyName;
   }
 }
