@@ -30,6 +30,7 @@
     "@ngneat/hot-toast": "^4.1.0",
     "@ngneat/overview": "^2.0.2",
     "@ngneat/reactive-forms": "^4.0.4",
+    "@ngneat/until-destroy": "^9.0.0",
     "@nrwl/angular": "13.6.1",
     "dotenv": "^14.3.2",
     "passport": "^0.5.2",

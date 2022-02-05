@@ -1,11 +1,18 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+
+import { MatDialog } from '@angular/material/dialog';
+
 import { MinistryKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
+
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { combineLatest, map, Observable, of, switchMap, take } from 'rxjs';
-import { MinistryKeyDialogComponent } from '../../components/ministry-key-dialog/ministry-key-dialog.component';
+import {
+    MinistryKeyDialogComponent
+} from '../../components/ministry-key-dialog/ministry-key-dialog.component';
 import { MinistryService } from '../../services/ministry.service';
 
+@UntilDestroy()
 @Component({
   templateUrl: './ministry-detail.page.html',
   styleUrls: ['./ministry-detail.page.scss'],
@@ -40,15 +47,20 @@ export class MinistryDetailPage implements OnInit {
     );
   }
 
-  createMinistryKey(route: boolean) {
-    if (!route) return;
+  createMinistryKey(isKeyTabActive: boolean) {
+    if (!isKeyTabActive) return;
+
     const dialogRef = this.dialog.open(MinistryKeyDialogComponent, {
       data: this.ministryID,
     });
-    dialogRef.afterClosed().subscribe((result: MinistryKeyRequest) => {
-      this.ministryService.createMinistryKey(this.ministryID, result).subscribe((ministryKey) => {
-        console.log(ministryKey);
+
+    dialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this))
+      .subscribe((result: MinistryKeyRequest) => {
+        this.ministryService.createMinistryKey(this.ministryID, result).subscribe((ministryKey) => {
+          console.log(ministryKey);
+        });
       });
-    });
   }
 }
