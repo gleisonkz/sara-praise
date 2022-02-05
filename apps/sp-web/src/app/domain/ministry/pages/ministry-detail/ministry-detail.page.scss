@@ -18,17 +18,16 @@ mat-toolbar.top {
   margin-top: 50px;
 }
 
-.example-header-image {
-  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
-  background-size: cover;
-}
-
-.example-spacer {
-  flex: 1 1 auto;
-}
-
 nav {
   margin-bottom: 20px;
+}
+
+.desktop-nav {
+  transition: color 0.3s ease-in-out, border 0.3s ease-in-out;
+  button.active {
+    color: var(--primary-color);
+    border: solid 0.1px var(--primary-color);
+  }
 }
 
 footer {

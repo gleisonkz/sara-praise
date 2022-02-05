@@ -21,7 +21,7 @@
 
   <div class="toolbar-spacer"></div>
 
-  <nav mat-tab-nav-bar mat-stretch-tabs *spMediaIf="510; mode 'gt'">
+  <nav class="desktop-nav" mat-tab-nav-bar mat-stretch-tabs *spMediaIf="510; mode 'gt'">
     <a
       mat-tab-link
       [routerLink]="['escalas']"
@@ -41,6 +41,7 @@
     >
       Músicas ({{ ministryListItem.musicsQuantity }})
     </a>
+
     <a
       mat-tab-link
       [routerLink]="['membros']"
@@ -50,6 +51,7 @@
     >
       Membros ({{ ministryListItem.membersQuantity }})
     </a>
+
     <a
       mat-tab-link
       [routerLink]="['tonalidades']"
@@ -59,7 +61,13 @@
     >
       Tonalidades ({{ ministryListItem.keysQuantity }})
     </a>
-    <button mat-raised-button (click)="createMinistryKey(keyLink.isActive)">
+
+    <button
+      [class.active]="keyLink.isActive || memberLink.isActive"
+      [disabled]="scaleLink.isActive || musicLink.isActive"
+      mat-raised-button
+      (click)="createMinistryKey(keyLink.isActive)"
+    >
       <mat-icon>add</mat-icon>
     </button>
   </nav>
