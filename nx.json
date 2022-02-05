@@ -1,5 +1,5 @@
 {
-  "npmScope": "sara-praise",
+  "npmScope": "sp",
   "affected": {
     "defaultBase": "main"
   },
@@ -43,6 +43,12 @@
     },
     "@nrwl/angular:component": {
       "style": "scss"
+    },
+    "@schematics/angular:component": {
+      "prefix": "sp-",
+      "style": "scss",
+      "displayBlock": true,
+      "changeDetection": "OnPush"
     }
   },
   "defaultProject": "sp-web"

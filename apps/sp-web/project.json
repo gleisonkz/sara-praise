@@ -2,7 +2,7 @@
   "projectType": "application",
   "root": "apps/sp-web",
   "sourceRoot": "apps/sp-web/src",
-  "prefix": "sara-praise",
+  "prefix": "sp",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",

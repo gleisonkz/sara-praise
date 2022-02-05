@@ -1,13 +1,19 @@
 import { Injectable } from '@nestjs/common';
-
 import { eMinistryRole } from '@sp/api/enums';
 import { Member, Ministry, Scale, Song } from '@sp/api/models';
 import {
-    KeyListItemResponse, MemberListItemResponse, MinistryListItemResponse, MinistryRequest,
-    ScaleDetailResponse, ScaleListItemResponse, SongListItemResponse
+  KeyListItemResponse,
+  KeyResponse,
+  MemberListItemResponse,
+  MinistryKeyRequest,
+  MinistryListItemResponse,
+  MinistryRequest,
+  ScaleDetailResponse,
+  ScaleListItemResponse,
+  SongListItemResponse,
 } from '@sp/shared-interfaces';
-
 import { MINISTRIES_MOCK } from '../mocks';
+import { KEYS } from '../mocks/keys.mock';
 
 export class MinistryNotFoundError extends Error {
   constructor(public ministryID: number) {
@@ -17,6 +23,23 @@ export class MinistryNotFoundError extends Error {
 
 @Injectable()
 export class MinistryService {
+  private getMinistryById(ministryID: number): Ministry {
+    const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
+
+    if (!ministry) throw new MinistryNotFoundError(ministryID);
+
+    return ministry;
+  }
+  createMinistryKey(ministryKeyRequest: MinistryKeyRequest, id: number) {
+    const ministry = this.getMinistryById(id);
+    const ministryKey = {
+      ministryID: ministry.ministryID,
+      ministryKeyID: ministry.ministryKeys.length + 1,
+      ...ministryKeyRequest,
+    };
+    ministry.ministryKeys.push(ministryKey);
+    return ministryKey;
+  }
   private ministries: Ministry[] = MINISTRIES_MOCK;
 
   getMinistriesListItems(ministryID?: string): MinistryListItemResponse[] {
@@ -103,7 +126,7 @@ export class MinistryService {
     return members;
   }
 
-  async getKeys(ministryID: number) {
+  async getKeyListItems(ministryID: number) {
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
     if (!ministry) throw new MinistryNotFoundError(ministryID);
 
@@ -124,6 +147,10 @@ export class MinistryService {
     });
 
     return keys;
+  }
+
+  getKeys(): KeyResponse[] {
+    return KEYS;
   }
 
   createMinistry(ministryListItem: MinistryRequest): MinistryListItemResponse {
