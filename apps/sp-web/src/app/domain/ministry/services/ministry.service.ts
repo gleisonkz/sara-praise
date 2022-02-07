@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
@@ -63,9 +63,11 @@ export class MinistryService {
     return this.http.get<SongListItemResponse[]>(url);
   }
 
-  getMemberListItems(ministryID: number): Observable<MemberListItemResponse[]> {
+  getMemberListItems(ministryID: number, roles?: number[]): Observable<MemberListItemResponse[]> {
     const url = `${this.BASE_URL}/${ministryID}/members`;
-    return this.http.get<MemberListItemResponse[]>(url);
+    const params = new HttpParams().set('roles', roles ? roles.join(',') : '');
+
+    return this.http.get<MemberListItemResponse[]>(url, { params });
   }
 
   getKeyListItem(ministryID: number): Observable<MinistryKeyListItemResponse[]> {

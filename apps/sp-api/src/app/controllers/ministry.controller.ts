@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, Res } from '@nestjs/common';
 
 import {
     KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
@@ -51,11 +51,12 @@ export class MinistryController {
 
   @Get('/:id/members')
   async getMembers(
-    @Param('id') id: number,
+    @Param('id') ministryID: number,
+    @Query('roles') roles,
     @Res({ passthrough: true }) res: Response
   ): Promise<MemberListItemResponse[]> {
     try {
-      const members = await this.ministryService.getMembers(+id);
+      const members = await this.ministryService.getMembers(+ministryID, roles);
       return members;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {

@@ -3,7 +3,7 @@
     <mat-label>Ministro</mat-label>
     <mat-select formControlName="memberID">
       <mat-option
-        *ngFor="let member of sntListMembers$ | async"
+        *ngFor="let member of ministerMembers$ | async"
         [value]="member.memberID"
       >
         {{ member.name }}

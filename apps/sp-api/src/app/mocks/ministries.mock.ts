@@ -1,5 +1,6 @@
-import { eMinistryRole, eSongKey } from '@sp/api/enums';
+import { eSongKey } from '@sp/api/enums';
 import { Member, Ministry, Song } from '@sp/api/models';
+import { eMinistryRole } from '@sp/shared-interfaces';
 
 import { User } from 'apps/sp-api/src/app/models/user.model';
 import { DEFAULT_ROLES, MOCK_ROLES } from './roles.mock';

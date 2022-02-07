@@ -1,5 +1,5 @@
-import { eMinistryRole } from '@sp/api/enums';
 import { Role } from '@sp/api/models';
+import { eMinistryRole } from '@sp/shared-interfaces';
 
 export const MOCK_ROLES = {
   [eMinistryRole.MINISTER]: {
