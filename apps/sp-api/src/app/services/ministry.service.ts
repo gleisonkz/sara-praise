@@ -1,15 +1,19 @@
 import { Injectable } from '@nestjs/common';
-
 import { eMinistryRole } from '@sp/api/enums';
 import { Member, Ministry, Scale, Song } from '@sp/api/models';
 import {
-    KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
-    MinistryListItemResponse, MinistryRequest, ScaleDetailResponse, ScaleListItemResponse,
-    SongListItemResponse
+  KeyResponse,
+  MemberListItemResponse,
+  MinistryKeyListItemResponse,
+  MinistryKeyRequest,
+  MinistryListItemResponse,
+  MinistryRequest,
+  ScaleDetailResponse,
+  ScaleListItemResponse,
+  SongListItemResponse,
 } from '@sp/shared-interfaces';
-
 import { MinistryKey } from 'apps/sp-api/src/app/models/ministry-key.model';
-import { MINISTRIES_MOCK } from '../mocks';
+import { MinistryRepository } from '../database/ministry-repository';
 import { KEYS } from '../mocks/keys.mock';
 
 export class MinistryNotFoundError extends Error {
@@ -20,7 +24,10 @@ export class MinistryNotFoundError extends Error {
 
 @Injectable()
 export class MinistryService {
-  private ministries: Ministry[] = MINISTRIES_MOCK;
+  private storage = this.database.getDataBase();
+  private ministries: Ministry[] = this.storage.ministriesMock;
+
+  constructor(private database: MinistryRepository) {}
 
   private getMinistryById(ministryID: number): Ministry {
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
@@ -53,6 +60,8 @@ export class MinistryService {
     };
 
     ministry.ministryKeys.push(ministryKey);
+
+    this.database.saveDataBase(this.ministries, 'ministriesMock');
 
     return ministryKeyListItem;
   }
@@ -145,8 +154,6 @@ export class MinistryService {
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
     if (!ministry) throw new MinistryNotFoundError(ministryID);
 
-    console.log(ministry.ministryKeys);
-
     const keys: MinistryKeyListItemResponse[] = ministry.ministryKeys.map((ministryKey) => {
       const song = ministry.songs.find((song) => song.songID === ministryKey.songID);
       const member = ministry.members.find((member) => member.memberID === ministryKey.memberID);
@@ -192,6 +199,8 @@ export class MinistryService {
     };
 
     this.ministries.push(ministry);
+
+    this.database.saveDataBase(this.ministries, 'ministriesMock');
     return ministryListItemResponse;
   }
 
