@@ -27,6 +27,7 @@
     "@nestjs/core": "^8.0.0",
     "@nestjs/passport": "^8.1.0",
     "@nestjs/platform-express": "^8.0.0",
+    "@nestjs/swagger": "^5.2.0",
     "@ngneat/hot-toast": "^4.1.0",
     "@ngneat/overview": "^2.0.2",
     "@ngneat/reactive-forms": "^4.0.4",
@@ -38,6 +39,7 @@
     "passport-google-oauth20": "^2.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.4.0",
+    "swagger-ui-express": "^4.3.0",
     "tslib": "^2.0.0",
     "zone.js": "~0.11.4"
   },

@@ -17,6 +17,12 @@ export class MinistryNotFoundError extends Error {
   }
 }
 
+export class MultipleSongsFoundError extends Error {
+  constructor(public songID: number) {
+    super(`Multiple songs with ID ${songID} found`);
+  }
+}
+
 @Injectable()
 export class MinistryService {
   private storage = this.database.getDataBase();
@@ -154,22 +160,24 @@ export class MinistryService {
     return songs;
   }
 
-  async getMembers(ministryID: number, roles: eMinistryRole[]) {
+  async getMembers(ministryID: number, roles?: eMinistryRole[]) {
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
     if (!ministry) throw new MinistryNotFoundError(ministryID);
 
-    const members: MemberListItemResponse[] = ministry.members
-      .filter((member) => member.roles.some((role) => roles.includes(role.roleID)))
-      .map((member) => {
-        const memberListItem: MemberListItemResponse = {
-          memberID: member.memberID,
-          name: member.user.name,
-          imageUrl: member.user.imageUrl,
-          roles: member.roles,
-        };
+    let members: MemberListItemResponse[] = ministry.members.map((member) => {
+      const memberListItem: MemberListItemResponse = {
+        memberID: member.memberID,
+        name: member.user.name,
+        imageUrl: member.user.imageUrl,
+        roles: member.roles,
+      };
 
-        return memberListItem;
-      });
+      return memberListItem;
+    });
+
+    if (roles) {
+      members = members.filter((member) => member.roles.some((role) => roles.includes(role.roleID)));
+    }
 
     return members;
   }
@@ -181,7 +189,7 @@ export class MinistryService {
     const keys: MinistryKeyListItemResponse[] = ministry.ministryKeys.map((ministryKey) => {
       const songs = ministry.songs.filter((song) => song.songID === ministryKey.songID);
 
-      if (songs.length > 1) throw new Error('More than one song with the same songID');
+      if (songs.length > 1) throw new MultipleSongsFoundError(ministryKey.songID);
 
       const [song] = songs;
 
