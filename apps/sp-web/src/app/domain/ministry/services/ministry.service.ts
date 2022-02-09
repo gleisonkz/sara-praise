@@ -63,6 +63,11 @@ export class MinistryService {
     return this.http.get<SongListItemResponse[]>(url);
   }
 
+  getAvailableSongListItems(ministryID: number, ministerID: number): Observable<SongListItemResponse[]> {
+    const url = `${this.BASE_URL}/${ministryID}/songs/available/${ministerID}`;
+    return this.http.get<SongListItemResponse[]>(url);
+  }
+
   getMemberListItems(ministryID: number, roles?: number[]): Observable<MemberListItemResponse[]> {
     const url = `${this.BASE_URL}/${ministryID}/members`;
     const params = new HttpParams().set('roles', roles ? roles.join(',') : '');

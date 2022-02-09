@@ -127,6 +127,33 @@ export class MinistryService {
     return songs;
   }
 
+  async getAvailableSongs(ministryID: number, ministerID: number): Promise<SongListItemResponse[]> {
+    const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
+    if (!ministry) throw new MinistryNotFoundError(ministryID);
+
+    const ministryKeys: MinistryKey[] = ministry.ministryKeys.filter((key) => key.memberID === ministerID);
+
+    const songs: SongListItemResponse[] = ministry.songs
+      .filter((song) => !ministryKeys.some((key) => key.songID === song.songID))
+      .map((song) => {
+        const songListItem: SongListItemResponse = {
+          songID: song.songID,
+          title: song.title,
+          tags: song.tags,
+          artistName: song.artist.name,
+          hasAudioLink: !!song.audioLink,
+          hasChordsLink: !!song.chordsLink,
+          hasLyricLink: !!song.lyricLink,
+          hasYoutubeLink: !!song.youtubeLink,
+          key: song.key,
+        };
+
+        return songListItem;
+      });
+
+    return songs;
+  }
+
   async getMembers(ministryID: number, roles: eMinistryRole[]) {
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
     if (!ministry) throw new MinistryNotFoundError(ministryID);
@@ -152,7 +179,14 @@ export class MinistryService {
     if (!ministry) throw new MinistryNotFoundError(ministryID);
 
     const keys: MinistryKeyListItemResponse[] = ministry.ministryKeys.map((ministryKey) => {
-      const song = ministry.songs.find((song) => song.songID === ministryKey.songID);
+      const songs = ministry.songs.filter((song) => song.songID === ministryKey.songID);
+
+      if (songs.length > 1) throw new Error('More than one song with the same songID');
+
+      const [song] = songs;
+
+      const ministryKeyLabel = KEYS.find((key) => key.keyID === ministryKey.keyID).key;
+
       const member = ministry.members.find((member) => member.memberID === ministryKey.memberID);
 
       const keyListItem: MinistryKeyListItemResponse = {
@@ -161,7 +195,7 @@ export class MinistryService {
         songTitle: song.title,
         artistName: song.artist.name,
         memberImageUrl: member.user.imageUrl,
-        songKey: song.key,
+        songKey: ministryKeyLabel,
       };
 
       return keyListItem;

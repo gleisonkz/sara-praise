@@ -10,14 +10,16 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
   <mat-form-field appearance="fill">
     <mat-label>Música</mat-label>
     <mat-select formControlName="songID">
-      <mat-option *ngFor="let songs of sntListSongs$ | async" [value]="songs.songID">
+      <mat-option *ngFor="let songs of songs$ | async" [value]="songs.songID">
         {{ songs.title }}
       </mat-option>
     </mat-select>
   </mat-form-field>
+
   <mat-form-field appearance="fill">
     <mat-label>Tom</mat-label>
     <mat-select formControlName="keyID">
@@ -26,6 +28,7 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
+
   <button
     type="button"
     color="accent"

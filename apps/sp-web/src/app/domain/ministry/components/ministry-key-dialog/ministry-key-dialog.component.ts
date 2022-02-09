@@ -8,7 +8,7 @@ import {
 } from '@sp/shared-interfaces';
 
 import { ControlsOf, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, filter, Observable, switchMap, tap } from 'rxjs';
 import { MinistryService } from '../../services/ministry.service';
 
 @Component({
@@ -17,27 +17,43 @@ import { MinistryService } from '../../services/ministry.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MinistryKeyDialogComponent implements OnInit {
-  constructor(public readonly ministryService: MinistryService, @Inject(MAT_DIALOG_DATA) private id: number) {}
+  constructor(public readonly ministryService: MinistryService, @Inject(MAT_DIALOG_DATA) private ministryID: number) {}
 
   ministryKeyForm: FormGroup<ControlsOf<MinistryKeyRequest>>;
+
   ministerMembers$: Observable<MemberListItemResponse[]>;
-  sntListSongs$: Observable<SongListItemResponse[]>;
+  songs$ = new BehaviorSubject<SongListItemResponse[]>([]);
   sntKeys$: Observable<KeyResponse[]>;
+
+  public get memberIdControl(): FormControl<number> {
+    return (this.ministryKeyForm.controls as any).memberID;
+  }
+
+  public get songIdControl(): FormControl<number> {
+    return (this.ministryKeyForm.controls as any).songID;
+  }
 
   ngOnInit(): void {
     this.createForm();
-    this.sntKeys$ = this.ministryService.getKeys();
     const roles = [eMinistryRole.MINISTER];
-    this.ministerMembers$ = this.ministryService.getMemberListItems(this.id, roles);
-    this.sntListSongs$ = this.ministryService.getSongListItems(this.id);
+
+    this.sntKeys$ = this.ministryService.getKeys();
+    this.ministerMembers$ = this.ministryService.getMemberListItems(this.ministryID, roles);
+
+    this.memberIdControl.valueChanges
+      .pipe(
+        filter((id) => !!id),
+        tap(() => this.songIdControl.reset()),
+        switchMap((memberId) => this.ministryService.getAvailableSongListItems(this.ministryID, memberId))
+      )
+      .subscribe(this.songs$);
   }
 
-  createForm(member?: number, song?: number, key?: number) {
-    console.log('createForm', member, song, key);
+  createForm(memberID?: number, songID?: number, keyID?: number) {
     this.ministryKeyForm = new FormGroup({
-      memberID: new FormControl(member, Validators.required),
-      songID: new FormControl(song, Validators.required),
-      keyID: new FormControl(key, Validators.required),
+      memberID: new FormControl(memberID, Validators.required),
+      songID: new FormControl(songID, Validators.required),
+      keyID: new FormControl(keyID, Validators.required),
     });
   }
 

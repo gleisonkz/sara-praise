@@ -12,19 +12,19 @@ import { MinistryNotFoundError, MinistryService } from '../services';
 export class MinistryController {
   constructor(private readonly ministryService: MinistryService) {}
 
-  @Get('/list-item/:id?')
-  getMinistriesListItems(@Param('id') id?: string): MinistryListItemResponse[] {
-    const ministries = this.ministryService.getMinistriesListItems(id);
+  @Get('/list-item/:ministryID?')
+  getMinistriesListItems(@Param('ministryID') ministryID?: string): MinistryListItemResponse[] {
+    const ministries = this.ministryService.getMinistriesListItems(ministryID);
     return ministries;
   }
 
-  @Get('/:id/scales')
+  @Get('/:ministryID/scales')
   async getScales(
-    @Param('id') id: number,
+    @Param('ministryID') ministryID: number,
     @Res({ passthrough: true }) res: Response
   ): Promise<ScaleListItemResponse[]> {
     try {
-      const scales = await this.ministryService.getScales(+id);
+      const scales = await this.ministryService.getScales(+ministryID);
       return scales;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
@@ -35,10 +35,13 @@ export class MinistryController {
     }
   }
 
-  @Get('/:id/songs')
-  async getSongs(@Param('id') id: number, @Res({ passthrough: true }) res: Response): Promise<SongListItemResponse[]> {
+  @Get('/:ministryID/songs')
+  async getSongs(
+    @Param('ministryID') ministryID: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<SongListItemResponse[]> {
     try {
-      const songs = await this.ministryService.getSongs(+id);
+      const songs = await this.ministryService.getSongs(+ministryID);
       return songs;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
@@ -49,9 +52,27 @@ export class MinistryController {
     }
   }
 
-  @Get('/:id/members')
+  @Get('/:ministryID/songs/available/:ministerID')
+  async getAvailableSongs(
+    @Param('ministryID') ministryID: number,
+    @Param('ministerID') ministerID: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<SongListItemResponse[]> {
+    try {
+      const songs = await this.ministryService.getAvailableSongs(+ministryID, +ministerID);
+      return songs;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
+  }
+
+  @Get('/:ministryID/members')
   async getMembers(
-    @Param('id') ministryID: number,
+    @Param('ministryID') ministryID: number,
     @Query('roles') roles,
     @Res({ passthrough: true }) res: Response
   ): Promise<MemberListItemResponse[]> {
@@ -74,18 +95,18 @@ export class MinistryController {
     return ministryListItem;
   }
 
-  @Post('/:id/keys')
+  @Post('/:ministryID/keys')
   createMinistryKey(
     @Body() ministryKeyRequest: MinistryKeyRequest,
-    @Param('id') ministryID: number
+    @Param('ministryID') ministryID: number
   ): MinistryKeyListItemResponse {
     const ministryKey = this.ministryService.createMinistryKey(ministryKeyRequest, +ministryID);
     return ministryKey;
   }
 
-  @Get('/:id/keys')
+  @Get('/:ministryID/keys')
   async getKeyListItems(
-    @Param('id') ministryID: number,
+    @Param('ministryID') ministryID: number,
     @Res({ passthrough: true }) res: Response
   ): Promise<MinistryKeyListItemResponse[]> {
     try {
@@ -103,7 +124,7 @@ export class MinistryController {
   @Get('keys')
   async getKeys(@Res({ passthrough: true }) res: Response): Promise<KeyResponse[]> {
     try {
-      const keys = await this.ministryService.getKeys();
+      const keys = this.ministryService.getKeys();
       return keys;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
@@ -117,7 +138,7 @@ export class MinistryController {
   @Get('/scales/:scaleID')
   async getScaleDetails(@Param('scaleID') scaleID: number, @Res({ passthrough: true }) res: Response) {
     try {
-      const scaleDetails = await this.ministryService.getScaleDetails(+scaleID);
+      const scaleDetails = this.ministryService.getScaleDetails(+scaleID);
       return scaleDetails;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {

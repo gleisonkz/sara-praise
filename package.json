@@ -33,6 +33,7 @@
     "@ngneat/until-destroy": "^9.0.0",
     "@nrwl/angular": "13.6.1",
     "dotenv": "^14.3.2",
+    "mat-timepicker": "^5.1.4",
     "passport": "^0.5.2",
     "passport-google-oauth20": "^2.0.0",
     "reflect-metadata": "^0.1.13",

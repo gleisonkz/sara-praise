@@ -32,6 +32,7 @@ import { SpForDirectiveWidgetModule } from 'apps/sp-web/src/app/widget/directive
 import {
     MediaIfDirectiveWidgetModule
 } from 'apps/sp-web/src/app/widget/directives/media-if/media-if.widget.module';
+import { MatTimepickerModule } from 'mat-timepicker';
 import { ScaleMembersDialog } from './components/scale-members/scale-members.dialog';
 import { ScaleCreateEditPage } from './pages/scale-create-edit/scale-create-edit.page';
 import { ScaleViewPage } from './pages/scale-view/scale-view.page';
@@ -53,6 +54,7 @@ import { ScaleRoutingModule } from './scale-routing.module';
     ScaleRoutingModule,
     MatFormFieldModule,
     MatCardModule,
+    MatTimepickerModule,
     MatButtonModule,
     MatInputModule,
     MatCardModule,

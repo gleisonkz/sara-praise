@@ -8,7 +8,7 @@
 
 <mat-divider></mat-divider>
 
-<form *ngIf="scale$ |async as scale">
+<form [formGroup]="scaleFormGroup" *ngIf="scale$ |async as scale">
   <mat-tab-group mat-stretch-tabs>
     <mat-tab label="Info">
       <ng-template mat-tab-label>
@@ -19,21 +19,50 @@
       </ng-template>
 
       <mat-form-field appearance="fill">
-        <mat-label>Title *</mat-label>
+        <mat-label>Titulo da Escala</mat-label>
         <mat-icon matPrefix>mode_edit</mat-icon>
-        <input type="tel" matInput placeholder="555-555-1234" />
+        <input
+          matInput
+          placeholder="Ex. Escala de Aula"
+          formControlName="title"
+          type="text"
+          matInput
+        />
       </mat-form-field>
 
-      <mat-form-field appearance="fill">
-        <input type="datetime-local" matInput [matDatepicker]="datePicker" disabled />
-        <mat-datepicker-toggle matSuffix [for]="datePicker"></mat-datepicker-toggle>
-        <mat-datepicker #datePicker disabled="false"></mat-datepicker>
-      </mat-form-field>
+      <div class="date-time">
+        <mat-form-field appearance="fill">
+          <mat-label>Data </mat-label>
+          <input
+            readonly
+            (click)="picker.open()"
+            placeholder="Choose a date"
+            formControlName="date"
+            matInput
+            [matDatepicker]="picker"
+          />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+          <mat-label>Horário</mat-label>
+          <input
+            formControlName="time"
+            matTimepicker
+            mode="24h"
+            #timerPickerRef="matTimepicker"
+            [strict]="false"
+          />
+          <mat-icon matSuffix (click)="timerPickerRef.showDialog()">access_time</mat-icon>
+        </mat-form-field>
+      </div>
 
       <mat-form-field appearance="fill">
         <mat-label>Observações</mat-label>
         <textarea
           matInput
+          formControlName="notes"
           cdkTextareaAutosize
           #autosize="cdkTextareaAutosize"
           cdkAutosizeMinRows="5"
@@ -71,3 +100,6 @@
     </mat-tab>
   </mat-tab-group>
 </form>
+
+{{ scaleFormGroup.value | json }}
+<p>Valido {{ scaleFormGroup.valid }}</p>

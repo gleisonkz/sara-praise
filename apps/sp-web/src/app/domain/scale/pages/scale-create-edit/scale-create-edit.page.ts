@@ -36,7 +36,7 @@ export class ScaleCreateEditPage implements OnInit {
   scale$: any;
   scaleId: number;
 
-  scaleFormGroup: FormGroup<ScaleRequest>;
+  scaleFormGroup: any;
 
   constructor(
     private readonly matDialog: MatDialog,
@@ -48,6 +48,8 @@ export class ScaleCreateEditPage implements OnInit {
     const parentRoute = this.activatedRoute.parent;
     if (!parentRoute) throw new Error('parentRoute is undefined');
 
+    this.createForm();
+
     this.scale$ = parentRoute.params.pipe(
       map(({ scaleID }) => +scaleID),
       tap((id) => (this.scaleId = id))
@@ -56,13 +58,19 @@ export class ScaleCreateEditPage implements OnInit {
   }
 
   createForm() {
+    const date = new Date();
+    date.setHours(7);
+
     const scaleForm = new FormGroup({
       title: new FormControl(''),
-      date: new FormControl(''),
+      date: new FormControl(date),
       notes: new FormControl(''),
       members: new FormControl([]),
       songs: new FormControl([]),
+      time: new FormControl(date),
     });
+
+    this.scaleFormGroup = scaleForm;
   }
 
   addMember() {

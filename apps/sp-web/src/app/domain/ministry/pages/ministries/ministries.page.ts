@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 
 import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 
+import { FormControl } from '@ngneat/reactive-forms';
+import { MinistryService } from 'apps/sp-web/src/app/domain/ministry/services/ministry.service';
 import { Observable } from 'rxjs';
-import { MinistryService } from '../../services/ministry.service';
 
 @Component({
   templateUrl: './ministries.page.html',
@@ -12,7 +13,10 @@ import { MinistryService } from '../../services/ministry.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MinistriesPage implements OnInit {
-  ministryNameControl = new FormControl(null, Validators.required);
+  minValue: Date;
+  maxValue: Date;
+
+  ministryNameControl = new FormControl('', Validators.required);
 
   ministryListItems$: Observable<MinistryListItemResponse[]>;
 
@@ -32,7 +36,7 @@ export class MinistriesPage implements OnInit {
     };
 
     this.ministryService.createMinistry(ministry).subscribe(() => {
-      this.ministryNameControl.setValue('');
+      this.ministryNameControl.reset();
     });
   }
 }
