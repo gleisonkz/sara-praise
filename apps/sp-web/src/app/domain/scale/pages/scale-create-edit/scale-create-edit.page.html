@@ -1,5 +1,5 @@
 <mat-toolbar class="absolute">
-  <button routerLink="../view" mat-icon-button>
+  <button routerLink="../" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
 
@@ -8,7 +8,7 @@
 
 <mat-divider></mat-divider>
 
-<form [formGroup]="scaleFormGroup" *ngIf="scale$ |async as scale">
+<form [formGroup]="scaleFormGroup">
   <mat-tab-group mat-stretch-tabs>
     <mat-tab label="Info">
       <ng-template mat-tab-label>

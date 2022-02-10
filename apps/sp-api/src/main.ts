@@ -17,6 +17,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('Sara Praise')
     .setDescription('Api for managing ministries and scales')
+
     .setVersion('1.0')
     .addTag('sp-api')
     .build();

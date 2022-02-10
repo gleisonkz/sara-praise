@@ -17,11 +17,16 @@ export class ScaleViewPage implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly ministryService: MinistryService
   ) {}
+
   scaleListItem$: Observable<ScaleDetailResponse>;
+  scaleID: number;
 
   ngOnInit(): void {
     this.scaleListItem$ = this.activatedRoute.params.pipe(
-      map(({ scaleID }) => +scaleID),
+      map(({ scaleID }) => {
+        this.scaleID = scaleID;
+        return +scaleID;
+      }),
       switchMap((scaleID) => this.ministryService.getScaleListItemDetails(scaleID))
     );
   }

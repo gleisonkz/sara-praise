@@ -63,10 +63,15 @@
     </a>
 
     <button
-      [class.active]="keyLink.isActive || memberLink.isActive"
-      [disabled]="scaleLink.isActive || musicLink.isActive"
+      [class.active]="keyLink.isActive || memberLink.isActive || scaleLink.isActive"
+      [disabled]="musicLink.isActive"
       mat-raised-button
-      (click)="createMinistryKey(keyLink.isActive)"
+      (click)="
+          keyLink.isActive && createMinistryKey() ||
+          memberLink.isActive && createMinistryMember() ||
+          scaleLink.isActive && createScale() ||
+          musicLink.isActive && createMusic()
+        "
     >
       <mat-icon>add</mat-icon>
     </button>

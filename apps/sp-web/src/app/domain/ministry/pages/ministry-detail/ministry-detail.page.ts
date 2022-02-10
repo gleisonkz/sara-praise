@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
@@ -25,6 +25,7 @@ export class MinistryDetailPage implements OnInit {
   constructor(
     public readonly ministryService: MinistryService,
     private activatedRoute: ActivatedRoute,
+    private readonly router: Router,
     private dialog: MatDialog
   ) {}
 
@@ -47,9 +48,19 @@ export class MinistryDetailPage implements OnInit {
     );
   }
 
-  createMinistryKey(isKeyTabActive: boolean) {
-    if (!isKeyTabActive) return;
+  createScale() {
+    this.router.navigate(['escalas', 'create'], { relativeTo: this.activatedRoute });
+  }
 
+  createMusic() {
+    console.log('createMusic');
+  }
+
+  createMinistryMember() {
+    console.log('createMinistryMember');
+  }
+
+  createMinistryKey() {
     const dialogRef = this.dialog.open(MinistryKeyDialogComponent, {
       data: this.ministryID,
       width: '100%',

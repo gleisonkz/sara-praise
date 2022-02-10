@@ -21,7 +21,7 @@ const routes: Routes = [
   },
 
   {
-    path: ':ministryID/escalas/:scaleID',
+    path: ':ministryID/escalas',
     loadChildren: () => import('@sp/web/domain/scale').then((m) => m.ScaleDomainModule),
   },
 ];

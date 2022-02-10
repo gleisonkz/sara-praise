@@ -5,15 +5,19 @@ import { ScaleCreateEditPage } from './pages/scale-create-edit/scale-create-edit
 import { ScaleViewPage } from './pages/scale-view/scale-view.page';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'view', pathMatch: 'full' },
   {
-    path: 'edit',
+    path: 'create',
     component: ScaleCreateEditPage,
   },
   {
-    path: 'view',
+    path: ':scaleID/edit',
+    component: ScaleCreateEditPage,
+  },
+  {
+    path: ':scaleID/view',
     component: ScaleViewPage,
   },
+  { path: ':scaleID', redirectTo: ':scaleID/view', pathMatch: 'full' },
 ];
 
 @NgModule({

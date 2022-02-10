@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MinistryService } from 'apps/sp-web/src/app/domain/ministry/services/ministry.service';
 import {
     ScaleMembersDialog
@@ -33,9 +33,7 @@ interface ScaleRequest {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScaleCreateEditPage implements OnInit {
-  scale$: any;
   scaleId: number;
-
   scaleFormGroup: any;
 
   constructor(
@@ -45,16 +43,18 @@ export class ScaleCreateEditPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const parentRoute = this.activatedRoute.parent;
+    const parentRoute = this.activatedRoute;
     if (!parentRoute) throw new Error('parentRoute is undefined');
 
     this.createForm();
 
-    this.scale$ = parentRoute.params.pipe(
-      map(({ scaleID }) => +scaleID),
-      tap((id) => (this.scaleId = id))
-      // switchMap((scaleID) => this.ministryService.getScaleListItemDetails(scaleID))
-    );
+    parentRoute.params
+      .pipe(
+        map(({ scaleID }) => +scaleID),
+        tap((id) => (this.scaleId = id))
+        // switchMap((scaleID) => this.ministryService.getScaleListItemDetails(scaleID))
+      )
+      .subscribe();
   }
 
   createForm() {
@@ -62,12 +62,24 @@ export class ScaleCreateEditPage implements OnInit {
     date.setHours(7);
 
     const scaleForm = new FormGroup({
+      scaleID: new FormControl(null),
       title: new FormControl(''),
       date: new FormControl(date),
-      notes: new FormControl(''),
-      members: new FormControl([]),
-      songs: new FormControl([]),
       time: new FormControl(date),
+      notes: new FormControl(''),
+      participants: new FormArray([
+        new FormGroup({
+          participantID: new FormControl(null),
+          memberID: new FormControl(null),
+          roleID: new FormControl(null),
+        }),
+        new FormGroup({
+          participantID: new FormControl(null),
+          memberID: new FormControl(null),
+          roleID: new FormControl(null),
+        }),
+      ]),
+      songs: new FormControl(),
     });
 
     this.scaleFormGroup = scaleForm;
@@ -75,7 +87,10 @@ export class ScaleCreateEditPage implements OnInit {
 
   addMember() {
     this.matDialog.open(ScaleMembersDialog, {
-      data: this.scaleId,
+      data: {
+        scaleId: this.scaleId,
+        members: [],
+      },
       maxWidth: '800px',
       width: '100%',
       panelClass: 'sp-scale-modal',
