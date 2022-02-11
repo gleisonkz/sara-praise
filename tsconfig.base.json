@@ -31,6 +31,8 @@
       "@sp/web/domain/scale": ["apps/sp-web/src/app/domain/scale"],
 
       "@sp/web/widget/pipes": ["apps/sp-web/src/app/widget/pipes"],
+      "@sp/web/widget/directives": ["apps/sp-web/src/app/widget/directives"],
+      "@sp/web/widget/components": ["apps/sp-web/src/app/widget/components"],
 
       "@sp/web/mocks": ["apps/sp-web/src/app/mocks"],
       "@sp/web/models": ["apps/sp-web/src/app/models"],
