@@ -1,12 +1,20 @@
 import { Injectable } from '@nestjs/common';
-
-import { Member, Ministry, Role, Scale, Song } from '@sp/api/models';
+import { Member, Ministry, Scale, Song } from '@sp/api/models';
 import {
-    eMinistryRole, KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse,
-    MinistryKeyRequest, MinistryListItemResponse, MinistryRequest, ScaleDetailResponse,
-    ScaleListItemResponse, ScaleRequest, ScaleResponse, SongListItemResponse
+  eMinistryRole,
+  KeyResponse,
+  MemberListItemResponse,
+  MinistryKeyListItemResponse,
+  MinistryKeyRequest,
+  MinistryListItemResponse,
+  MinistryRequest,
+  Role,
+  ScaleDetailResponse,
+  ScaleListItemResponse,
+  ScaleRequest,
+  ScaleResponse,
+  SongListItemResponse,
 } from '@sp/shared-interfaces';
-
 import { MinistryKey } from 'apps/sp-api/src/app/models/ministry-key.model';
 import { MinistryRepository } from '../database/ministry-repository';
 import { KEYS } from '../mocks/keys.mock';
@@ -382,15 +390,16 @@ export class MinistryService {
     return scaleDetail;
   }
 
-  private findMinister(scale: Scale) {
-    const isMinisterPredicate = ({ roleID }: Role) => roleID === eMinistryRole.MINISTER;
-
-    const minister: Member = scale.members.find((member) => {
-      const isMinister = member.roles.some(isMinisterPredicate);
-      return isMinister;
+  deleteScale(scaleID: number) {
+    const ministry = this.ministries.find((ministry) => {
+      const scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
+      if (!scale) throw new ScaleNotFoundError(ministry.ministryID, scaleID);
+      return ministry;
     });
 
-    return minister;
+    ministry.scales = ministry.scales.filter((scale) => scale.scaleID !== scaleID);
+
+    this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
   }
 
   private getMinistryKeyName(ministry: Ministry, song: Song, minister: Member) {
@@ -416,6 +425,17 @@ export class MinistryService {
 
     if (!ministry) throw new MinistryNotFoundError(ministryID);
     return ministry;
+  }
+
+  private findMinister(scale: Scale) {
+    const isMinisterPredicate = ({ roleID }: Role) => roleID === eMinistryRole.MINISTER;
+
+    const minister: Member = scale.members.find((member) => {
+      const isMinister = member.roles.some(isMinisterPredicate);
+      return isMinister;
+    });
+
+    return minister;
   }
 
   private getMinistryByScaleID(scaleID: number): Ministry {

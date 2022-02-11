@@ -1,13 +1,18 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Query, Res } from '@nestjs/common';
-
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Res } from '@nestjs/common';
 import {
-    KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
-    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse, ScaleRequest,
-    ScaleResponseCreate, SongListItemResponse
+  KeyResponse,
+  MemberListItemResponse,
+  MinistryKeyListItemResponse,
+  MinistryKeyRequest,
+  MinistryListItemResponse,
+  MinistryRequest,
+  ScaleListItemResponse,
+  ScaleRequest,
+  ScaleResponseCreate,
+  SongListItemResponse,
 } from '@sp/shared-interfaces';
-
 import { Response } from 'express';
-import { MinistryNotFoundError, MinistryService } from '../services';
+import { MinistryNotFoundError, MinistryService, ScaleNotFoundError } from '../services';
 
 @Controller('ministry')
 export class MinistryController {
@@ -114,6 +119,23 @@ export class MinistryController {
     const scaleID = await this.ministryService.createScale(+ministryID, scaleRequest);
 
     return { scaleID };
+  }
+
+  @Delete('/scales/:scaleID')
+  async deleteScale(
+    @Param('scaleID') scaleID: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<ScaleResponseCreate> {
+    try {
+      await this.ministryService.deleteScale(+scaleID);
+      res.status(HttpStatus.NO_CONTENT).send();
+    } catch (error) {
+      if (error instanceof ScaleNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
   }
 
   @Get('/scales/:scaleID')

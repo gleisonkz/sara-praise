@@ -1,12 +1,19 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import {
-    KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
-    MinistryListItemResponse, MinistryRequest, ScaleDetailResponse, ScaleListItemResponse,
-    ScaleRequest, ScaleResponse, ScaleResponseCreate, SongListItemResponse
+  KeyResponse,
+  MemberListItemResponse,
+  MinistryKeyListItemResponse,
+  MinistryKeyRequest,
+  MinistryListItemResponse,
+  MinistryRequest,
+  ScaleDetailResponse,
+  ScaleListItemResponse,
+  ScaleRequest,
+  ScaleResponse,
+  ScaleResponseCreate,
+  SongListItemResponse,
 } from '@sp/shared-interfaces';
-
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 @Injectable({
@@ -100,5 +107,10 @@ export class MinistryService {
   getKeys(): Observable<KeyResponse[]> {
     const url = `${this.BASE_URL}/keys`;
     return this.http.get<KeyResponse[]>(url);
+  }
+
+  deleteScale(scaleID: number): Observable<ScaleResponse> {
+    const url = `${this.BASE_URL}/scales/${scaleID}`;
+    return this.http.delete<ScaleResponse>(url);
   }
 }
