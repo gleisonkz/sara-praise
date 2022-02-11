@@ -45,7 +45,7 @@
   <div class="scale-info">
     <span class="icon-container">
       <mat-icon>light_mode</mat-icon>
-      <span>Quarta Feira</span>
+      <span>{{ scale.date | date : 'EEEE' | titlecase }}</span>
     </span>
 
     <span class="icon-container">

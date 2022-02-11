@@ -19,15 +19,13 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import {
-    EmptyListNoMessageWidgetModule
-} from 'apps/sp-web/src/app/widget/components/empty-list-no-message/empty-list-no-message.widget.module';
+    EmptyListNoMessageWidgetModule, SongListItemWidgetModule
+} from '@sp/web/widget/components';
 import {
-    SongListItemWidgetModule
-} from 'apps/sp-web/src/app/widget/components/song-list-item/song-list-item.widget.module';
-import { SpForDirectiveWidgetModule } from 'apps/sp-web/src/app/widget/directives/for.directive';
-import {
-    MediaIfDirectiveWidgetModule
-} from 'apps/sp-web/src/app/widget/directives/media-if/media-if.widget.module';
+    MediaIfDirectiveWidgetModule, SpForDirectiveWidgetModule
+} from '@sp/web/widget/directives';
+import { RemoveDotsPipeWidgetModule } from '@sp/web/widget/pipes';
+
 import {
     MinistryKeyDialogComponent
 } from './components/ministry-key-dialog/ministry-key-dialog.component';
@@ -55,6 +53,7 @@ import { SongDetailPage } from './pages/song-detail/song-detail.page';
   imports: [
     CommonModule,
     MatBadgeModule,
+    RemoveDotsPipeWidgetModule,
     EmptyListNoMessageWidgetModule,
     MatSelectModule,
     MediaIfDirectiveWidgetModule,

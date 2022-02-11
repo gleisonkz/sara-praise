@@ -11,6 +11,7 @@ export interface ScaleListItemResponse {
 
 export interface ScaleDetailResponse {
   scaleID: number;
+  title: string;
   date: Date;
   songs: SongListItemResponse[];
   participants: MemberListItemResponse[];
@@ -19,8 +20,8 @@ export interface ScaleDetailResponse {
 export interface ScaleResponse {
   scaleID: number;
   title: string;
-  date: Date;
-  time: Date;
+  date: string;
+  time: string;
   notes: string;
 }
 

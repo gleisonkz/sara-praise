@@ -7,8 +7,8 @@
       *ngFor="let scale of scales"
     >
       <div class="date">
-        <span>{{scale.date | date : 'EEEE'}}</span>
-        <span>{{scale.date | date : 'dd/MMM'}}</span>
+        <span>{{scale.date | date : 'EEEE' | titlecase}}</span>
+        <span>{{scale.date | date : 'dd/MMM' }}</span>
         <span>{{scale.date | date : 'HH:mm'}}</span>
       </div>
       <div class="main">

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Member, Ministry, Scale, Song } from '@sp/api/models';
+import { Member, Ministry, Role, Scale, Song } from '@sp/api/models';
 import {
     eMinistryRole, KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse,
     MinistryKeyRequest, MinistryListItemResponse, MinistryRequest, ScaleDetailResponse,
@@ -14,6 +14,12 @@ import { KEYS } from '../mocks/keys.mock';
 export class MinistryNotFoundError extends Error {
   constructor(public ministryID: number) {
     super(`Ministry with ID ${ministryID} not found`);
+  }
+}
+
+export class MinistryByScaleNotFoundError extends Error {
+  constructor(public scaleID: number) {
+    super(`Not found any ministry associated with scale with ID ${scaleID}`);
   }
 }
 
@@ -82,15 +88,6 @@ export class MinistryService {
 
   constructor(private ministryRepository: MinistryRepository) {}
 
-  private getMinistryByID(ministryID: number): Ministry {
-    console.log('ministryID', ministryID);
-    console.log('typeof ministryID', typeof ministryID);
-    const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
-
-    if (!ministry) throw new MinistryNotFoundError(ministryID);
-    return ministry;
-  }
-
   async createScale(ministryID: number, scaleRequest: ScaleRequest) {
     const ministry = this.getMinistryByID(ministryID);
 
@@ -114,25 +111,19 @@ export class MinistryService {
 
   async getScaleByIDAsync(scaleID: number): Promise<ScaleResponse> {
     let ministryID: number;
-    const ministry = this.ministryRepository.getDataBase().ministriesMock.find((ministry) => {
-      const scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
-      if (!scale) return false;
 
-      ministryID = ministry.ministryID;
-      return true;
-    });
-
+    const ministry = this.getMinistryByScaleID(scaleID);
     const scale: Scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
 
     if (!scale) throw new ScaleNotFoundError(ministryID, scaleID);
 
-    const { date, time } = splitDateAndTime(scale.date);
+    const { date, time } = splitDateAndTime(scale.date.toISOString());
 
     const scaleDetail: ScaleResponse = {
       scaleID: scale.scaleID,
       title: scale.title,
-      date,
-      time,
+      date: date.toISOString().split('T')[0],
+      time: time.toISOString().split('T')[1],
       notes: scale.notes,
     };
 
@@ -346,10 +337,8 @@ export class MinistryService {
   }
 
   getScaleDetails(scaleID: number) {
-    const ministry = this.ministries.find((ministry) => ministry.scales.find((scale) => scale.scaleID === scaleID));
-    if (!ministry) throw new MinistryNotFoundError(scaleID);
-
-    const scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
+    const ministry = this.getMinistryByScaleID(scaleID);
+    const scale: Scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
 
     const members: MemberListItemResponse[] = scale.members.map((member) => {
       const memberListItem: MemberListItemResponse = {
@@ -362,10 +351,7 @@ export class MinistryService {
       return memberListItem;
     });
 
-    const minister = scale.members.find((member) => {
-      const isMinister = member.roles.find(({ roleID }) => roleID === eMinistryRole.MINISTER);
-      return isMinister;
-    });
+    const minister = this.findMinister(scale);
 
     const songs: SongListItemResponse[] = scale.songs.map((song) => {
       const ministryKey = this.getMinistryKeyName(ministry, song, minister);
@@ -387,12 +373,24 @@ export class MinistryService {
 
     const scaleDetail: ScaleDetailResponse = {
       scaleID: scaleID,
+      title: scale.title,
       date: scale.date,
       participants: members,
       songs: songs,
     };
 
     return scaleDetail;
+  }
+
+  private findMinister(scale: Scale) {
+    const isMinisterPredicate = ({ roleID }: Role) => roleID === eMinistryRole.MINISTER;
+
+    const minister: Member = scale.members.find((member) => {
+      const isMinister = member.roles.some(isMinisterPredicate);
+      return isMinister;
+    });
+
+    return minister;
   }
 
   private getMinistryKeyName(ministry: Ministry, song: Song, minister: Member) {
@@ -411,5 +409,24 @@ export class MinistryService {
 
     const keyName = KEYS.find((key) => key.keyID === ministryKey.keyID).key;
     return keyName;
+  }
+
+  private getMinistryByID(ministryID: number): Ministry {
+    const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
+
+    if (!ministry) throw new MinistryNotFoundError(ministryID);
+    return ministry;
+  }
+
+  private getMinistryByScaleID(scaleID: number): Ministry {
+    const ministry = this.ministryRepository.getDataBase().ministriesMock.find((ministry) => {
+      const scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
+      if (!scale) throw new ScaleNotFoundError(ministry.ministryID, scaleID);
+
+      return true;
+    });
+
+    if (!ministry) throw new MinistryByScaleNotFoundError(scaleID);
+    return ministry;
   }
 }
