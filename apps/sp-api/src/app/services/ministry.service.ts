@@ -1,12 +1,19 @@
 import { Injectable } from '@nestjs/common';
-
 import { Member, Ministry, Scale, Song } from '@sp/api/models';
 import {
-    eMinistryRole, KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse,
-    MinistryKeyRequest, MinistryListItemResponse, MinistryRequest, ScaleDetailResponse,
-    ScaleListItemResponse, ScaleRequest, ScaleResponse, SongListItemResponse
+  eMinistryRole,
+  KeyResponse,
+  MemberListItemResponse,
+  MinistryKeyListItemResponse,
+  MinistryKeyRequest,
+  MinistryListItemResponse,
+  MinistryRequest,
+  ScaleDetailResponse,
+  ScaleListItemResponse,
+  ScaleRequest,
+  ScaleResponse,
+  SongListItemResponse,
 } from '@sp/shared-interfaces';
-
 import { MinistryKey } from 'apps/sp-api/src/app/models/ministry-key.model';
 import { MinistryRepository } from '../database/ministry-repository';
 import { KEYS } from '../mocks/keys.mock';
@@ -393,6 +400,18 @@ export class MinistryService {
     };
 
     return scaleDetail;
+  }
+
+  deleteScale(scaleID: number) {
+    const ministry = this.ministries.find((ministry) => {
+      const scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
+      if (!scale) throw new ScaleNotFoundError(ministry.ministryID, scaleID);
+      return ministry;
+    });
+
+    ministry.scales = ministry.scales.filter((scale) => scale.scaleID !== scaleID);
+
+    this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
   }
 
   private getMinistryKeyName(ministry: Ministry, song: Song, minister: Member) {

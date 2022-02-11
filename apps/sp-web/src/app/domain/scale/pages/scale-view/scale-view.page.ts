@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-
+import { HotToastService } from '@ngneat/hot-toast';
 import { ScaleDetailResponse } from '@sp/shared-interfaces';
-
 import { MinistryService } from 'apps/sp-web/src/app/domain/ministry/services/ministry.service';
 import { map, Observable, switchMap } from 'rxjs';
 
@@ -14,6 +13,8 @@ import { map, Observable, switchMap } from 'rxjs';
 export class ScaleViewPage implements OnInit {
   constructor(
     private readonly router: Router,
+    private readonly toastService: HotToastService,
+
     private readonly activatedRoute: ActivatedRoute,
     private readonly ministryService: MinistryService
   ) {}
@@ -29,5 +30,12 @@ export class ScaleViewPage implements OnInit {
       }),
       switchMap((scaleID) => this.ministryService.getScaleListItemDetails(scaleID))
     );
+  }
+
+  deleteScale() {
+    this.ministryService.deleteScale(this.scaleID).subscribe(() => {
+      this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
+      this.toastService.success(`Escala apagada com sucesso!`);
+    });
   }
 }
