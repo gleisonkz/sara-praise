@@ -30,6 +30,8 @@
       "@sp/web/domain/ministry": ["apps/sp-web/src/app/domain/ministry"],
       "@sp/web/domain/scale": ["apps/sp-web/src/app/domain/scale"],
 
+      "@sp/web/widget/pipes": ["apps/sp-web/src/app/widget/pipes"],
+
       "@sp/web/mocks": ["apps/sp-web/src/app/mocks"],
       "@sp/web/models": ["apps/sp-web/src/app/models"],
       "@sp/web/pages": ["apps/sp-web/src/app/pages"],
