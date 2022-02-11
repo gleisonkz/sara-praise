@@ -24,6 +24,11 @@ form {
   margin-top: 20px;
 }
 
+::ng-deep .mat-tab-body-content {
+  display: flex;
+  flex-direction: column;
+}
+
 mat-form-field {
   width: 100%;
 }
@@ -40,4 +45,10 @@ form {
 .date-time {
   display: flex;
   column-gap: 10px;
+}
+
+button.save {
+  width: 200px;
+  padding: 3px;
+  align-self: end;
 }

@@ -67,10 +67,10 @@
       [disabled]="musicLink.isActive"
       mat-raised-button
       (click)="
-          keyLink.isActive && createMinistryKey() ||
-          memberLink.isActive && createMinistryMember() ||
-          scaleLink.isActive && createScale() ||
-          musicLink.isActive && createMusic()
+          keyLink.isActive && goToCreateMinistryKey() ||
+          memberLink.isActive && goToCreateMinistryMember() ||
+          scaleLink.isActive && goToCreateScale() ||
+          musicLink.isActive && goToCreateMusic()
         "
     >
       <mat-icon>add</mat-icon>

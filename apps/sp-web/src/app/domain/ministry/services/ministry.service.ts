@@ -4,10 +4,10 @@ import { Injectable } from '@angular/core';
 import {
     KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
     MinistryListItemResponse, MinistryRequest, ScaleDetailResponse, ScaleListItemResponse,
-    SongListItemResponse
+    ScaleRequest, ScaleResponse, ScaleResponseCreate, SongListItemResponse
 } from '@sp/shared-interfaces';
 
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -31,6 +31,29 @@ export class MinistryService {
       );
   }
 
+  createScale(ministryID: number, scaleRequest: ScaleRequest): Observable<ScaleResponseCreate> {
+    const url = `${this.BASE_URL}/${ministryID}/scale`;
+    return this.http.post<ScaleResponseCreate>(url, scaleRequest);
+  }
+
+  updateScale(scaleRequest: ScaleRequest, scaleID: number): Observable<ScaleResponse> {
+    const url = `${this.BASE_URL}/scales/${scaleID}`;
+    return this.http.put<ScaleResponse>(url, scaleRequest);
+  }
+
+  getScaleByID(scaleID: number): Observable<ScaleResponse> {
+    const url = `${this.BASE_URL}/scales/${scaleID}`;
+    return this.http.get<ScaleResponse>(url).pipe(
+      map((scale) => {
+        return {
+          ...scale,
+          date: new Date(scale.date),
+          time: new Date(scale.time),
+        };
+      })
+    );
+  }
+
   createMinistryKey(ministryID: number, key: MinistryKeyRequest): Observable<MinistryKeyListItemResponse> {
     const url = `${this.BASE_URL}/${ministryID}/keys`;
     return this.http.post<MinistryKeyListItemResponse>(url, key).pipe(
@@ -49,12 +72,12 @@ export class MinistryService {
   }
 
   getScaleListItems(ministryID: number): Observable<ScaleListItemResponse[]> {
-    const url = `${this.BASE_URL}/${ministryID}/scales`;
+    const url = `${this.BASE_URL}/${ministryID}/scale-list-items`;
     return this.http.get<ScaleListItemResponse[]>(url);
   }
 
   getScaleListItemDetails(scaleID: number): Observable<ScaleDetailResponse> {
-    const url = `${this.BASE_URL}/scales/${scaleID}`;
+    const url = `${this.BASE_URL}/scale-details/${scaleID}`;
     return this.http.get<ScaleDetailResponse>(url);
   }
 

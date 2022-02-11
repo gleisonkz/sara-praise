@@ -4,6 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { MAT_DATE_LOCALE } from '@angular/material/core';
+
 import { HotToastModule } from '@ngneat/hot-toast';
 import {
     HttpErrorInterceptor
@@ -25,6 +27,7 @@ import { AppComponent } from './app.component';
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LogInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
   ],
   bootstrap: [AppComponent],
 })

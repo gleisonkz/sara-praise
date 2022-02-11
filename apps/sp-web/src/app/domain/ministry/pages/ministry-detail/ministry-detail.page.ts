@@ -48,19 +48,19 @@ export class MinistryDetailPage implements OnInit {
     );
   }
 
-  createScale() {
+  goToCreateScale() {
     this.router.navigate(['escalas', 'create'], { relativeTo: this.activatedRoute });
   }
 
-  createMusic() {
+  goToCreateMusic() {
     console.log('createMusic');
   }
 
-  createMinistryMember() {
+  goToCreateMinistryMember() {
     console.log('createMinistryMember');
   }
 
-  createMinistryKey() {
+  goToCreateMinistryKey() {
     const dialogRef = this.dialog.open(MinistryKeyDialogComponent, {
       data: this.ministryID,
       width: '100%',

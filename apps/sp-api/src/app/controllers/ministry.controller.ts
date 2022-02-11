@@ -2,7 +2,8 @@ import { Body, Controller, Get, HttpStatus, Param, Post, Query, Res } from '@nes
 
 import {
     KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
-    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse, SongListItemResponse
+    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse, ScaleRequest,
+    ScaleResponseCreate, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { Response } from 'express';
@@ -18,7 +19,7 @@ export class MinistryController {
     return ministries;
   }
 
-  @Get('/:ministryID/scales')
+  @Get('/:ministryID/scale-list-items')
   async getScales(
     @Param('ministryID') ministryID: number,
     @Res({ passthrough: true }) res: Response
@@ -104,6 +105,31 @@ export class MinistryController {
     return ministryKey;
   }
 
+  @Post('/:ministryID/scale')
+  async createScale(
+    @Param('ministryID') ministryID: number,
+    @Body() scaleRequest: ScaleRequest,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<ScaleResponseCreate> {
+    const scaleID = await this.ministryService.createScale(+ministryID, scaleRequest);
+
+    return { scaleID };
+  }
+
+  @Get('/scales/:scaleID')
+  async getScaleByID(@Param('scaleID') scaleID: number, @Res({ passthrough: true }) res: Response) {
+    try {
+      const scale = await this.ministryService.getScaleByIDAsync(+scaleID);
+      return scale;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
+  }
+
   @Get('/:ministryID/keys')
   async getKeyListItems(
     @Param('ministryID') ministryID: number,
@@ -135,7 +161,7 @@ export class MinistryController {
     }
   }
 
-  @Get('/scales/:scaleID')
+  @Get('/scale-details/:scaleID')
   async getScaleDetails(@Param('scaleID') scaleID: number, @Res({ passthrough: true }) res: Response) {
     try {
       const scaleDetails = this.ministryService.getScaleDetails(+scaleID);

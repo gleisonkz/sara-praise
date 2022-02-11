@@ -15,3 +15,15 @@ export interface ScaleDetailResponse {
   songs: SongListItemResponse[];
   participants: MemberListItemResponse[];
 }
+
+export interface ScaleResponse {
+  scaleID: number;
+  title: string;
+  date: Date;
+  time: Date;
+  notes: string;
+}
+
+export type ScaleResponseCreate = Pick<ScaleResponse, 'scaleID'>;
+
+export type ScaleRequest = Omit<ScaleResponse, 'scaleID'>;

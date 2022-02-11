@@ -6,7 +6,6 @@ import { MinistryService } from 'apps/sp-web/src/app/domain/ministry/services/mi
 
 interface ScaleMembersDialogData {
   scaleId: number;
-  members: number[];
 }
 
 @Component({

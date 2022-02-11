@@ -4,7 +4,7 @@ import { Member, Ministry, Scale, Song } from '@sp/api/models';
 import {
     eMinistryRole, KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse,
     MinistryKeyRequest, MinistryListItemResponse, MinistryRequest, ScaleDetailResponse,
-    ScaleListItemResponse, SongListItemResponse
+    ScaleListItemResponse, ScaleRequest, ScaleResponse, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { MinistryKey } from 'apps/sp-api/src/app/models/ministry-key.model';
@@ -23,22 +23,124 @@ export class MultipleSongsFoundError extends Error {
   }
 }
 
+export class ScaleNotFoundError extends Error {
+  constructor(public ministryID: number, public scaleID: number) {
+    super(`Scale with ID ${scaleID} not found for ministry with ID ${ministryID}`);
+  }
+}
+
+const sixteenHours = new Date(0);
+sixteenHours.setHours(16);
+
+function combineDateAndTime(dateFrom: string, timeFrom: string): Date {
+  const time = new Date(dateFrom);
+  const date = new Date(timeFrom);
+
+  const mins = time.getMinutes().toString().padStart(2, '0');
+  const hours = time.getHours().toString().padStart(2, '0');
+  const seconds = time.getSeconds().toString().padStart(2, '0');
+  const timeString = `${hours}:${mins}:${seconds}`;
+
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  const dateString = `${year}-${month}-${day}`;
+
+  const dateAndTime = `${dateString}T${timeString}`;
+  return new Date(dateAndTime);
+}
+
+function splitDateAndTime(dateString: string): { date: Date; time: Date } {
+  const dateAndTime = new Date(dateString);
+
+  const mins = dateAndTime.getMinutes();
+  const hours = dateAndTime.getHours();
+  const seconds = dateAndTime.getSeconds();
+
+  const time = new Date();
+  time.setHours(hours);
+  time.setMinutes(mins);
+  time.setSeconds(seconds);
+
+  const year = dateAndTime.getFullYear();
+  const month = dateAndTime.getMonth();
+  const day = dateAndTime.getDate();
+
+  const date = new Date();
+  date.setFullYear(year);
+  date.setMonth(month);
+  date.setDate(day);
+
+  return { date, time };
+}
+
 @Injectable()
 export class MinistryService {
-  private storage = this.database.getDataBase();
+  private storage = this.ministryRepository.getDataBase();
   private ministries: Ministry[] = this.storage.ministriesMock;
 
-  constructor(private database: MinistryRepository) {}
+  constructor(private ministryRepository: MinistryRepository) {}
 
-  private getMinistryById(ministryID: number): Ministry {
+  private getMinistryByID(ministryID: number): Ministry {
+    console.log('ministryID', ministryID);
+    console.log('typeof ministryID', typeof ministryID);
     const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);
 
     if (!ministry) throw new MinistryNotFoundError(ministryID);
     return ministry;
   }
 
+  async createScale(ministryID: number, scaleRequest: ScaleRequest) {
+    const ministry = this.getMinistryByID(ministryID);
+
+    const nextScaleID = ministry.scales.length + 1;
+    const date = combineDateAndTime(scaleRequest.date, scaleRequest.time);
+
+    const scale: Scale = {
+      scaleID: nextScaleID,
+      title: scaleRequest.title,
+      date,
+      notes: scaleRequest.notes,
+      songs: [],
+      members: [],
+    };
+
+    ministry.scales.push(scale);
+    this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
+
+    return nextScaleID;
+  }
+
+  async getScaleByIDAsync(scaleID: number): Promise<ScaleResponse> {
+    let ministryID: number;
+    const ministry = this.ministryRepository.getDataBase().ministriesMock.find((ministry) => {
+      const scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
+      if (!scale) return false;
+
+      ministryID = ministry.ministryID;
+      return true;
+    });
+
+    const scale: Scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
+
+    if (!scale) throw new ScaleNotFoundError(ministryID, scaleID);
+
+    const { date, time } = splitDateAndTime(scale.date);
+
+    const scaleDetail: ScaleResponse = {
+      scaleID: scale.scaleID,
+      title: scale.title,
+      date,
+      time,
+      notes: scale.notes,
+    };
+
+    return scaleDetail;
+  }
+
   createMinistryKey(ministryKeyRequest: MinistryKeyRequest, id: number): MinistryKeyListItemResponse {
-    const ministry = this.getMinistryById(id);
+    const ministry = this.getMinistryByID(id);
 
     const song: Song = ministry.songs.find((song) => song.songID === ministryKeyRequest.songID);
     const member: Member = ministry.members.find((member) => member.memberID === ministryKeyRequest.memberID);
@@ -62,7 +164,7 @@ export class MinistryService {
 
     ministry.ministryKeys.push(ministryKey);
 
-    this.database.saveDataBase(this.ministries, 'ministriesMock');
+    this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
 
     return ministryKeyListItem;
   }
@@ -239,7 +341,7 @@ export class MinistryService {
 
     this.ministries.push(ministry);
 
-    this.database.saveDataBase(this.ministries, 'ministriesMock');
+    this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
     return ministryListItemResponse;
   }
 
