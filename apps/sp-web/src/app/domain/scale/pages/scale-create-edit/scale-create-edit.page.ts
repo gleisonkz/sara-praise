@@ -82,9 +82,9 @@ export class ScaleCreateEditPage implements OnInit {
 
     const scaleRequest: ScaleRequest = {
       title,
-      date,
+      date: date.toISOString(),
       notes,
-      time,
+      time: time.toISOString(),
     };
 
     if (this.scaleID)
