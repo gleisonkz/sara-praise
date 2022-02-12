@@ -15,7 +15,7 @@ import { MinistryService } from 'apps/sp-web/src/app/domain/ministry/services/mi
 import {
     ScaleMembersDialog
 } from 'apps/sp-web/src/app/domain/scale/components/scale-members/scale-members.dialog';
-import { filter, map, switchMap, tap } from 'rxjs';
+import { filter, map, startWith, switchMap, tap } from 'rxjs';
 
 @Component({
   templateUrl: './scale-create-edit.page.html',
@@ -25,11 +25,16 @@ import { filter, map, switchMap, tap } from 'rxjs';
 export class ScaleCreateEditPage implements OnInit {
   scaleID: number;
   ministryID: number;
+
+  dateGroup = new FormGroup({
+    date: new FormControl<Date>(),
+    time: new FormControl<Date>(),
+  });
+
   scaleFormGroup: FormGroup<{
     scaleID?: FormControl<number>;
     date: FormControl<Date>;
     title: FormControl<string>;
-    time: FormControl<Date>;
     notes: FormControl<string>;
   }>;
 
@@ -49,6 +54,29 @@ export class ScaleCreateEditPage implements OnInit {
     if (!parentRoute) throw new Error('parentRoute is undefined');
 
     this.createForm();
+
+    this.scaleFormGroup.controls.date.valueChanges
+      .pipe(
+        filter((date) => !!date),
+        startWith(this.scaleFormGroup.controls.date.value)
+      )
+      .subscribe((date) => {
+        this.dateGroup.controls.date.setValue(date, { emitEvent: false });
+        this.dateGroup.controls.time.setValue(date, { emitEvent: false });
+      });
+
+    this.dateGroup.valueChanges.pipe(filter(({ date, time }) => !!date && !!time)).subscribe(({ date, time }) => {
+      const day = date.getDate();
+      const month = date.getMonth();
+      const year = date.getFullYear();
+
+      const hour = time.getHours();
+      const minute = time.getMinutes();
+      const second = time.getSeconds();
+
+      const fullDate = new Date(year, month, day, hour, minute, second);
+      this.scaleFormGroup.controls.date.setValue(fullDate);
+    });
 
     parentRoute.params
       .pipe(
@@ -78,13 +106,12 @@ export class ScaleCreateEditPage implements OnInit {
     const isScaleFormValid = this.scaleFormGroup.valid;
     if (!isScaleFormValid) return;
 
-    const { title, time, notes, date } = this.scaleFormGroup.value;
+    const { title, notes, date } = this.scaleFormGroup.value;
 
     const scaleRequest: ScaleRequest = {
       title,
-      date: date.toISOString(),
+      date,
       notes,
-      time: time.toISOString(),
     };
 
     if (this.scaleID)
@@ -103,12 +130,10 @@ export class ScaleCreateEditPage implements OnInit {
 
   private createForm() {
     const date = new Date();
-    date.setHours(7);
 
     const scaleForm = new FormGroup({
       date: new FormControl(date, [Validators.required]),
       title: new FormControl('', [Validators.required]),
-      time: new FormControl(date, [Validators.required]),
       notes: new FormControl(''),
     });
 

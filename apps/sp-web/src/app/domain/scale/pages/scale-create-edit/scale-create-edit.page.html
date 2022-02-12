@@ -30,33 +30,36 @@
         />
       </mat-form-field>
 
-      <div class="date-time">
-        <mat-form-field appearance="fill">
-          <mat-label>Data </mat-label>
-          <input
-            readonly
-            (click)="picker.open()"
-            placeholder="Choose a date"
-            formControlName="date"
-            matInput
-            [matDatepicker]="picker"
-          />
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill">
-          <mat-label>Horário</mat-label>
-          <input
-            formControlName="time"
-            matTimepicker
-            mode="24h"
-            #timerPickerRef="matTimepicker"
-            [strict]="false"
-          />
-          <mat-icon matSuffix (click)="timerPickerRef.showDialog()">access_time</mat-icon>
-        </mat-form-field>
-      </div>
+      <ng-container [formGroup]="dateGroup" ]>
+        <div class="date-time">
+          <mat-form-field appearance="fill">
+            <mat-label>Data </mat-label>
+            <input
+              readonly
+              (click)="picker.open()"
+              placeholder="Choose a date"
+              formControlName="date"
+              matInput
+              [matDatepicker]="picker"
+            />
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Horário</mat-label>
+            <input
+              formControlName="time"
+              matTimepicker
+              mode="24h"
+              #timerPickerRef="matTimepicker"
+              [strict]="false"
+            />
+            <mat-icon matSuffix (click)="timerPickerRef.showDialog()"
+              >access_time</mat-icon
+            >
+          </mat-form-field>
+        </div>
+      </ng-container>
 
       <mat-form-field appearance="fill">
         <mat-label>Observações</mat-label>

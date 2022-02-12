@@ -4,7 +4,7 @@ import { Song } from './song.model';
 export interface Scale {
   scaleID: number;
   title: string;
-  date: string;
+  date: Date;
   notes: string;
   members: Member[];
   songs: Song[];

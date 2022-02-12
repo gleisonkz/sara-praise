@@ -35,52 +35,6 @@ export class ScaleNotFoundError extends Error {
   }
 }
 
-const sixteenHours = new Date(0);
-sixteenHours.setHours(16);
-
-function combineDateAndTime(dateFrom: string, timeFrom: string): Date {
-  const time = new Date(dateFrom);
-  const date = new Date(timeFrom);
-
-  const mins = time.getMinutes().toString().padStart(2, '0');
-  const hours = time.getHours().toString().padStart(2, '0');
-  const seconds = time.getSeconds().toString().padStart(2, '0');
-  const timeString = `${hours}:${mins}:${seconds}`;
-
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-
-  const dateString = `${year}-${month}-${day}`;
-
-  const dateAndTime = `${dateString}T${timeString}`;
-  return new Date(dateAndTime);
-}
-
-function splitDateAndTime(dateString: string): { date: Date; time: Date } {
-  const dateAndTime = new Date(dateString);
-
-  const mins = dateAndTime.getMinutes();
-  const hours = dateAndTime.getHours();
-  const seconds = dateAndTime.getSeconds();
-
-  const time = new Date();
-  time.setHours(hours);
-  time.setMinutes(mins);
-  time.setSeconds(seconds);
-
-  const year = dateAndTime.getFullYear();
-  const month = dateAndTime.getMonth();
-  const day = dateAndTime.getDate();
-
-  const date = new Date();
-  date.setFullYear(year);
-  date.setMonth(month);
-  date.setDate(day);
-
-  return { date, time };
-}
-
 @Injectable()
 export class MinistryService {
   private storage = this.ministryRepository.getDataBase();
@@ -93,12 +47,10 @@ export class MinistryService {
 
     const nextScaleID = ministry.scales.length + 1;
 
-    const date = combineDateAndTime(scaleRequest.date, scaleRequest.time) as any as string;
-
     const scale: Scale = {
       scaleID: nextScaleID,
       title: scaleRequest.title,
-      date,
+      date: scaleRequest.date,
       notes: scaleRequest.notes,
       songs: [],
       members: [],
@@ -118,13 +70,10 @@ export class MinistryService {
 
     if (!scale) throw new ScaleNotFoundError(ministryID, scaleID);
 
-    const { date, time } = splitDateAndTime(scale.date);
-
     const scaleDetail: ScaleResponse = {
       scaleID: scale.scaleID,
       title: scale.title,
-      date: date.toLocaleDateString().slice(0, 10),
-      time: time.toLocaleTimeString().slice(0, 8),
+      date: scale.date,
       notes: scale.notes,
     };
 

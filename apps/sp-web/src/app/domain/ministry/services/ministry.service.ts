@@ -1,20 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import {
-  KeyResponse,
-  MemberListItemResponse,
-  MinistryKeyListItemResponse,
-  MinistryKeyRequest,
-  MinistryListItemResponse,
-  MinistryRequest,
-  ScaleDetailResponse,
-  ScaleListItemResponse,
-  ScaleRequest,
-  ScaleResponse,
-  ScaleResponseCreate,
-  SongListItemResponse,
+    KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
+    MinistryListItemResponse, MinistryRequest, ScaleDetailResponse, ScaleListItemResponse,
+    ScaleRequest, ScaleResponse, ScaleResponseCreate, SongListItemResponse
 } from '@sp/shared-interfaces';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+
+import { BehaviorSubject, map, Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -50,7 +43,14 @@ export class MinistryService {
 
   getScaleByID(scaleID: number): Observable<ScaleResponse> {
     const url = `${this.BASE_URL}/scales/${scaleID}`;
-    return this.http.get<ScaleResponse>(url);
+    return this.http.get<ScaleResponse>(url).pipe(
+      map((scale) => {
+        return {
+          ...scale,
+          date: new Date(scale.date),
+        };
+      })
+    );
   }
 
   createMinistryKey(ministryID: number, key: MinistryKeyRequest): Observable<MinistryKeyListItemResponse> {
