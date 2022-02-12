@@ -5,14 +5,14 @@ export interface ScaleListItemResponse {
   title: string;
   notes: string;
   songsQuantity: number;
-  date: Date;
+  date: string;
   imagesUrl: string[];
 }
 
 export interface ScaleDetailResponse {
   scaleID: number;
   title: string;
-  date: Date;
+  date: string;
   songs: SongListItemResponse[];
   participants: MemberListItemResponse[];
 }

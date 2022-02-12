@@ -20,27 +20,22 @@
       "@sp/api/mocks": ["apps/sp-api/src/app/mocks"],
       "@sp/api/models": ["apps/sp-api/src/app/models"],
       "@sp/api/services": ["apps/sp-api/src/app/services"],
-
       "@sp/shared-interfaces": ["libs/api-interfaces/src/index.ts"],
-
       "@sp/web/components": ["apps/sp-web/src/app/components"],
       "@sp/web/directives": ["apps/sp-web/src/app/directives"],
-
       "@sp/web/domain/auth": ["apps/sp-web/src/app/domain/auth"],
       "@sp/web/domain/ministry": ["apps/sp-web/src/app/domain/ministry"],
       "@sp/web/domain/scale": ["apps/sp-web/src/app/domain/scale"],
-
-      "@sp/web/widget/pipes": ["apps/sp-web/src/app/widget/pipes"],
-      "@sp/web/widget/directives": ["apps/sp-web/src/app/widget/directives"],
-      "@sp/web/widget/components": ["apps/sp-web/src/app/widget/components"],
-
       "@sp/web/mocks": ["apps/sp-web/src/app/mocks"],
       "@sp/web/models": ["apps/sp-web/src/app/models"],
       "@sp/web/pages": ["apps/sp-web/src/app/pages"],
       "@sp/web/pipes": ["apps/sp-web/src/app/pipes"],
       "@sp/web/shared/animations": ["apps/sp-web/src/app/shared/animations/index.ts"],
       "@sp/web/shared/interceptors": ["apps/sp-web/src/app/shared/interceptors/index.ts"],
-      "@sp/web/shared/services": ["apps/sp-web/src/app/shared/services/index.ts"]
+      "@sp/web/shared/services": ["apps/sp-web/src/app/shared/services/index.ts"],
+      "@sp/web/widget/components": ["apps/sp-web/src/app/widget/components"],
+      "@sp/web/widget/directives": ["apps/sp-web/src/app/widget/directives"],
+      "@sp/web/widget/pipes": ["apps/sp-web/src/app/widget/pipes"]
     }
   },
   "exclude": ["node_modules", "tmp"]

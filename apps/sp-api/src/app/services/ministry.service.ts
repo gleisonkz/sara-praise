@@ -1,20 +1,12 @@
 import { Injectable } from '@nestjs/common';
+
 import { Member, Ministry, Scale, Song } from '@sp/api/models';
 import {
-  eMinistryRole,
-  KeyResponse,
-  MemberListItemResponse,
-  MinistryKeyListItemResponse,
-  MinistryKeyRequest,
-  MinistryListItemResponse,
-  MinistryRequest,
-  Role,
-  ScaleDetailResponse,
-  ScaleListItemResponse,
-  ScaleRequest,
-  ScaleResponse,
-  SongListItemResponse,
+    eMinistryRole, KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse,
+    MinistryKeyRequest, MinistryListItemResponse, MinistryRequest, Role, ScaleDetailResponse,
+    ScaleListItemResponse, ScaleRequest, ScaleResponse, SongListItemResponse
 } from '@sp/shared-interfaces';
+
 import { MinistryKey } from 'apps/sp-api/src/app/models/ministry-key.model';
 import { MinistryRepository } from '../database/ministry-repository';
 import { KEYS } from '../mocks/keys.mock';
@@ -100,7 +92,8 @@ export class MinistryService {
     const ministry = this.getMinistryByID(ministryID);
 
     const nextScaleID = ministry.scales.length + 1;
-    const date = combineDateAndTime(scaleRequest.date, scaleRequest.time);
+
+    const date = combineDateAndTime(scaleRequest.date, scaleRequest.time) as any as string;
 
     const scale: Scale = {
       scaleID: nextScaleID,
@@ -125,13 +118,13 @@ export class MinistryService {
 
     if (!scale) throw new ScaleNotFoundError(ministryID, scaleID);
 
-    const { date, time } = splitDateAndTime(scale.date.toISOString());
+    const { date, time } = splitDateAndTime(scale.date);
 
     const scaleDetail: ScaleResponse = {
       scaleID: scale.scaleID,
       title: scale.title,
-      date: date.toISOString().split('T')[0],
-      time: time.toISOString().split('T')[1],
+      date: date.toLocaleDateString().slice(0, 10),
+      time: time.toLocaleTimeString().slice(0, 8),
       notes: scale.notes,
     };
 
@@ -390,7 +383,7 @@ export class MinistryService {
     return scaleDetail;
   }
 
-  deleteScale(scaleID: number) {
+  async deleteScale(scaleID: number) {
     const ministry = this.ministries.find((ministry) => {
       const scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
       if (!scale) throw new ScaleNotFoundError(ministry.ministryID, scaleID);
