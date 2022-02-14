@@ -38,6 +38,7 @@ export class MinistryDetailPage implements OnInit {
       switchMap(([id, ministriesListItems]) => {
         this.ministryID = id;
         const ministryListItem = ministriesListItems.find(({ ministryID }) => ministryID === id);
+        console.log('ministryListItem', ministryListItem);
 
         if (ministryListItem) return of(ministryListItem);
         const ministryListItem$ = this.ministryService

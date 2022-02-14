@@ -24,11 +24,7 @@ export class MinistryService {
   ministryKeyListItems$ = this.ministryKeyListItems$$.asObservable();
 
   createMinistry(ministry: MinistryRequest): Observable<MinistryListItemResponse> {
-    return this.http
-      .post<MinistryListItemResponse>(this.BASE_URL, ministry)
-      .pipe(
-        tap((ministryListItem) => this.ministryListItems$$.next([...this.ministryListItems$$.value, ministryListItem]))
-      );
+    return this.http.post<MinistryListItemResponse>(this.BASE_URL, ministry);
   }
 
   createScale(ministryID: number, scaleRequest: ScaleRequest): Observable<ScaleResponseCreate> {
@@ -65,9 +61,7 @@ export class MinistryService {
     const idParamPath = ministryID ? `/${ministryID}` : '';
     const url = `${this.BASE_URL}/list-item${idParamPath}`;
 
-    return this.http
-      .get<MinistryListItemResponse[]>(url)
-      .pipe(tap((ministryListItems) => this.ministryListItems$$.next(ministryListItems)));
+    return this.http.get<MinistryListItemResponse[]>(url);
   }
 
   getScaleListItems(ministryID: number): Observable<ScaleListItemResponse[]> {

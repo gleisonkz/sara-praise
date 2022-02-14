@@ -20,6 +20,7 @@
       "@sp/api/mocks": ["apps/sp-api/src/app/mocks"],
       "@sp/api/models": ["apps/sp-api/src/app/models"],
       "@sp/api/services": ["apps/sp-api/src/app/services"],
+
       "@sp/shared-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@sp/web/components": ["apps/sp-web/src/app/components"],
       "@sp/web/directives": ["apps/sp-web/src/app/directives"],
@@ -30,6 +31,13 @@
       "@sp/web/models": ["apps/sp-web/src/app/models"],
       "@sp/web/pages": ["apps/sp-web/src/app/pages"],
       "@sp/web/pipes": ["apps/sp-web/src/app/pipes"],
+
+      "@sp/store/ministry": ["apps/sp-web/src/app/store/ministry"],
+      "@sp/store/ministry/actions": ["apps/sp-web/src/app/store/ministry/ministry.actions"],
+      "@sp/store/ministry/effects": ["apps/sp-web/src/app/store/ministry/ministry.effects"],
+      "@sp/store/ministry/reducers": ["apps/sp-web/src/app/store/ministry/ministry.reducers"],
+      "@sp/store/ministry/selectors": ["apps/sp-web/src/app/store/ministry/ministry.selectors"],
+
       "@sp/web/shared/animations": ["apps/sp-web/src/app/shared/animations/index.ts"],
       "@sp/web/shared/interceptors": ["apps/sp-web/src/app/shared/interceptors/index.ts"],
       "@sp/web/shared/services": ["apps/sp-web/src/app/shared/services/index.ts"],

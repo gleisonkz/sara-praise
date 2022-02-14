@@ -8,15 +8,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
+import { ministryListItemReducer } from '@sp/store/ministry';
+import { MinistryListItemEffects } from '@sp/store/ministry/effects';
+
 import { HotToastModule } from '@ngneat/hot-toast';
-import { HttpErrorInterceptor } from 'apps/sp-web/src/app/shared/interceptors/http-error.interceptor';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import {
+    HttpErrorInterceptor
+} from 'apps/sp-web/src/app/shared/interceptors/http-error.interceptor';
 import { LogInterceptor } from 'apps/sp-web/src/app/shared/interceptors/log.interceptor';
+import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environment';
 
 registerLocaleData(localePT);
 
@@ -30,7 +35,9 @@ registerLocaleData(localePT);
     BrowserAnimationsModule,
     ReactiveFormsModule,
     StoreModule.forRoot(
-      {},
+      {
+        ministryListItems: ministryListItemReducer,
+      },
       {
         metaReducers: !environment.production ? [] : [],
         runtimeChecks: {
@@ -39,7 +46,7 @@ registerLocaleData(localePT);
         },
       }
     ),
-    EffectsModule.forRoot([]),
+    EffectsModule.forRoot([MinistryListItemEffects]),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
