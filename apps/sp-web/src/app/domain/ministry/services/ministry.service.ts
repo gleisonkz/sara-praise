@@ -7,21 +7,15 @@ import {
     ScaleRequest, ScaleResponse, ScaleResponseCreate, SongListItemResponse
 } from '@sp/shared-interfaces';
 
-import { BehaviorSubject, map, Observable, tap } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MinistryService {
-  private ministryListItems$$ = new BehaviorSubject<MinistryListItemResponse[]>([]);
-  private ministryKeyListItems$$ = new BehaviorSubject<MinistryKeyListItemResponse[]>([]);
-
   private readonly BASE_URL = '/api/ministry';
 
   constructor(private readonly http: HttpClient) {}
-
-  ministryListItems$ = this.ministryListItems$$.asObservable();
-  ministryKeyListItems$ = this.ministryKeyListItems$$.asObservable();
 
   createMinistry(ministry: MinistryRequest): Observable<MinistryListItemResponse> {
     return this.http.post<MinistryListItemResponse>(this.BASE_URL, ministry);
@@ -51,10 +45,7 @@ export class MinistryService {
 
   createMinistryKey(ministryID: number, key: MinistryKeyRequest): Observable<MinistryKeyListItemResponse> {
     const url = `${this.BASE_URL}/${ministryID}/keys`;
-    return this.http.post<MinistryKeyListItemResponse>(url, key).pipe(
-      tap((ministryKeyListItem) => console.log(ministryKeyListItem)),
-      tap((ministryKey) => this.ministryKeyListItems$$.next([...this.ministryKeyListItems$$.value, ministryKey]))
-    );
+    return this.http.post<MinistryKeyListItemResponse>(url, key);
   }
 
   getMinistryListItems(ministryID?: number): Observable<MinistryListItemResponse[]> {
@@ -93,9 +84,7 @@ export class MinistryService {
 
   getKeyListItem(ministryID: number): Observable<MinistryKeyListItemResponse[]> {
     const url = `${this.BASE_URL}/${ministryID}/keys`;
-    return this.http
-      .get<MinistryKeyListItemResponse[]>(url)
-      .pipe(tap((ministryKeyListItems) => this.ministryKeyListItems$$.next(ministryKeyListItems)));
+    return this.http.get<MinistryKeyListItemResponse[]>(url);
   }
 
   getKeys(): Observable<KeyResponse[]> {

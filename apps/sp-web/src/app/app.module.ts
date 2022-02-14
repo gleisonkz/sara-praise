@@ -8,18 +8,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
-import { ministryListItemReducer } from '@sp/store/ministry';
-import { MinistryListItemEffects } from '@sp/store/ministry/effects';
-
 import { HotToastModule } from '@ngneat/hot-toast';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import {
     HttpErrorInterceptor
 } from 'apps/sp-web/src/app/shared/interceptors/http-error.interceptor';
 import { LogInterceptor } from 'apps/sp-web/src/app/shared/interceptors/log.interceptor';
-import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -34,20 +27,6 @@ registerLocaleData(localePT);
     HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    StoreModule.forRoot(
-      {
-        ministryListItems: ministryListItemReducer,
-      },
-      {
-        metaReducers: !environment.production ? [] : [],
-        runtimeChecks: {
-          strictActionImmutability: true,
-          strictStateImmutability: true,
-        },
-      }
-    ),
-    EffectsModule.forRoot([MinistryListItemEffects]),
-    !environment.production ? StoreDevtoolsModule.instrument() : [],
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LogInterceptor, multi: true },

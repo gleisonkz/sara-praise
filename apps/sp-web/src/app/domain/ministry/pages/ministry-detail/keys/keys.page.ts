@@ -23,7 +23,7 @@ export class KeysPage implements OnInit {
   ngOnInit(): void {
     const ministryID = this.ministryDetailRouteService.getMinistryID(this.activatedRoute);
 
-    this.keysListItems$ = this.ministryService.ministryKeyListItems$;
-    this.ministryService.getKeyListItem(ministryID).subscribe();
+    // this.keysListItems$ = this.ministryService.ministryKeyListItems$;
+    // this.ministryService.getKeyListItem(ministryID).subscribe();
   }
 }

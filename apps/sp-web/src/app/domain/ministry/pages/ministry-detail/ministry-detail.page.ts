@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MinistryKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { combineLatest, filter, map, Observable, of, switchMap, take } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import {
     MinistryKeyDialogComponent
 } from '../../components/ministry-key-dialog/ministry-key-dialog.component';
@@ -31,22 +31,22 @@ export class MinistryDetailPage implements OnInit {
 
   ngOnInit(): void {
     const param$ = this.activatedRoute.params.pipe(map(({ ministryID }) => +ministryID));
-    const previousMinistriesListItems$ = this.ministryService.ministryListItems$;
+    // const previousMinistriesListItems$ = this.ministryService.ministryListItems$;
 
-    this.ministryListItem$ = combineLatest([param$, previousMinistriesListItems$]).pipe(
-      take(1),
-      switchMap(([id, ministriesListItems]) => {
-        this.ministryID = id;
-        const ministryListItem = ministriesListItems.find(({ ministryID }) => ministryID === id);
-        console.log('ministryListItem', ministryListItem);
+    // this.ministryListItem$ = combineLatest([param$, previousMinistriesListItems$]).pipe(
+    //   take(1),
+    //   switchMap(([id, ministriesListItems]) => {
+    //     this.ministryID = id;
+    //     const ministryListItem = ministriesListItems.find(({ ministryID }) => ministryID === id);
+    //     console.log('ministryListItem', ministryListItem);
 
-        if (ministryListItem) return of(ministryListItem);
-        const ministryListItem$ = this.ministryService
-          .getMinistryListItems(id)
-          .pipe(map(([ministryListItem]) => ministryListItem));
-        return ministryListItem$;
-      })
-    );
+    //     if (ministryListItem) return of(ministryListItem);
+    //     const ministryListItem$ = this.ministryService
+    //       .getMinistryListItems(id)
+    //       .pipe(map(([ministryListItem]) => ministryListItem));
+    //     return ministryListItem$;
+    //   })
+    // );
   }
 
   goToCreateScale() {
