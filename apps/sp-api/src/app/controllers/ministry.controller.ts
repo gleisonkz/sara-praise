@@ -2,8 +2,8 @@ import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Res } fr
 
 import {
     KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
-    MinistryListItemResponse, MinistryRequest, ScaleListItemResponse, ScaleRequest,
-    ScaleResponseCreate, SongListItemResponse
+    MinistryListItemResponse, MinistryRequest, ScaleDetailResponse, ScaleListItemResponse,
+    ScaleRequest, ScaleResponse, ScaleResponseCreate, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { Response } from 'express';
@@ -121,7 +121,25 @@ export class MinistryController {
       res.status(HttpStatus.NO_CONTENT);
     } catch (error) {
       if (error instanceof ScaleNotFoundError) {
-        console.log('error.message', error.message);
+        console.error('error.message', error.message);
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
+  }
+
+  @Delete('/:ministryID')
+  async deleteMinistry(
+    @Param('ministryID') ministryID: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<void> {
+    try {
+      await this.ministryService.deleteMinistry(+ministryID);
+      res.status(HttpStatus.NO_CONTENT);
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        console.error('error.message', error.message);
         return res.status(HttpStatus.BAD_REQUEST).send(error.message);
       }
 
@@ -130,7 +148,10 @@ export class MinistryController {
   }
 
   @Get('/scales/:scaleID')
-  async getScaleByID(@Param('scaleID') scaleID: number, @Res({ passthrough: true }) res: Response) {
+  async getScaleByID(
+    @Param('scaleID') scaleID: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<ScaleResponse> {
     try {
       const scale = await this.ministryService.getScaleByIDAsync(+scaleID);
       return scale;
@@ -175,9 +196,12 @@ export class MinistryController {
   }
 
   @Get('/scale-details/:scaleID')
-  async getScaleDetails(@Param('scaleID') scaleID: number, @Res({ passthrough: true }) res: Response) {
+  async getScaleDetails(
+    @Param('scaleID') scaleID: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<ScaleDetailResponse> {
     try {
-      const scaleDetails = this.ministryService.getScaleDetails(+scaleID);
+      const scaleDetails: ScaleDetailResponse = this.ministryService.getScaleDetails(+scaleID);
       return scaleDetails;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {

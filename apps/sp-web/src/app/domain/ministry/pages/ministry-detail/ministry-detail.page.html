@@ -12,11 +12,32 @@
 
     <button
       mat-icon-button
-      class="example-icon"
-      aria-label="Example icon-button with share icon"
+      [matMenuTriggerFor]="menu"
+      aria-label="Example icon-button with a menu"
     >
-      <mat-icon>share</mat-icon>
+      <mat-icon>more_vert</mat-icon>
     </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>share</mat-icon>
+        <span>Compartilhar</span>
+      </button>
+      <button
+        routerLink="/ministerios/1/escalas/{{ministryListItem.ministryID}}/edit"
+        mat-menu-item
+      >
+        <mat-icon>edit</mat-icon>
+        <span>Editar</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>file_copy</mat-icon>
+        <span>Clonar</span>
+      </button>
+      <button mat-menu-item (click)="deleteMinistry(ministryListItem.ministryID)">
+        <mat-icon>delete</mat-icon>
+        <span>Deletar</span>
+      </button>
+    </mat-menu>
   </mat-toolbar>
 
   <div class="toolbar-spacer"></div>

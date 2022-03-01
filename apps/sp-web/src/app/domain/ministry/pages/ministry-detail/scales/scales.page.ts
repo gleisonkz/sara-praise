@@ -6,10 +6,10 @@ import { ScaleListItemResponse } from '@sp/shared-interfaces';
 
 import {
     MinistryDetailRouteService
-} from 'apps/sp-web/src/app/domain/ministry/services/ministry-detail-route.service';
+} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry-detail-route.service';
 import { FADE_ANIMATION } from 'apps/sp-web/src/app/shared/animations/fade.animation';
 import { Observable } from 'rxjs';
-import { MinistryService } from '../../../services/ministry.service';
+import { MinistryService } from '../../../core/services/ministry.service';
 
 @Component({
   templateUrl: './scales.page.html',

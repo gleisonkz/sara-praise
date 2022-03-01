@@ -1,8 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HotToastService } from '@ngneat/hot-toast';
+
 import { ScaleDetailResponse } from '@sp/shared-interfaces';
-import { MinistryService } from 'apps/sp-web/src/app/domain/ministry/services/ministry.service';
+
+import { HotToastService } from '@ngneat/hot-toast';
+import {
+    MinistryService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.service';
 import { map, Observable, switchMap } from 'rxjs';
 
 @Component({

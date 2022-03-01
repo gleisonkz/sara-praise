@@ -3,14 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { MinistryKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
+import { MinistryListItemResponse } from '@sp/shared-interfaces';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { filter, map, Observable } from 'rxjs';
+import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/minitries.facade';
+import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
 import {
     MinistryKeyDialogComponent
 } from '../../components/ministry-key-dialog/ministry-key-dialog.component';
-import { MinistryService } from '../../services/ministry.service';
 
 @UntilDestroy()
 @Component({
@@ -23,7 +23,7 @@ export class MinistryDetailPage implements OnInit {
   ministryID: number;
 
   constructor(
-    public readonly ministryService: MinistryService,
+    private readonly ministryFacade: MinistryFacade,
     private activatedRoute: ActivatedRoute,
     private readonly router: Router,
     private dialog: MatDialog
@@ -31,22 +31,22 @@ export class MinistryDetailPage implements OnInit {
 
   ngOnInit(): void {
     const param$ = this.activatedRoute.params.pipe(map(({ ministryID }) => +ministryID));
-    // const previousMinistriesListItems$ = this.ministryService.ministryListItems$;
+    const ministry$ = this.ministryFacade.ministry$;
 
-    // this.ministryListItem$ = combineLatest([param$, previousMinistriesListItems$]).pipe(
-    //   take(1),
-    //   switchMap(([id, ministriesListItems]) => {
-    //     this.ministryID = id;
-    //     const ministryListItem = ministriesListItems.find(({ ministryID }) => ministryID === id);
-    //     console.log('ministryListItem', ministryListItem);
+    this.ministryListItem$ = combineLatest([param$, ministry$]).pipe(
+      untilDestroyed(this),
+      switchMap(([ministryID, ministry]) => {
+        this.ministryID = ministryID;
 
-    //     if (ministryListItem) return of(ministryListItem);
-    //     const ministryListItem$ = this.ministryService
-    //       .getMinistryListItems(id)
-    //       .pipe(map(([ministryListItem]) => ministryListItem));
-    //     return ministryListItem$;
-    //   })
-    // );
+        if (ministry) return of(ministry);
+        return this.ministryFacade.getMinistryByID(ministryID);
+      })
+    );
+  }
+
+  deleteMinistry(ministryID: number) {
+    this.ministryFacade.removeMinistry(ministryID);
+    this.router.navigate(['/ministerios']);
   }
 
   goToCreateScale() {
@@ -68,13 +68,13 @@ export class MinistryDetailPage implements OnInit {
       maxWidth: '600px',
     });
 
-    dialogRef
-      .afterClosed()
-      .pipe(untilDestroyed(this), filter(Boolean))
-      .subscribe((result: MinistryKeyRequest) => {
-        this.ministryService.createMinistryKey(this.ministryID, result).subscribe((ministryKey) => {
-          console.log(ministryKey);
-        });
-      });
+    // dialogRef
+    //   .afterClosed()
+    //   .pipe(untilDestroyed(this), filter(Boolean))
+    //   .subscribe((result: MinistryKeyRequest) => {
+    //     this.ministryService.createMinistryKey(this.ministryID, result).subscribe((ministryKey) => {
+    //       console.log(ministryKey);
+    //     });
+    //   });
   }
 }

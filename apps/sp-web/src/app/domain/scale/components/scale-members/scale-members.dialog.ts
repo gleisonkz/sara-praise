@@ -2,7 +2,9 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { MinistryService } from 'apps/sp-web/src/app/domain/ministry/services/ministry.service';
+import {
+    MinistryService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.service';
 
 interface ScaleMembersDialogData {
   scaleId: number;

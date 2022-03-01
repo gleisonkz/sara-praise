@@ -21,6 +21,11 @@ export class MinistryService {
     return this.http.post<MinistryListItemResponse>(this.BASE_URL, ministry);
   }
 
+  deleteMinistry(ministryID: number) {
+    const url = `${this.BASE_URL}/${ministryID}`;
+    return this.http.delete(url);
+  }
+
   createScale(ministryID: number, scaleRequest: ScaleRequest): Observable<ScaleResponseCreate> {
     const url = `${this.BASE_URL}/${ministryID}/scale`;
     return this.http.post<ScaleResponseCreate>(url, scaleRequest);

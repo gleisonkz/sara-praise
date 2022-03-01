@@ -1,10 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+
+import { MinistryDetailRouteService } from './core/services/ministry-detail-route.service';
 import {
     KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
 } from './pages';
-import { MinistryDetailRouteService } from './services/ministry-detail-route.service';
 
 const routes: Routes = [
   { path: '', component: MinistriesPage },
@@ -27,7 +30,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [MatMenuModule, MatButtonModule, RouterModule.forChild(routes)],
   exports: [RouterModule],
   providers: [MinistryDetailRouteService],
 })

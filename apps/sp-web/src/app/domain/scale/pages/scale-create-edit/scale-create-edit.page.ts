@@ -10,8 +10,10 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
     MinistryDetailRouteService
-} from 'apps/sp-web/src/app/domain/ministry/services/ministry-detail-route.service';
-import { MinistryService } from 'apps/sp-web/src/app/domain/ministry/services/ministry.service';
+} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry-detail-route.service';
+import {
+    MinistryService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.service';
 import {
     ScaleMembersDialog
 } from 'apps/sp-web/src/app/domain/scale/components/scale-members/scale-members.dialog';

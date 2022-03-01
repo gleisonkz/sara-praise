@@ -8,10 +8,10 @@ import { SongListItemResponse } from '@sp/shared-interfaces';
 
 import {
     MinistryDetailRouteService
-} from 'apps/sp-web/src/app/domain/ministry/services/ministry-detail-route.service';
+} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry-detail-route.service';
 import { LIST_ANIMATION } from 'apps/sp-web/src/app/shared/animations/list.animation';
 import { Observable } from 'rxjs';
-import { MinistryService } from '../../../services/ministry.service';
+import { MinistryService } from '../../../core/services/ministry.service';
 
 @Component({
   templateUrl: './songs.page.html',

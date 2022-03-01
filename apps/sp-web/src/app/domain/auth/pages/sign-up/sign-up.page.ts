@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
+
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 
 @Component({
   templateUrl: './sign-up.page.html',
@@ -7,7 +9,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpPage implements OnInit {
-  userForm: FormGroup;
+  userForm: FormGroup<{
+    email: FormControl<string | null>;
+    password: FormControl<string | null>;
+    confirmPassword: FormControl<string | null>;
+  }>;
 
   ngOnInit(): void {
     this.createForm();

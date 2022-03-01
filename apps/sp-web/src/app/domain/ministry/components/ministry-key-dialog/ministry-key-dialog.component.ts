@@ -9,7 +9,7 @@ import {
 
 import { ControlsOf, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { BehaviorSubject, filter, Observable, switchMap, tap } from 'rxjs';
-import { MinistryService } from '../../services/ministry.service';
+import { MinistryService } from '../../core/services/ministry.service';
 
 @Component({
   templateUrl: './ministry-key-dialog.component.html',

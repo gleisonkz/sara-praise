@@ -61,15 +61,15 @@ export class LogService {
     console.groupCollapsed(method + `%c ${path}` + ` %c${date}`, methodStyle, this.URI_STYLES, this.DATE_STYLES);
 
     console.groupCollapsed('%cHeaders', this.URI_STYLES);
-    console.log(headers);
+    console.info(headers);
     console.groupEnd();
 
     console.groupCollapsed('%cPayload', this.URI_STYLES);
-    console.log(payload);
+    console.info(payload);
     console.groupEnd();
 
     console.group('%cResponse Data', this.URI_STYLES);
-    console.log(responseData);
+    console.info(responseData);
     console.groupEnd();
 
     console.groupEnd();

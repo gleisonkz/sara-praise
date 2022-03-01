@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 
 import { FormControl } from '@ngneat/reactive-forms';
+import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/minitries.facade';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -13,14 +15,13 @@ import { Observable } from 'rxjs';
 })
 export class MinistriesPage implements OnInit {
   ministryNameControl = new FormControl('', Validators.required);
-  ministryListItems$: Observable<MinistryListItemResponse[]>;
+  ministries$: Observable<MinistryListItemResponse[]>;
 
-  constructor() {
-    console.log('MinistriesPage.constructor');
-  }
+  constructor(private readonly router: Router, private readonly ministryFacade: MinistryFacade) {}
 
   ngOnInit(): void {
-    console.log('MinistriesPage.ngOnInit');
+    this.ministries$ = this.ministryFacade.ministries$;
+    this.ministryFacade.getMinistries();
   }
 
   createMinistry() {
@@ -31,6 +32,11 @@ export class MinistriesPage implements OnInit {
       ownerID: 1,
     };
 
-    console.log('MinistriesPage.createMinistry', ministry);
+    this.ministryFacade.addMinistry(ministry);
+  }
+
+  goToMinistryDetails(ministryID: number) {
+    this.ministryFacade.setActiveMinistry(ministryID);
+    this.router.navigate(['ministerios', ministryID]);
   }
 }

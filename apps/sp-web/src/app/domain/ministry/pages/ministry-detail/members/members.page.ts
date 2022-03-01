@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { MemberListItemResponse } from '@sp/shared-interfaces';
 
 import { Observable } from 'rxjs';
-import { MinistryDetailRouteService } from '../../../services/ministry-detail-route.service';
-import { MinistryService } from '../../../services/ministry.service';
+import { MinistryDetailRouteService } from '../../../core/services/ministry-detail-route.service';
+import { MinistryService } from '../../../core/services/ministry.service';
 
 @Component({
   templateUrl: './members.page.html',
