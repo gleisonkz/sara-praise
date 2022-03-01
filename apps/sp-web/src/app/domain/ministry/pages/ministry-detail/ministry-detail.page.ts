@@ -5,9 +5,9 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { MinistryListItemResponse } from '@sp/shared-interfaces';
 
-import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/minitries.facade';
-import { combineLatest, map, Observable, of, switchMap } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
     MinistryKeyDialogComponent
 } from '../../components/ministry-key-dialog/ministry-key-dialog.component';
@@ -24,24 +24,13 @@ export class MinistryDetailPage implements OnInit {
 
   constructor(
     private readonly ministryFacade: MinistryFacade,
-    private activatedRoute: ActivatedRoute,
+    private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
-    private dialog: MatDialog
+    private readonly dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
-    const param$ = this.activatedRoute.params.pipe(map(({ ministryID }) => +ministryID));
-    const ministry$ = this.ministryFacade.ministry$;
-
-    this.ministryListItem$ = combineLatest([param$, ministry$]).pipe(
-      untilDestroyed(this),
-      switchMap(([ministryID, ministry]) => {
-        this.ministryID = ministryID;
-
-        if (ministry) return of(ministry);
-        return this.ministryFacade.getMinistryByID(ministryID);
-      })
-    );
+    this.ministryListItem$ = this.ministryFacade.ministry$;
   }
 
   deleteMinistry(ministryID: number) {

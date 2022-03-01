@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ScaleDetailResponse } from '@sp/shared-interfaces';
+import { MinistryListItemResponse, ScaleDetailResponse } from '@sp/shared-interfaces';
 
 import { HotToastService } from '@ngneat/hot-toast';
+import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/minitries.facade';
 import {
     MinistryService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.service';
@@ -18,15 +19,18 @@ export class ScaleViewPage implements OnInit {
   constructor(
     private readonly router: Router,
     private readonly toastService: HotToastService,
-
+    private readonly ministryFacade: MinistryFacade,
     private readonly activatedRoute: ActivatedRoute,
     private readonly ministryService: MinistryService
   ) {}
 
   scaleListItem$: Observable<ScaleDetailResponse>;
+  ministry$: Observable<MinistryListItemResponse>;
   scaleID: number;
 
   ngOnInit(): void {
+    this.ministry$ = this.ministryFacade.ministry$;
+
     this.scaleListItem$ = this.activatedRoute.params.pipe(
       map(({ scaleID }) => {
         this.scaleID = scaleID;
