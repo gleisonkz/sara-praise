@@ -201,7 +201,7 @@ export class MinistryController {
     @Res({ passthrough: true }) res: Response
   ): Promise<ScaleDetailResponse> {
     try {
-      const scaleDetails: ScaleDetailResponse = this.ministryService.getScaleDetails(+scaleID);
+      const scaleDetails: ScaleDetailResponse = await this.ministryService.getScaleDetails(+scaleID);
       return scaleDetails;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
