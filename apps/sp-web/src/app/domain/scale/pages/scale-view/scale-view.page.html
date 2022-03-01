@@ -1,19 +1,14 @@
 <ng-container *ngIf="scaleListItem$ |async as scale">
   <mat-toolbar class="absolute">
-    <button routerLink="../../" mat-icon-button>
+    <button aria-label="Back to previous page" routerLink="../../" mat-icon-button>
       <mat-icon>arrow_back</mat-icon>
     </button>
 
-    <h1 *ngIf="ministry$ | async as ministry">
-      <button
-        mat-icon-button
-        [routerLink]="['/']"
-        aria-label="Example icon-button with menu icon"
-      >
-        <mat-icon>home</mat-icon>
-      </button>
-      {{ ministry.name }}
-    </h1>
+    <button mat-icon-button [routerLink]="['/']" aria-label="Back to ministries page">
+      <mat-icon>home</mat-icon>
+    </button>
+
+    <h1 *ngIf="ministry$ | async as ministry">{{ ministry.name }}</h1>
 
     <button
       mat-icon-button

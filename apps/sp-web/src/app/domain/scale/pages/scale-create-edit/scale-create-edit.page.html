@@ -3,7 +3,7 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
 
-  <h1>Editar Escala</h1>
+  <h1>{{ scaleID ? 'Editar Escala' : 'Criar Escala' }}</h1>
 </mat-toolbar>
 
 <mat-divider></mat-divider>
@@ -97,7 +97,7 @@
       <mat-icon>add</mat-icon> Adicionar Participante
     </button>
 
-    <p>A escala ainda não possui nenhum membro</p>
+    <p>A escala ainda não possui nenhum participante</p>
   </mat-tab>
 
   <mat-tab label="Músicas" *ngIf="scaleID">

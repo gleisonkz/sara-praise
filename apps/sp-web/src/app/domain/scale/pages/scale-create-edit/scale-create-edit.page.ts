@@ -15,8 +15,8 @@ import {
     MinistryService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.service';
 import {
-    ScaleMembersDialog
-} from 'apps/sp-web/src/app/domain/scale/components/scale-members/scale-members.dialog';
+    ParticipantsDialog
+} from 'apps/sp-web/src/app/domain/scale/components/participants/participants.dialog';
 import { filter, map, startWith, switchMap, tap } from 'rxjs';
 
 @Component({
@@ -93,9 +93,10 @@ export class ScaleCreateEditPage implements OnInit {
   }
 
   addMember() {
-    this.matDialog.open(ScaleMembersDialog, {
+    this.matDialog.open(ParticipantsDialog, {
       data: {
         scaleId: this.scaleID,
+        ministryID: this.ministryID,
       },
 
       maxWidth: '800px',

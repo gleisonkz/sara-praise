@@ -1,4 +1,6 @@
 @import 'custom-theme';
+@import 'mixins';
+@import 'variables';
 
 :host {
   display: block;
@@ -30,9 +32,8 @@ mat-expansion-panel {
   padding: 0 16px;
 }
 
-mat-radio-group {
-  display: grid;
-  row-gap: 20px;
+::ng-deep .mat-expansion-panel-body {
+  padding: 0 5px 7px 5px !important;
 }
 
 .radio-button-container {
@@ -40,6 +41,21 @@ mat-radio-group {
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  padding: 10px;
+  border-radius: $global-radius;
+
+  &.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background-color: $dark-bg-lighter-10;
+    }
+  }
 
   .icon-container {
     display: flex;

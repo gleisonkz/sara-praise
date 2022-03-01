@@ -1,11 +1,11 @@
-@import "functions";
+@import 'functions';
 
 // ==========================================================================
 // Font
 // ==========================================================================
 
-$font-primary: "Inter", sans-serif;
-$font-secondary: "Lexend", sans-serif;
+$font-primary: 'Inter', sans-serif;
+$font-secondary: 'Lexend', sans-serif;
 
 // ==========================================================================
 // Measures
@@ -14,7 +14,7 @@ $font-secondary: "Lexend", sans-serif;
 $global-max-width: rem(1200);
 $global-font-size: rem(18);
 $global-line-height: 1.5;
-$global-radius: rem(10);
+$global-radius: rem(5);
 $global-horizontal-padding: rem(43);
 $global-module-size: rem(25);
 
@@ -23,10 +23,10 @@ $global-module-size: rem(25);
 // ==========================================================================
 
 $z-indexes: (
-  "above": 500,
-  "modal": 400,
-  "overlay": 300,
-  "dropdown": 200,
-  "default": 1,
-  "below": -1,
+  'above': 500,
+  'modal': 400,
+  'overlay': 300,
+  'dropdown': 200,
+  'default': 1,
+  'below': -1,
 );

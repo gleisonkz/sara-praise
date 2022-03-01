@@ -1,0 +1,67 @@
+<h2 mat-dialog-title>Participantes</h2>
+
+<mat-dialog-content class="mat-typography">
+  <mat-form-field class="search" appearance="outline">
+    <mat-label>Fill in your name</mat-label>
+    <input matInput placeholder="Placeholder" />
+  </mat-form-field>
+
+  <mat-list [formGroup]="participantsGroup">
+    <div
+      formArrayName="participants"
+      *ngFor="let member of members$ | async; let participantIndex=index"
+    >
+      <mat-list-item>
+        <img matListAvatar src="https://randomuser.me/api/portraits/men/92.jpg" />
+        <div mat-line class="subtitle">{{ member.name }}</div>
+        <div class="flex"></div>
+        <mat-slide-toggle
+          (change)="toggleChanged($event,member,participantIndex)"
+          #toggle
+        ></mat-slide-toggle>
+      </mat-list-item>
+      <mat-accordion
+        [formGroupName]="participantIndex"
+        *ngIf="toggle.checked"
+        [hidden]="!toggle.checked"
+      >
+        <mat-expansion-panel [expanded]="false">
+          <mat-expansion-panel-header>
+            <mat-panel-description>
+              0/{{ member.roles.length }} funções selecionadas.
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+          <section formGroupName="roles" class="roles">
+            <div
+              (click)="toggleRoleControl(role.roleID, participantIndex)"
+              class="radio-button-container"
+              [class.disabled]="isRoleDisabled(role.roleID, participantIndex)"
+              *ngFor="let role of member.roles; let roleIndex=index"
+            >
+              <div class="icon-container">
+                <mat-icon svgIcon="bass"></mat-icon>
+                <span>{{role.name}}</span>
+              </div>
+
+              <mat-checkbox
+                (click)="$event.stopPropagation()"
+                [formControlName]="role.roleID"
+                #checkbox
+              >
+              </mat-checkbox>
+            </div>
+          </section>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <mat-divider></mat-divider>
+    </div>
+  </mat-list>
+</mat-dialog-content>
+
+{{ participantsGroup.value | json }}
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Close</button>
+  <button mat-button color="primary">Submit</button>
+</mat-dialog-actions>

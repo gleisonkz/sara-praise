@@ -21,6 +21,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
+import { LogPipeWidgetModule } from '@sp/web/widget/pipes';
+
 import { ScaleHostPage } from 'apps/sp-web/src/app/domain/scale/scale.host.component';
 import {
     EmptyListNoMessageWidgetModule
@@ -33,17 +35,18 @@ import {
     MediaIfDirectiveWidgetModule
 } from 'apps/sp-web/src/app/widget/directives/media-if/media-if.widget.module';
 import { MatTimepickerModule } from 'mat-timepicker';
-import { ScaleMembersDialog } from './components/scale-members/scale-members.dialog';
+import { ParticipantsDialog } from './components/participants/participants.dialog';
 import { ScaleCreateEditPage } from './pages/scale-create-edit/scale-create-edit.page';
 import { ScaleViewPage } from './pages/scale-view/scale-view.page';
 import { ScaleRoutingModule } from './scale-routing.module';
 
 @NgModule({
-  declarations: [ScaleHostPage, ScaleCreateEditPage, ScaleViewPage, ScaleMembersDialog],
+  declarations: [ScaleHostPage, ScaleCreateEditPage, ScaleViewPage, ParticipantsDialog],
   imports: [
     SongListItemWidgetModule,
     MatDatepickerModule,
     MatIconModule,
+    LogPipeWidgetModule,
     MatNativeDateModule,
     CommonModule,
     EmptyListNoMessageWidgetModule,
