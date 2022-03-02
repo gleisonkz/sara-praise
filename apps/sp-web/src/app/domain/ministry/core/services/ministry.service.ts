@@ -13,7 +13,7 @@ import { map, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class MinistryService {
-  private readonly BASE_URL = '/api/ministry';
+  private readonly BASE_URL = '/api/ministries';
 
   constructor(private readonly http: HttpClient) {}
 
@@ -34,6 +34,13 @@ export class MinistryService {
   updateScale(scaleRequest: ScaleRequest, scaleID: number): Observable<ScaleResponse> {
     const url = `${this.BASE_URL}/scales/${scaleID}`;
     return this.http.put<ScaleResponse>(url, scaleRequest);
+  }
+
+  getRolesByMemberID(ministryID: number, memberID?: number) {
+    const url = `${this.BASE_URL}/${ministryID}/roles`;
+    const params = new HttpParams().set('memberID', memberID ? memberID.toString() : '');
+
+    return this.http.get<any[]>(url, { params });
   }
 
   getScaleByID(scaleID: number): Observable<ScaleResponse> {

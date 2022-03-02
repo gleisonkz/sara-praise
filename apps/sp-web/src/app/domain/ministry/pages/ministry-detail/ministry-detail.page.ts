@@ -5,9 +5,12 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { MinistryListItemResponse } from '@sp/shared-interfaces';
 
-import { UntilDestroy } from '@ngneat/until-destroy';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/minitries.facade';
-import { Observable } from 'rxjs';
+import {
+    MemberDialog
+} from 'apps/sp-web/src/app/domain/ministry/components/member-dialog/member.dialog';
+import { filter, Observable, tap } from 'rxjs';
 import {
     MinistryKeyDialogComponent
 } from '../../components/ministry-key-dialog/ministry-key-dialog.component';
@@ -30,7 +33,11 @@ export class MinistryDetailPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.ministryListItem$ = this.ministryFacade.ministry$;
+    this.ministryListItem$ = this.ministryFacade.ministry$.pipe(
+      tap((ministry: MinistryListItemResponse) => {
+        this.ministryID = ministry.ministryID;
+      })
+    );
   }
 
   deleteMinistry(ministryID: number) {
@@ -47,7 +54,20 @@ export class MinistryDetailPage implements OnInit {
   }
 
   goToCreateMinistryMember() {
-    console.log('createMinistryMember');
+    const dialogRef = this.dialog.open(MemberDialog, {
+      data: {
+        ministryID: this.ministryID,
+      },
+      width: '100%',
+      maxWidth: '600px',
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this), filter(Boolean))
+      .subscribe((result: any) => {
+        console.log(result);
+      });
   }
 
   goToCreateMinistryKey() {

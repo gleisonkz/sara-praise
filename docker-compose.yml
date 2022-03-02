@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  dev-db:
+    image: postgres
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: sara
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: 123

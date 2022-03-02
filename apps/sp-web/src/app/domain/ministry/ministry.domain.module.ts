@@ -27,6 +27,9 @@ import {
 import { RemoveDotsPipeWidgetModule } from '@sp/web/widget/pipes';
 
 import {
+    MemberDialog
+} from 'apps/sp-web/src/app/domain/ministry/components/member-dialog/member.dialog';
+import {
     MinistryKeyDialogComponent
 } from './components/ministry-key-dialog/ministry-key-dialog.component';
 import { MinistryRoutingModule } from './ministry-routing.module';
@@ -49,6 +52,7 @@ import { SongDetailPage } from './pages/song-detail/song-detail.page';
     SongDetailPage,
     MemberDetailPage,
     MinistryKeyDialogComponent,
+    MemberDialog,
   ],
   imports: [
     CommonModule,

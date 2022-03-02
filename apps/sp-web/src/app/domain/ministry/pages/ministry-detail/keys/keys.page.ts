@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { MinistryKeyListItemResponse } from '@sp/shared-interfaces';
 
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { MinistryDetailRouteService } from '../../../core/services/ministry-detail-route.service';
 import { MinistryService } from '../../../core/services/ministry.service';
 
@@ -13,7 +13,7 @@ import { MinistryService } from '../../../core/services/ministry.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KeysPage implements OnInit {
-  keysListItems$: Observable<MinistryKeyListItemResponse[]>;
+  keysListItems$: Observable<MinistryKeyListItemResponse[]> = of([]);
   constructor(
     private readonly ministryDetailRouteService: MinistryDetailRouteService,
     private readonly ministryService: MinistryService,

@@ -1,12 +1,17 @@
-<h2 mat-dialog-title>Participantes</h2>
-
-<mat-dialog-content class="mat-typography">
-  <mat-form-field class="search" appearance="outline">
-    <mat-label>Fill in your name</mat-label>
-    <input matInput placeholder="Placeholder" />
+<form [formGroup]="memberForm">
+  <mat-form-field>
+    <input matInput placeholder="Nome" formControlName="name" />
   </mat-form-field>
 
-  <mat-list>
+  <mat-form-field>
+    <input formControlName="email" matInput placeholder="Email" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input formControlName="password" matInput placeholder="Password" type="password" />
+  </mat-form-field>
+
+  <!-- <mat-list>
     <div *ngFor="let member of members; let participantIndex=index">
       <mat-list-item>
         <img matListAvatar src="https://randomuser.me/api/portraits/men/92.jpg" />
@@ -53,10 +58,16 @@
       {{ member.form.value | json }} }
       <mat-divider></mat-divider>
     </div>
-  </mat-list>
-</mat-dialog-content>
+  </mat-list> -->
 
-<mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Close</button>
-  <button (click)="submitForm()" mat-button color="primary">Submit</button>
-</mat-dialog-actions>
+  <button
+    type="button"
+    color="accent"
+    mat-raised-button
+    [mat-dialog-close]="submitForm()"
+    [disabled]="!this.memberForm.valid"
+  >
+    Confirmar
+  </button>
+  <button type="button" mat-dialog-close mat-raised-button>Cancelar</button>
+</form>

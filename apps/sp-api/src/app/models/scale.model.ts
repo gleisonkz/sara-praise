@@ -1,4 +1,5 @@
-import { Member } from './member.model';
+import { Participant } from '@sp/api/models';
+
 import { Song } from './song.model';
 
 export interface Scale {
@@ -6,6 +7,6 @@ export interface Scale {
   title: string;
   date: Date;
   notes: string;
-  members: Member[];
+  participants: Participant[];
   songs: Song[];
 }

@@ -9,7 +9,7 @@ import {
 import { Response } from 'express';
 import { MinistryNotFoundError, MinistryService, ScaleNotFoundError } from '../services';
 
-@Controller('ministry')
+@Controller('ministries')
 export class MinistryController {
   constructor(private readonly ministryService: MinistryService) {}
 
@@ -80,6 +80,42 @@ export class MinistryController {
     try {
       const members = await this.ministryService.getMembers(+ministryID, roles);
       return members;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
+  }
+
+  @Get('/:ministryID/scales/:scaleID/participants')
+  async getParticipants(
+    @Param('ministryID') ministryID: number,
+    @Param('scaleID') scaleID: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<any[]> {
+    try {
+      const participants = await this.ministryService.getParticipants(+ministryID, +scaleID);
+      return participants;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        return res.status(HttpStatus.BAD_REQUEST).send(error.message);
+      }
+
+      throw error;
+    }
+  }
+
+  @Get('/:ministryID/roles')
+  async getRolesByMinistryID(
+    @Res({ passthrough: true }) res: Response,
+    @Param('ministryID') ministryID: number,
+    @Query('memberID') memberID?: number
+  ): Promise<any[]> {
+    try {
+      const roles = await this.ministryService.getRolesByMinistryID(+ministryID, memberID);
+      return roles;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
         return res.status(HttpStatus.BAD_REQUEST).send(error.message);
