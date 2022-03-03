@@ -10,7 +10,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
 
@@ -23,9 +23,8 @@ async function bootstrap(): Promise<void> {
 
   const config = new DocumentBuilder()
     .setTitle('Sara Praise')
-    .setDescription('Api for managing ministries and scales')
+    .setDescription('Api para gestão de usuários, ministérios e escalas')
     .setVersion('1.0')
-    .addTag('sp-api')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

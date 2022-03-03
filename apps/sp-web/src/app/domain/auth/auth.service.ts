@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { LocalStorageService } from '@sp/web/shared/services';
 
 import { environment } from 'apps/sp-web/src/environments/environment';
-import { Observable, of } from 'rxjs';
+import { mapTo, Observable, tap } from 'rxjs';
 
 const HTTP_OPTIONS = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
@@ -20,22 +20,19 @@ export class AuthService {
     return this.localStorageService.get('isLoggedIn');
   }
 
-  login(username: string, password: string): Observable<boolean> {
-    this.localStorageService.set('isLoggedIn', true);
-    return of(true);
-    // const url = environment.apiUrl + '/auth/sign-in';
-    // return this.http.post(
-    //   url,
-    //   {
-    //     username,
-    //     password,
-    //   },
-    //   HTTP_OPTIONS
-    // );
+  login(email: string, password: string): Observable<boolean> {
+    const url = environment.apiUrl + '/auth/signin';
+
+    return this.http.post<string>(url, { email, password }).pipe(
+      tap((token) => {
+        this.localStorageService.set('accessToken', token);
+      }),
+      mapTo(true)
+    );
   }
 
   register(username: string, email: string, password: string): Observable<any> {
-    const url = environment.apiUrl + '/auth/sign-up';
+    const url = environment.apiUrl + '/auth/signup';
 
     return this.http.post(
       url,

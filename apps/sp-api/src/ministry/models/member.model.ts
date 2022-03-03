@@ -1,7 +1,6 @@
-import { ePermission } from '@sp/api/enums';
-import { Role } from '@sp/api/models';
-
-import { User } from 'apps/sp-api/src/app/models/user.model';
+import { ePermission } from 'apps/sp-api/src/ministry/enums';
+import { Role } from 'apps/sp-api/src/ministry/models';
+import { User } from 'apps/sp-api/src/ministry/models/user.model';
 
 export interface Member {
   ministryID: number;

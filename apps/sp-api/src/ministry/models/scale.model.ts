@@ -1,5 +1,4 @@
-import { Participant } from '@sp/api/models';
-
+import { Participant } from 'apps/sp-api/src/ministry/models';
 import { Song } from './song.model';
 
 export interface Scale {

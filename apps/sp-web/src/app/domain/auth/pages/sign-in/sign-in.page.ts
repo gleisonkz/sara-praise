@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { AuthService } from '../../auth.service';
 
 @Component({
@@ -10,7 +11,10 @@ import { AuthService } from '../../auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignInPage implements OnInit {
-  userForm: FormGroup;
+  userForm: FormGroup<{
+    email: FormControl<string>;
+    password: FormControl<string>;
+  }>;
 
   constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
@@ -31,8 +35,8 @@ export class SignInPage implements OnInit {
 
   createForm(): void {
     const form = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, Validators.required),
+      email: new FormControl('gleisonsubzerokz@gmail.com', [Validators.required, Validators.email]),
+      password: new FormControl('123456', Validators.required),
     });
 
     this.userForm = form;

@@ -22,9 +22,11 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           case HttpStatusCode.BadRequest:
             this.toastService.error('Houve um erro ao realizar a operação. Por favor, tente novamente.');
             break;
-          case HttpStatusCode.Unauthorized:
-            this.toastService.error('Você não está autorizado a realizar esta operação.');
+          case HttpStatusCode.Unauthorized: {
+            const message = error?.error?.message || 'Você não está autorizado a realizar esta operação.';
+            this.toastService.error(message);
             break;
+          }
           case HttpStatusCode.Forbidden:
             this.toastService.error('Você não tem permissão para realizar esta operação.');
             break;

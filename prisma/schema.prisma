@@ -7,9 +7,95 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model SongKey {
+  songKeyID Int    @id @default(autoincrement())
+  name      String
+  Song      Song[]
+}
+
+model Scale {
+  scaleID Int      @id @default(autoincrement())
+  title   String
+  date    DateTime
+  notes   String
+
+  participants Participant[]
+  songs        Song[]
+}
+
+model Role {
+  roleID  Int    @id @default(autoincrement())
+  name    String
+  iconUrl String
+
+  Member   Member? @relation(fields: [memberID], references: [memberID])
+  memberID Int?
+}
+
+model Permission {
+  permissionID Int     @id @default(autoincrement())
+  name         String
+  Member       Member? @relation(fields: [memberID], references: [memberID])
+  memberID     Int?
+}
+
+model Member {
+  memberID    Int           @id @default(autoincrement())
+  userID      Int           @unique
+  user        User          @relation(fields: [userID], references: [userID])
+  roles       Role[]
+  permissions Permission[]
+  Participant Participant[]
+}
+
+model Participant {
+  participantID Int    @id @default(autoincrement())
+  memberID      Int
+  scaleID       Int
+  Member        Member @relation(fields: [memberID], references: [memberID])
+  Scale         Scale? @relation(fields: [scaleScaleID], references: [scaleID])
+  scaleScaleID  Int?
+}
+
 model User {
-  userID   Int    @id @default(autoincrement())
+  userID   Int        @id @default(autoincrement())
   name     String
-  email    String @unique
+  email    String     @unique
   password String
+  Ministry Ministry[]
+  Member   Member?
+}
+
+model Ministry {
+  ministryID Int    @id @default(autoincrement())
+  name       String
+  ownerID    Int
+  owner      User   @relation(fields: [ownerID], references: [userID])
+  Song       Song[]
+}
+
+model Song {
+  songID       Int      @id @default(autoincrement())
+  title        String
+  tags         String[]
+  observations String
+  audioUrl     String
+  youtubeUrl   String
+  lyricUrl     String
+  chordsUrl    String
+
+  artistID   Int
+  keyID      Int
+  ministryID Int
+  artist     Artist   @relation(fields: [artistID], references: [artistID])
+  key        SongKey  @relation(fields: [keyID], references: [songKeyID])
+  ministry   Ministry @relation(fields: [ministryID], references: [ministryID])
+  Scale      Scale?   @relation(fields: [scaleID], references: [scaleID])
+  scaleID    Int?
+}
+
+model Artist {
+  artistID Int    @id @default(autoincrement())
+  name     String
+  Song     Song[]
 }
