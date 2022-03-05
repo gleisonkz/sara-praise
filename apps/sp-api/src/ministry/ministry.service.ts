@@ -5,7 +5,7 @@ import {
     MinistryListItemResponse, MinistryRequest, Role, SongListItemResponse
 } from '@sp/shared-interfaces';
 
-import { MinistryListItemResponseDto } from './dto';
+import { MinistryListItemResponseDto } from './dtos';
 import { MinistryNotFoundError, MultipleSongsFoundError } from './ministry.error';
 import { DEFAULT_ROLES, KEYS } from './mocks';
 import { Member, Ministry, MinistryKey, Scale, Song } from './models';

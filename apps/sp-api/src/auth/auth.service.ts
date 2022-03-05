@@ -6,7 +6,7 @@ import { SignUpRequest, SignUpResponse } from '@sp/shared-interfaces';
 import { PrismaService } from 'apps/sp-api/src/prisma/prisma.service';
 import { eAuthMessage } from 'apps/sp-api/src/shared';
 import * as argon from 'argon2';
-import { SignInRequestDto } from './dto/sign-in.dto';
+import { SignInRequestDto } from './dtos/sign-in.dto';
 
 @Injectable()
 export class AuthService {
@@ -55,7 +55,7 @@ export class AuthService {
 
   private signToken(user: SignUpResponse): Promise<string> {
     const payload = {
-      userID: user.userID,
+      sub: user.userID,
       email: user.email,
       name: user.name,
     };

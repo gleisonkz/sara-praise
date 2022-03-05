@@ -7,8 +7,8 @@ import { SignUpResponse } from '@sp/shared-interfaces';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { eAuthMessage } from 'apps/sp-api/src/shared';
 import { AuthService } from './auth.service';
-import { SignInRequestDto } from './dto/sign-in.dto';
-import { SignUpRequestDto } from './dto/sign-up.dto';
+import { SignInRequestDto } from './dtos/sign-in.dto';
+import { SignUpRequestDto } from './dtos/sign-up.dto';
 
 @ApiTags('Autenticação')
 @Controller('auth')
@@ -20,9 +20,8 @@ export class AuthController {
     try {
       return await this.authService.signUp(signUpRequest);
     } catch (error) {
-      if (error instanceof PrismaClientKnownRequestError) {
+      if (error instanceof PrismaClientKnownRequestError)
         throw new HttpException(eAuthMessage.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
-      }
 
       throw error;
     }

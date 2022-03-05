@@ -1,18 +1,24 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
-import { ApiCreatedResponse, ApiTags } from '@nestjs/swagger';
+import {
+    Body, Controller, Delete, Get, HttpStatus, Param, Post, Res, UseGuards
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 
 import { MinistryListItemResponse, SongListItemResponse } from '@sp/shared-interfaces';
 
+import { JwtGuard } from 'apps/sp-api/src/auth/guards/jwt.guard';
 import { MinistryNotFoundError } from 'apps/sp-api/src/ministry/ministry.error';
 import { Response } from 'express';
-import { MinistryListItemResponseDto, MinistryRequestDto } from './dto';
+import { MinistryListItemResponseDto, MinistryRequestDto } from './dtos';
 import { MinistryService } from './ministry.service';
 
 @ApiTags('Ministérios')
+@UseGuards(JwtGuard)
+@ApiBearerAuth('JWT-auth')
 @Controller('ministries')
 export class MinistryController {
   constructor(private readonly ministryService: MinistryService) {}
 
+  @ApiQuery({ name: 'ministryID', required: false })
   @Get('/list-item/:ministryID?')
   async getMinistriesListItems(@Param('ministryID') ministryID?: string): Promise<MinistryListItemResponse[]> {
     const ministries = [];
@@ -25,6 +31,7 @@ export class MinistryController {
     type: MinistryListItemResponseDto,
   })
   async createMinistry(@Body() ministryRequest: MinistryRequestDto): Promise<MinistryListItemResponseDto> {
+    console.log('ministryRequest', ministryRequest);
     // const ministryListItem = this.ministryService.createMinistry(ministryRequest);
     // return ministryListItem;
     return ministryRequest as any;

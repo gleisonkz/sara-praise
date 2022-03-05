@@ -23,8 +23,19 @@ async function bootstrap(): Promise<void> {
 
   const config = new DocumentBuilder()
     .setTitle('Sara Praise')
-    .setDescription('Api para gestão de usuários, ministérios e escalas')
+    .setDescription('Api para gestão de usuários,ministérios e escalas ')
     .setVersion('1.0')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth' // This name here is important for matching up with @ApiBearerAuth() in your controller!
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
