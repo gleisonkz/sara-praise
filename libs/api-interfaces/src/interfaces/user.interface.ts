@@ -8,3 +8,6 @@ export interface SignUpResponse extends Omit<SignUpRequest, 'password'> {
 }
 
 export interface SignInRequest extends Omit<SignUpRequest, 'name'> {}
+export interface TokenResponse {
+  accessToken: string;
+}

@@ -30,11 +30,11 @@ export class AuthService {
       email: user.email,
     };
 
-    const access_token = await this.signToken(responseUser);
+    const access_token = await this.generateToken(responseUser);
     return { access_token };
   }
 
-  async signUp(userRequest: SignUpRequest): Promise<SignUpResponse> {
+  async signUp(userRequest: SignUpRequest): Promise<string> {
     const passwordHash = await argon.hash(userRequest.password);
 
     const user = await this.prismaService.user.create({
@@ -50,12 +50,13 @@ export class AuthService {
       },
     });
 
-    return user;
+    const token = await this.generateToken(user);
+    return token;
   }
 
-  private signToken(user: SignUpResponse): Promise<string> {
+  private generateToken(user: SignUpResponse): Promise<string> {
     const payload = {
-      sub: user.userID,
+      userID: user.userID,
       email: user.email,
       name: user.name,
     };

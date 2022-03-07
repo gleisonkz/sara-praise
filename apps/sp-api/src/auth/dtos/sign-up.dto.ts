@@ -10,13 +10,13 @@ export class SignUpRequestDto implements SignUpRequest {
     default: 'gleison',
   })
   @IsString()
+  @MinLength(3)
   name: string;
 
   @ApiProperty({
     description: 'O email do usuário a ser criado',
     default: 'gleison@teste.com',
   })
-  @IsString()
   @IsEmail()
   email: string;
 

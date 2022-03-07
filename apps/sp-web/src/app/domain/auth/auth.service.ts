@@ -1,8 +1,10 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
+import { SignUpRequest, TokenResponse } from '@sp/shared-interfaces';
 import { LocalStorageService } from '@sp/web/shared/services';
 
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { environment } from 'apps/sp-web/src/environments/environment';
 import { mapTo, Observable, tap } from 'rxjs';
 
@@ -10,38 +12,42 @@ const HTTP_OPTIONS = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
 };
 
+export const TOKEN_KEY = 'accessToken';
+
+export const tokenGetter = () => {
+  return localStorage.getItem(TOKEN_KEY);
+};
+
+const setToken = (source$: Observable<TokenResponse>) => {
+  return source$.pipe(tap(({ accessToken }) => localStorage.setItem(TOKEN_KEY, accessToken)));
+};
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(private readonly localStorageService: LocalStorageService, private http: HttpClient) {}
+  constructor(
+    private readonly jwtHelperService: JwtHelperService,
+    private readonly localStorageService: LocalStorageService,
+    private readonly http: HttpClient
+  ) {}
 
-  isLoggedIn(): boolean {
-    return this.localStorageService.get('isLoggedIn');
+  get isLoggedIn(): boolean {
+    const token = this.localStorageService.get(TOKEN_KEY);
+    const decodedToken = this.jwtHelperService.decodeToken(token);
+
+    console.log('decodedToken', decodedToken);
+
+    return !this.jwtHelperService.isTokenExpired(token);
   }
 
-  login(email: string, password: string): Observable<boolean> {
-    const url = environment.apiUrl + '/auth/signin';
-
-    return this.http.post<string>(url, { email, password }).pipe(
-      tap((token) => {
-        this.localStorageService.set('accessToken', token);
-      }),
-      mapTo(true)
-    );
+  signIn(email: string, password: string): Observable<boolean> {
+    const url = environment.apiUrl + '/auth/sign-in';
+    return this.http.post<TokenResponse>(url, { email, password }).pipe(setToken, mapTo(true));
   }
 
-  register(username: string, email: string, password: string): Observable<any> {
-    const url = environment.apiUrl + '/auth/signup';
-
-    return this.http.post(
-      url,
-      {
-        username,
-        email,
-        password,
-      },
-      HTTP_OPTIONS
-    );
+  signUp(signUpRequest: SignUpRequest): Observable<boolean> {
+    const url = environment.apiUrl + '/auth/sign-up';
+    return this.http.post<TokenResponse>(url, signUpRequest, HTTP_OPTIONS).pipe(setToken, mapTo(true));
   }
 }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { LoggedInGuard } from 'apps/sp-web/src/app/domain/auth/guards/logged-in.guard';
+import { IsLoggedInGuard } from 'apps/sp-web/src/app/domain/auth/guards/logged-in.guard';
 import { AuthComponent } from './auth.component';
 import { SignInPage } from './pages/sign-in/sign-in.page';
 import { SignUpPage } from './pages/sign-up/sign-up.page';
@@ -12,13 +12,13 @@ const routes: Routes = [
     component: AuthComponent,
     children: [
       {
-        canActivate: [LoggedInGuard],
+        canActivate: [IsLoggedInGuard],
         path: '',
         redirectTo: 'sign-in',
         pathMatch: 'full',
       },
       {
-        canActivate: [LoggedInGuard],
+        canActivate: [IsLoggedInGuard],
         path: 'sign-in',
         component: SignInPage,
       },

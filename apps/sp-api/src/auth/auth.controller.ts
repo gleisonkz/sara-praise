@@ -2,7 +2,7 @@
 import { Body, Controller, HttpCode, HttpException, HttpStatus, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
-import { SignUpResponse } from '@sp/shared-interfaces';
+import { TokenResponse } from '@sp/shared-interfaces';
 
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { eAuthMessage } from 'apps/sp-api/src/shared';
@@ -15,10 +15,11 @@ import { SignUpRequestDto } from './dtos/sign-up.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Post('signup')
-  async signUp(@Body() signUpRequest: SignUpRequestDto): Promise<SignUpResponse> {
+  @Post('sign-up')
+  async signUp(@Body() signUpRequest: SignUpRequestDto): Promise<TokenResponse> {
     try {
-      return await this.authService.signUp(signUpRequest);
+      const token = await this.authService.signUp(signUpRequest);
+      return { accessToken: token };
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError)
         throw new HttpException(eAuthMessage.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
@@ -27,7 +28,7 @@ export class AuthController {
     }
   }
 
-  @Post('signin')
+  @Post('sign-in')
   @HttpCode(HttpStatus.OK)
   async signIn(@Body() signInRequest: SignInRequestDto): Promise<{
     access_token: string;

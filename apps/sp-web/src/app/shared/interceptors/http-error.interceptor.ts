@@ -19,9 +19,12 @@ export class HttpErrorInterceptor implements HttpInterceptor {
         }
 
         switch (error.status) {
-          case HttpStatusCode.BadRequest:
-            this.toastService.error('Houve um erro ao realizar a operação. Por favor, tente novamente.');
+          case HttpStatusCode.BadRequest: {
+            const message =
+              error?.error?.message || 'Houve um erro ao realizar a operação. Por favor, tente novamente.';
+            this.toastService.error(message);
             break;
+          }
           case HttpStatusCode.Unauthorized: {
             const message = error?.error?.message || 'Você não está autorizado a realizar esta operação.';
             this.toastService.error(message);

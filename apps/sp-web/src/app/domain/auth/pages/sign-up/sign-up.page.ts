@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { AuthService } from 'apps/sp-web/src/app/domain/auth/auth.service';
 
 @Component({
   templateUrl: './sign-up.page.html',
@@ -9,27 +11,38 @@ import { FormControl, FormGroup } from '@ngneat/reactive-forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpPage implements OnInit {
-  userForm: FormGroup<{
-    email: FormControl<string | null>;
-    password: FormControl<string | null>;
-    confirmPassword: FormControl<string | null>;
+  constructor(private readonly authService: AuthService, private readonly router: Router) {}
+
+  signUpForm: FormGroup<{
+    name: FormControl<string>;
+    email: FormControl<string>;
+    password: FormControl<string>;
+    confirmPassword: FormControl<string>;
   }>;
 
   ngOnInit(): void {
     this.createForm();
   }
 
-  submit() {
-    console.log(this.userForm.value);
+  signUp() {
+    if (!this.signUpForm.valid) return;
+
+    const { name, email, password } = this.signUpForm.value;
+
+    this.authService.signUp({ name, email, password }).subscribe(() => {
+      this.signUpForm.reset();
+      this.router.navigate(['/']);
+    });
   }
 
   createForm(): void {
     const form = new FormGroup({
-      email: new FormControl(null, [Validators.required, Validators.email]),
-      password: new FormControl(null, Validators.required),
-      confirmPassword: new FormControl(null, Validators.required),
+      name: new FormControl('Renato', [Validators.required]),
+      email: new FormControl('renato@teste.com', [Validators.required, Validators.email]),
+      password: new FormControl('123456', Validators.required),
+      confirmPassword: new FormControl('123456', Validators.required),
     });
 
-    this.userForm = form;
+    this.signUpForm = form;
   }
 }

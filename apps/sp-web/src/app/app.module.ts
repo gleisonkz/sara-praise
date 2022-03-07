@@ -8,7 +8,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { MAT_DATE_LOCALE } from '@angular/material/core';
 
+import { JwtModule } from '@auth0/angular-jwt';
 import { HotToastModule } from '@ngneat/hot-toast';
+import { tokenGetter } from 'apps/sp-web/src/app/domain/auth/auth.service';
 import {
     HttpErrorInterceptor
 } from 'apps/sp-web/src/app/shared/interceptors/http-error.interceptor';
@@ -27,6 +29,9 @@ registerLocaleData(localePT);
     HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    JwtModule.forRoot({
+      config: { tokenGetter },
+    }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LogInterceptor, multi: true },

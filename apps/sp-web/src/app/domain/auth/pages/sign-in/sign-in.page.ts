@@ -26,7 +26,7 @@ export class SignInPage implements OnInit {
     if (!this.userForm.valid) return;
 
     const user = this.userForm.value;
-    this.authService.login(user.email, user.password).subscribe((isLoggedIn) => {
+    this.authService.signIn(user.email, user.password).subscribe((isLoggedIn) => {
       if (!isLoggedIn) return this.userForm.reset();
 
       this.router.navigate(['/']);

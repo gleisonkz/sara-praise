@@ -1,30 +1,56 @@
 <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
   <h1>Register</h1>
 
-  <form class="form">
+  <form [formGroup]="signUpForm" (ngSubmit)="signUp()" class="form">
     <mat-card-content>
       <mat-form-field>
-        <input autocomplete="off" matInput placeholder="Name" />
+        <input
+          type="text"
+          formControlName="name"
+          autocomplete="off"
+          matInput
+          placeholder="Name"
+        />
       </mat-form-field>
 
       <mat-form-field>
-        <input autocomplete="off" matInput placeholder="Email" />
+        <input
+          type="text"
+          formControlName="email"
+          autocomplete="off"
+          matInput
+          placeholder="Email"
+        />
       </mat-form-field>
 
       <mat-form-field>
-        <input autocomplete="off" matInput placeholder="Password" />
+        <input
+          type="password"
+          formControlName="password"
+          autocomplete="off"
+          matInput
+          placeholder="Password"
+        />
       </mat-form-field>
 
       <mat-form-field>
-        <input autocomplete="off" matInput placeholder="Confirm password" />
+        <input
+          type="password"
+          formControlName="confirmPassword"
+          autocomplete="off"
+          matInput
+          placeholder="Confirm password"
+        />
       </mat-form-field>
     </mat-card-content>
 
     <div class="actions-container">
-      <button routerLink="/auth/sign-in" mat-stroked-button color="accent">
+      <button type="button" routerLink="/auth/sign-in" mat-stroked-button color="accent">
         Go to Login
       </button>
       <button mat-stroked-button color="primary">Register</button>
     </div>
   </form>
+
+  {{ signUpForm.value | json }}
 </div>
