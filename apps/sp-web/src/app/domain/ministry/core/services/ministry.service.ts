@@ -18,6 +18,7 @@ export class MinistryService {
   constructor(private readonly http: HttpClient) {}
 
   createMinistry(ministry: MinistryRequest): Observable<MinistryListItemResponse> {
+    console.log('createMinistry', ministry);
     return this.http.post<MinistryListItemResponse>(this.BASE_URL, ministry);
   }
 

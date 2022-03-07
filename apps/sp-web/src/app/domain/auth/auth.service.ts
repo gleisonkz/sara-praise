@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { SignUpRequest, TokenResponse } from '@sp/shared-interfaces';
+import { SignUpRequest, TokenResponse, UserAuthPayload } from '@sp/shared-interfaces';
 import { LocalStorageService } from '@sp/web/shared/services';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -32,10 +32,14 @@ export class AuthService {
     private readonly http: HttpClient
   ) {}
 
+  user: UserAuthPayload;
+
   get isLoggedIn(): boolean {
     const token = this.localStorageService.get(TOKEN_KEY) || '';
-
     if (!token) return false;
+
+    this.user = this.jwtHelperService.decodeToken(token);
+
     return !this.jwtHelperService.isTokenExpired(token);
   }
 

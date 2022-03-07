@@ -90,8 +90,7 @@ model Song {
   artist     Artist   @relation(fields: [artistID], references: [artistID])
   key        SongKey  @relation(fields: [keyID], references: [songKeyID])
   ministry   Ministry @relation(fields: [ministryID], references: [ministryID])
-  Scale      Scale?   @relation(fields: [scaleID], references: [scaleID])
-  scaleID    Int?
+  Scale      Scale[]
 }
 
 model Artist {

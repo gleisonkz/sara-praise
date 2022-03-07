@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 
 import { FormControl } from '@ngneat/reactive-forms';
+import { AuthService } from 'apps/sp-web/src/app/domain/auth/auth.service';
 import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/minitries.facade';
 import { Observable } from 'rxjs';
 
@@ -17,7 +18,11 @@ export class MinistriesPage implements OnInit {
   ministryNameControl = new FormControl('', Validators.required);
   ministries$: Observable<MinistryListItemResponse[]>;
 
-  constructor(private readonly router: Router, private readonly ministryFacade: MinistryFacade) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly ministryFacade: MinistryFacade
+  ) {}
 
   ngOnInit(): void {
     this.ministries$ = this.ministryFacade.ministries$;
@@ -29,7 +34,7 @@ export class MinistriesPage implements OnInit {
 
     const ministry: MinistryRequest = {
       name: this.ministryNameControl.value,
-      ownerID: 1,
+      ownerID: this.authService.user.userID,
     };
 
     this.ministryFacade.addMinistry(ministry);

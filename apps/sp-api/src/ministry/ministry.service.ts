@@ -5,6 +5,7 @@ import {
     MinistryListItemResponse, MinistryRequest, Role, SongListItemResponse
 } from '@sp/shared-interfaces';
 
+import { PrismaService } from 'apps/sp-api/src/prisma/prisma.service';
 import { MinistryListItemResponseDto } from './dtos';
 import { MinistryNotFoundError, MultipleSongsFoundError } from './ministry.error';
 import { DEFAULT_ROLES, KEYS } from './mocks';
@@ -12,6 +13,8 @@ import { Member, Ministry, MinistryKey, Scale, Song } from './models';
 
 @Injectable()
 export class MinistryService {
+  constructor(private readonly prismaService: PrismaService) {}
+
   // async createScale(ministryID: number, scaleRequest: ScaleRequest): Promise<number> {
   //   const ministry = this.getMinistryByID(ministryID);
 
@@ -32,29 +35,27 @@ export class MinistryService {
   //   return nextScaleID;
   // }
 
-  async createMinistry(ministryListItem: MinistryRequest): Promise<MinistryListItemResponseDto> {
-    // const ministry: Ministry = {
-    //   name: ministryListItem.name,
-    //   ownerId: ministryListItem.ownerID,
-    //   members: [],
-    //   roles: [],
-    //   scales: [],
-    //   songs: [],
-    //   ministryKeys: [],
-    // };
+  async createMinistry(ministryRequest: MinistryRequest): Promise<MinistryListItemResponseDto> {
+    const ministry = await this.prismaService.ministry.create({
+      data: {
+        name: ministryRequest.name,
+        ownerID: ministryRequest.ownerID,
+      },
+      include: {
+        owner: true,
+      },
+    });
 
-    // const ministryListItemResponse: MinistryListItemResponse = {
-    //   ministryID: ministry.ministryID,
-    //   name: ministry.name,
-    //   musicsQuantity: ministry.songs.length,
-    //   membersQuantity: ministry.members.length,
-    //   scalesQuantity: ministry.scales.length,
-    //   keysQuantity: ministry.ministryKeys.length,
-    // };
+    const ministryListItem: MinistryListItemResponseDto = {
+      ministryID: ministry.ministryID,
+      name: ministry.name,
+      musicsQuantity: 0,
+      membersQuantity: 1,
+      scalesQuantity: 0,
+      keysQuantity: 0,
+    };
 
-    // return ministryListItemResponse;
-
-    return null;
+    return ministryListItem;
   }
 
   async deleteMinistry(ministryID: number): Promise<void> {

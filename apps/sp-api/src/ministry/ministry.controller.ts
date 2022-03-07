@@ -32,9 +32,8 @@ export class MinistryController {
   })
   async createMinistry(@Body() ministryRequest: MinistryRequestDto): Promise<MinistryListItemResponseDto> {
     console.log('ministryRequest', ministryRequest);
-    // const ministryListItem = this.ministryService.createMinistry(ministryRequest);
-    // return ministryListItem;
-    return ministryRequest as any;
+    const ministryListItem = this.ministryService.createMinistry(ministryRequest);
+    return ministryListItem;
   }
 
   @Delete('/:ministryID')
