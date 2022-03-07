@@ -19,7 +19,7 @@ export class AuthController {
   async signUp(@Body() signUpRequest: SignUpRequestDto): Promise<TokenResponse> {
     try {
       const token = await this.authService.signUp(signUpRequest);
-      return { accessToken: token };
+      return token;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError)
         throw new HttpException(eAuthMessage.EMAIL_ALREADY_EXISTS, HttpStatus.BAD_REQUEST);
@@ -30,10 +30,8 @@ export class AuthController {
 
   @Post('sign-in')
   @HttpCode(HttpStatus.OK)
-  async signIn(@Body() signInRequest: SignInRequestDto): Promise<{
-    access_token: string;
-  }> {
-    const user = await this.authService.signIn(signInRequest);
-    return user;
+  async signIn(@Body() signInRequest: SignInRequestDto): Promise<TokenResponse> {
+    const token = await this.authService.signIn(signInRequest);
+    return token;
   }
 }

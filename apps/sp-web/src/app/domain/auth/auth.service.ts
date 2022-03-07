@@ -33,11 +33,9 @@ export class AuthService {
   ) {}
 
   get isLoggedIn(): boolean {
-    const token = this.localStorageService.get(TOKEN_KEY);
-    const decodedToken = this.jwtHelperService.decodeToken(token);
+    const token = this.localStorageService.get(TOKEN_KEY) || '';
 
-    console.log('decodedToken', decodedToken);
-
+    if (!token) return false;
     return !this.jwtHelperService.isTokenExpired(token);
   }
 

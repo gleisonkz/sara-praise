@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { SignUpRequest, SignUpResponse } from '@sp/shared-interfaces';
+import { SignUpRequest, SignUpResponse, TokenResponse } from '@sp/shared-interfaces';
 
 import { PrismaService } from 'apps/sp-api/src/prisma/prisma.service';
 import { eAuthMessage } from 'apps/sp-api/src/shared';
@@ -12,7 +12,7 @@ import { SignInRequestDto } from './dtos/sign-in.dto';
 export class AuthService {
   constructor(private readonly prismaService: PrismaService, private readonly jwtService: JwtService) {}
 
-  async signIn(userRequest: SignInRequestDto): Promise<{ access_token: string }> {
+  async signIn(userRequest: SignInRequestDto): Promise<TokenResponse> {
     const user = await this.prismaService.user.findUnique({
       where: {
         email: userRequest.email,
@@ -30,11 +30,11 @@ export class AuthService {
       email: user.email,
     };
 
-    const access_token = await this.generateToken(responseUser);
-    return { access_token };
+    const token = await this.generateToken(responseUser);
+    return token;
   }
 
-  async signUp(userRequest: SignUpRequest): Promise<string> {
+  async signUp(userRequest: SignUpRequest): Promise<TokenResponse> {
     const passwordHash = await argon.hash(userRequest.password);
 
     const user = await this.prismaService.user.create({
@@ -54,16 +54,18 @@ export class AuthService {
     return token;
   }
 
-  private generateToken(user: SignUpResponse): Promise<string> {
+  private async generateToken(user: SignUpResponse): Promise<TokenResponse> {
     const payload = {
       userID: user.userID,
       email: user.email,
       name: user.name,
     };
 
-    return this.jwtService.signAsync(payload, {
+    const token = await this.jwtService.signAsync(payload, {
       expiresIn: '1h',
       secret: process.env.JWT_SECRET,
     });
+
+    return { accessToken: token };
   }
 }

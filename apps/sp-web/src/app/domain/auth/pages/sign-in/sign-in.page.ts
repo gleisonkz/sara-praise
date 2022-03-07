@@ -35,7 +35,7 @@ export class SignInPage implements OnInit {
 
   createForm(): void {
     const form = new FormGroup({
-      email: new FormControl('gleisonsubzerokz@gmail.com', [Validators.required, Validators.email]),
+      email: new FormControl('renato@teste.com', [Validators.required, Validators.email]),
       password: new FormControl('123456', Validators.required),
     });
 
