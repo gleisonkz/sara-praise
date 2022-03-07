@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+import { PrismaService } from '@sp/api/domain/prisma';
 import { SignUpRequest, SignUpResponse, TokenResponse } from '@sp/shared-interfaces';
 
-import { PrismaService } from 'apps/sp-api/src/prisma/prisma.service';
 import { eAuthMessage } from 'apps/sp-api/src/shared';
 import * as argon from 'argon2';
 import { SignInRequestDto } from './dtos/sign-in.dto';

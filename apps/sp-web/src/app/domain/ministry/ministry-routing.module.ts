@@ -23,10 +23,10 @@ const routes: Routes = [
     ],
   },
 
-  {
-    path: ':ministryID/escalas',
-    loadChildren: () => import('@sp/web/domain/scale').then((m) => m.ScaleDomainModule),
-  },
+  // {
+  //   path: ':ministryID/escalas',
+  //   loadChildren: () => import('@sp/web/domain/scale').then((m) => m.ScaleDomainModule),
+  // },
 ];
 
 @NgModule({

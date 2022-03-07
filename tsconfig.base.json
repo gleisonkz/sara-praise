@@ -40,7 +40,11 @@
       "@sp/web/shared/services": ["apps/sp-web/src/app/shared/services/index.ts"],
       "@sp/web/widget/components": ["apps/sp-web/src/app/widget/components"],
       "@sp/web/widget/directives": ["apps/sp-web/src/app/widget/directives"],
-      "@sp/web/widget/pipes": ["apps/sp-web/src/app/widget/pipes"]
+      "@sp/web/widget/pipes": ["apps/sp-web/src/app/widget/pipes"],
+
+      "@sp/api/domain/auth": ["apps/sp-api/src/domain/auth"],
+      "@sp/api/domain/ministry": ["apps/sp-api/src/domain/ministry"],
+      "@sp/api/domain/prisma": ["apps/sp-api/src/domain/prisma"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -7,22 +7,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model SongKey {
-  songKeyID Int    @id @default(autoincrement())
-  name      String
-  Song      Song[]
-}
-
-model Scale {
-  scaleID Int      @id @default(autoincrement())
-  title   String
-  date    DateTime
-  notes   String
-
-  participants Participant[]
-  songs        Song[]
-}
-
 model Role {
   roleID  Int    @id @default(autoincrement())
   name    String
@@ -42,8 +26,10 @@ model Permission {
 model Member {
   memberID    Int           @id @default(autoincrement())
   userID      Int           @unique
+  ministryID  Int           @unique
   user        User          @relation(fields: [userID], references: [userID])
   roles       Role[]
+  ministry    Ministry     @relation(fields: [ministryID], references: [ministryID])
   permissions Permission[]
   Participant Participant[]
 }
@@ -71,7 +57,31 @@ model Ministry {
   name       String
   ownerID    Int
   owner      User   @relation(fields: [ownerID], references: [userID])
-  Song       Song[]
+  Songs       Song[]
+  Members    Member[]
+  Scales     Scale[]
+  SongKeys   SongKey[]
+}
+
+model SongKey {
+  songKeyID Int    @id @default(autoincrement())
+  name      String
+  Song      Song[]
+  ministryID Int
+  ministry Ministry  @relation(fields: [ministryID], references: [ministryID])
+}
+
+
+model Scale {
+  scaleID Int      @id @default(autoincrement())
+  title   String
+  date    DateTime
+  notes   String
+
+  ministryID Int
+  ministry Ministry  @relation(fields: [ministryID], references: [ministryID])
+  participants Participant[]
+  songs        Song[]
 }
 
 model Song {

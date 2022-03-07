@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import { Injectable } from '@nestjs/common';
 
+import { PrismaService } from '@sp/api/domain/prisma';
 import {
     eMinistryRole, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
     MinistryListItemResponse, MinistryRequest, Role, SongListItemResponse
 } from '@sp/shared-interfaces';
 
-import { PrismaService } from 'apps/sp-api/src/prisma/prisma.service';
 import { MinistryListItemResponseDto } from './dtos';
 import { MinistryNotFoundError, MultipleSongsFoundError } from './ministry.error';
 import { DEFAULT_ROLES, KEYS } from './mocks';
@@ -41,8 +42,12 @@ export class MinistryService {
         name: ministryRequest.name,
         ownerID: ministryRequest.ownerID,
       },
-      include: {
-        owner: true,
+    });
+
+    await this.prismaService.member.create({
+      data: {
+        userID: ministryRequest.ownerID,
+        ministryID: ministry.ministryID,
       },
     });
 
@@ -52,7 +57,7 @@ export class MinistryService {
       musicsQuantity: 0,
       membersQuantity: 1,
       scalesQuantity: 0,
-      keysQuantity: 0,
+      songKeysQuantity: 0,
     };
 
     return ministryListItem;
@@ -127,24 +132,38 @@ export class MinistryService {
     return ministryKeyListItem;
   }
 
-  getMinistriesListItems(ministryID?: string): MinistryListItemResponse[] {
-    const ministryPredicate: (ministry: Ministry) => boolean = (ministry) => ministry.ministryID === Number(ministryID);
-
-    const filteredMinistries: Ministry[] = ministryID ? ([] as any).filter(ministryPredicate) : [];
-
-    const ministriesListItems: MinistryListItemResponse[] = filteredMinistries.map((ministry) => {
+  async getMinistriesListItems(ministryID?: number): Promise<MinistryListItemResponse[]> {
+    const ministryListItemMapFn = (ministry: any) => {
       const ministryListItem: MinistryListItemResponse = {
         ministryID: ministry.ministryID,
         name: ministry.name,
-        musicsQuantity: ministry.songs.length,
-        membersQuantity: ministry.members.length,
-        scalesQuantity: ministry.scales.length,
-        keysQuantity: ministry.ministryKeys.length,
+        musicsQuantity: ministry._count.Songs,
+        membersQuantity: ministry._count.Members,
+        scalesQuantity: ministry._count.Scales,
+        songKeysQuantity: ministry._count.SongKeys,
       };
 
       return ministryListItem;
-    });
+    };
 
+    const ministries = await this.prismaService.ministry.findMany({
+      where: {
+        ministryID: {
+          equals: ministryID,
+        },
+      },
+      include: {
+        _count: {
+          select: {
+            Members: true,
+            Scales: true,
+            Songs: true,
+            SongKeys: true,
+          },
+        },
+      },
+    });
+    const ministriesListItems: MinistryListItemResponse[] = ministries.map(ministryListItemMapFn);
     return ministriesListItems;
   }
 

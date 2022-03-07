@@ -8,5 +8,5 @@ export class MinistryListItemResponseDto implements MinistryListItemResponse {
   @ApiProperty() musicsQuantity: number;
   @ApiProperty() membersQuantity: number;
   @ApiProperty() scalesQuantity: number;
-  @ApiProperty() keysQuantity: number;
+  @ApiProperty() songKeysQuantity: number;
 }

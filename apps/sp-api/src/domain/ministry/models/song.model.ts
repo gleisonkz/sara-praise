@@ -1,4 +1,4 @@
-import { eSongKey } from 'apps/sp-api/src/ministry/enums';
+import { eSongKey } from 'apps/sp-api/src/domain/ministry/enums';
 import { Artist } from './artist.model';
 
 export interface Song {

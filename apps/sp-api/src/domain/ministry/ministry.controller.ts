@@ -3,12 +3,12 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 
+import { JwtGuard } from '@sp/api/domain/auth';
 import { MinistryListItemResponse, SongListItemResponse } from '@sp/shared-interfaces';
 
-import { JwtGuard } from 'apps/sp-api/src/auth/guards/jwt.guard';
-import { MinistryNotFoundError } from 'apps/sp-api/src/ministry/ministry.error';
 import { Response } from 'express';
 import { MinistryListItemResponseDto, MinistryRequestDto } from './dtos';
+import { MinistryNotFoundError } from './ministry.error';
 import { MinistryService } from './ministry.service';
 
 @ApiTags('Ministérios')
@@ -21,7 +21,9 @@ export class MinistryController {
   @ApiQuery({ name: 'ministryID', required: false })
   @Get('/list-item/:ministryID?')
   async getMinistriesListItems(@Param('ministryID') ministryID?: string): Promise<MinistryListItemResponse[]> {
-    const ministries = [];
+    const parsedID = ministryID ? +ministryID : undefined;
+    const ministries = await this.ministryService.getMinistriesListItems(parsedID);
+
     return ministries;
   }
 

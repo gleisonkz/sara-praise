@@ -50,9 +50,9 @@ export class MinistriesState {
     ministry.scalesQuantity++;
   }
 
-  incrementKeysQuantity(): void {
+  incrementSongKeysQuantity(): void {
     const ministry = this.activeMinistry;
-    ministry.keysQuantity++;
+    ministry.songKeysQuantity++;
   }
 
   addMinistry(newMinistry: MinistryListItemResponse): void {
