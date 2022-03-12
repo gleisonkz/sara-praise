@@ -111,24 +111,6 @@ export class MinistryController {
   //   }
   // }
 
-  // @Get('/:ministryID/members')
-  // async getMembers(
-  //   @Param('ministryID') ministryID: number,
-  //   @Query('roles') roles,
-  //   @Res({ passthrough: true }) res: Response
-  // ): Promise<MemberListItemResponse[]> {
-  //   try {
-  //     const members = await this.ministryService.getMembers(+ministryID, roles);
-  //     return members;
-  //   } catch (error) {
-  //     if (error instanceof MinistryNotFoundError) {
-  //       return res.status(HttpStatus.BAD_REQUEST).send(error.message);
-  //     }
-
-  //     throw error;
-  //   }
-  // }
-
   // @Get('/:ministryID/scales/:scaleID/participants')
   // async getParticipants(
   //   @Param('ministryID') ministryID: number,

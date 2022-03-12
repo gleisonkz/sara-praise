@@ -42,6 +42,7 @@ export class AuthService {
         name: userRequest.name,
         email: userRequest.email,
         password: passwordHash,
+        imageURL: '',
       },
       select: {
         userID: true,

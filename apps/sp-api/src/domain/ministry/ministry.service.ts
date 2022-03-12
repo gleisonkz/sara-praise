@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
 import {
-    eMinistryRole, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
-    MinistryListItemResponse, MinistryRequest, Role, SongListItemResponse
+    eMinistryRole, MinistryKeyListItemResponse, MinistryKeyRequest, MinistryListItemResponse,
+    MinistryRequest, Role, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { MinistryListItemResponseDto } from './dtos';
@@ -240,28 +240,6 @@ export class MinistryService {
       });
 
     return songs;
-  }
-
-  async getMembers(ministryID: number, roles?: eMinistryRole[]): Promise<MemberListItemResponse[]> {
-    const ministry = {} as any;
-    if (!ministry) throw new MinistryNotFoundError(ministryID);
-
-    let members: MemberListItemResponse[] = ministry.members.map((member) => {
-      const memberListItem: MemberListItemResponse = {
-        memberID: member.memberID,
-        name: member.user.name,
-        imageUrl: member.user.imageUrl,
-        roles: member.roles,
-      };
-
-      return memberListItem;
-    });
-
-    if (roles) {
-      members = members.filter((member) => member.roles.some((role) => roles.includes(role.roleID)));
-    }
-
-    return members;
   }
 
   async getKeyListItems(ministryID: number): Promise<MinistryKeyListItemResponse[]> {
