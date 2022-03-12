@@ -16,38 +16,16 @@ import { Member, Ministry, MinistryKey, Scale, Song } from './models';
 export class MinistryService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  // async createScale(ministryID: number, scaleRequest: ScaleRequest): Promise<number> {
-  //   const ministry = this.getMinistryByID(ministryID);
-
-  //   const nextScaleID = ministry.scales.length + 1;
-
-  //   const scale: Scale = {
-  //     scaleID: nextScaleID,
-  //     title: scaleRequest.title,
-  //     date: scaleRequest.date,
-  //     notes: scaleRequest.notes,
-  //     songs: [],
-  //     participants: [],
-  //   };
-
-  //   ministry.scales.push(scale);
-  //   this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
-
-  //   return nextScaleID;
-  // }
-
   async createMinistry(ministryRequest: MinistryRequest): Promise<MinistryListItemResponseDto> {
     const ministry = await this.prismaService.ministry.create({
       data: {
         name: ministryRequest.name,
         ownerID: ministryRequest.ownerID,
-      },
-    });
-
-    await this.prismaService.member.create({
-      data: {
-        userID: ministryRequest.ownerID,
-        ministryID: ministry.ministryID,
+        Members: {
+          create: {
+            userID: ministryRequest.ownerID,
+          },
+        },
       },
     });
 
@@ -64,7 +42,46 @@ export class MinistryService {
   }
 
   async deleteMinistry(ministryID: number): Promise<void> {
-    return null;
+    await this.prismaService.ministry.delete({
+      where: {
+        ministryID,
+      },
+    });
+  }
+
+  async getMinistriesListItems(ministryID?: number): Promise<MinistryListItemResponse[]> {
+    const ministryListItemMapFn = (ministry: any) => {
+      const ministryListItem: MinistryListItemResponse = {
+        ministryID: ministry.ministryID,
+        name: ministry.name,
+        musicsQuantity: ministry._count.Songs,
+        membersQuantity: ministry._count.Members,
+        scalesQuantity: ministry._count.Scales,
+        songKeysQuantity: ministry._count.SongKeys,
+      };
+
+      return ministryListItem;
+    };
+
+    const ministries = await this.prismaService.ministry.findMany({
+      where: {
+        ministryID: {
+          equals: ministryID,
+        },
+      },
+      include: {
+        _count: {
+          select: {
+            Members: true,
+            Scales: true,
+            Songs: true,
+            SongKeys: true,
+          },
+        },
+      },
+    });
+    const ministriesListItems: MinistryListItemResponse[] = ministries.map(ministryListItemMapFn);
+    return ministriesListItems;
   }
 
   async getRolesByMinistryID(ministryID: number, memberID?: number): Promise<Role[]> {
@@ -130,41 +147,6 @@ export class MinistryService {
     // this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
 
     return ministryKeyListItem;
-  }
-
-  async getMinistriesListItems(ministryID?: number): Promise<MinistryListItemResponse[]> {
-    const ministryListItemMapFn = (ministry: any) => {
-      const ministryListItem: MinistryListItemResponse = {
-        ministryID: ministry.ministryID,
-        name: ministry.name,
-        musicsQuantity: ministry._count.Songs,
-        membersQuantity: ministry._count.Members,
-        scalesQuantity: ministry._count.Scales,
-        songKeysQuantity: ministry._count.SongKeys,
-      };
-
-      return ministryListItem;
-    };
-
-    const ministries = await this.prismaService.ministry.findMany({
-      where: {
-        ministryID: {
-          equals: ministryID,
-        },
-      },
-      include: {
-        _count: {
-          select: {
-            Members: true,
-            Scales: true,
-            Songs: true,
-            SongKeys: true,
-          },
-        },
-      },
-    });
-    const ministriesListItems: MinistryListItemResponse[] = ministries.map(ministryListItemMapFn);
-    return ministriesListItems;
   }
 
   // async getScales(ministryID: number): Promise<ScaleListItemResponse[]> {
@@ -368,6 +350,26 @@ export class MinistryService {
   //   ministry.scales = ministry.scales.filter((scale) => scale.scaleID !== scaleID);
 
   //   this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
+  // }
+
+  // async createScale(ministryID: number, scaleRequest: ScaleRequest): Promise<number> {
+  //   const ministry = this.getMinistryByID(ministryID);
+
+  //   const nextScaleID = ministry.scales.length + 1;
+
+  //   const scale: Scale = {
+  //     scaleID: nextScaleID,
+  //     title: scaleRequest.title,
+  //     date: scaleRequest.date,
+  //     notes: scaleRequest.notes,
+  //     songs: [],
+  //     participants: [],
+  //   };
+
+  //   ministry.scales.push(scale);
+  //   this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
+
+  //   return nextScaleID;
   // }
 
   private getMinistryKeyName(ministry: Ministry, song: Song, minister: Member): string {

@@ -7,6 +7,37 @@ generator client {
   provider = "prisma-client-js"
 }
 
+model Ministry {
+  ministryID Int    @id @default(autoincrement())
+  name       String
+  ownerID    Int
+  owner      User   @relation(fields: [ownerID], references: [userID])
+  Songs       Song[]
+  Members    Member[]
+  Scales     Scale[]
+  SongKeys   SongKey[]
+}
+
+model User {
+  userID   Int        @id @default(autoincrement())
+  name     String
+  email    String     @unique
+  password String
+  Ministry Ministry[]
+}
+
+model Member {
+  memberID    Int           @id @default(autoincrement())
+  ministryID  Int           @unique
+
+  userID      Int
+  roles       Role[]
+  ministry    Ministry     @relation(fields: [ministryID], references: [ministryID] , onDelete: Cascade)
+  permissions Permission[]
+  Participant Participant[]
+}
+
+
 model Role {
   roleID  Int    @id @default(autoincrement())
   name    String
@@ -23,16 +54,7 @@ model Permission {
   memberID     Int?
 }
 
-model Member {
-  memberID    Int           @id @default(autoincrement())
-  userID      Int           @unique
-  ministryID  Int           @unique
-  user        User          @relation(fields: [userID], references: [userID])
-  roles       Role[]
-  ministry    Ministry     @relation(fields: [ministryID], references: [ministryID])
-  permissions Permission[]
-  Participant Participant[]
-}
+
 
 model Participant {
   participantID Int    @id @default(autoincrement())
@@ -43,25 +65,8 @@ model Participant {
   scaleScaleID  Int?
 }
 
-model User {
-  userID   Int        @id @default(autoincrement())
-  name     String
-  email    String     @unique
-  password String
-  Ministry Ministry[]
-  Member   Member?
-}
 
-model Ministry {
-  ministryID Int    @id @default(autoincrement())
-  name       String
-  ownerID    Int
-  owner      User   @relation(fields: [ownerID], references: [userID])
-  Songs       Song[]
-  Members    Member[]
-  Scales     Scale[]
-  SongKeys   SongKey[]
-}
+
 
 model SongKey {
   songKeyID Int    @id @default(autoincrement())

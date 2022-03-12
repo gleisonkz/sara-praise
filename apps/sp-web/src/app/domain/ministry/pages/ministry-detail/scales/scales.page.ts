@@ -26,7 +26,7 @@ export class ScalesPage implements OnInit {
     private readonly activatedRoute: ActivatedRoute
   ) {}
   ngOnInit(): void {
-    const ministryID = this.ministryDetailRouteService.getMinistryID(this.activatedRoute);
-    this.scaleListItems$ = this.ministryService.getScaleListItems(+ministryID);
+    // const ministryID = this.ministryDetailRouteService.getMinistryID(this.activatedRoute);
+    // this.scaleListItems$ = this.ministryService.getScaleListItems(+ministryID);
   }
 }
