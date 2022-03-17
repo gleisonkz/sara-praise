@@ -8,14 +8,24 @@ generator client {
 }
 
 model Ministry {
-  ministryID Int    @id @default(autoincrement())
+  ministryID Int       @id @default(autoincrement())
   name       String
   ownerID    Int
-  owner      User   @relation(fields: [ownerID], references: [userID])
-  Songs       Song[]
-  Members    Member[]
-  Scales     Scale[]
-  SongKeys   SongKey[]
+  owner      User      @relation(fields: [ownerID], references: [userID])
+  songs      Song[]
+  members    Member[]
+  scales     Scale[]
+  songKeys   SongKey[]
+  roles      Role[]
+}
+
+model Role {
+  roleID  Int    @id @default(autoincrement())
+  name    String
+  iconUrl String
+
+  members            Member[]
+  ministry           Ministry[]
 }
 
 model User {
@@ -24,59 +34,43 @@ model User {
   email    String     @unique
   password String
   imageURL String     @default("")
-  Ministry Ministry[]
+  ministry Ministry[]
 }
 
 model Member {
-  memberID    Int           @id @default(autoincrement())
-  ministryID  Int           @unique
+  memberID   Int @id @default(autoincrement())
+  ministryID Int @unique
 
   userID      Int
-  roles       Role[]
-  ministry    Ministry     @relation(fields: [ministryID], references: [ministryID] , onDelete: Cascade)
+  ministry    Ministry      @relation(fields: [ministryID], references: [ministryID], onDelete: Cascade)
   permissions Permission[]
-  Participant Participant[]
+  participant Participant[]
+  roles       Role[]
 }
 
-
-model Role {
-  roleID  Int    @id @default(autoincrement())
-  name    String
-  iconUrl String
-
-  Member   Member? @relation(fields: [memberID], references: [memberID])
-  memberID Int?
-}
 
 model Permission {
   permissionID Int     @id @default(autoincrement())
   name         String
-  Member       Member? @relation(fields: [memberID], references: [memberID])
+  member       Member? @relation(fields: [memberID], references: [memberID])
   memberID     Int?
 }
-
-
 
 model Participant {
   participantID Int    @id @default(autoincrement())
   memberID      Int
   scaleID       Int
-  Member        Member @relation(fields: [memberID], references: [memberID])
-  Scale         Scale? @relation(fields: [scaleScaleID], references: [scaleID])
-  scaleScaleID  Int?
+  member        Member @relation(fields: [memberID], references: [memberID])
+  scale         Scale @relation(fields: [scaleID], references: [scaleID])
 }
-
-
-
 
 model SongKey {
-  songKeyID Int    @id @default(autoincrement())
-  name      String
-  Song      Song[]
+  songKeyID  Int      @id @default(autoincrement())
+  name       String
+  song       Song[]
   ministryID Int
-  ministry Ministry  @relation(fields: [ministryID], references: [ministryID])
+  ministry   Ministry @relation(fields: [ministryID], references: [ministryID])
 }
-
 
 model Scale {
   scaleID Int      @id @default(autoincrement())
@@ -84,8 +78,8 @@ model Scale {
   date    DateTime
   notes   String
 
-  ministryID Int
-  ministry Ministry  @relation(fields: [ministryID], references: [ministryID])
+  ministryID   Int
+  ministry     Ministry      @relation(fields: [ministryID], references: [ministryID])
   participants Participant[]
   songs        Song[]
 }
@@ -99,18 +93,17 @@ model Song {
   youtubeUrl   String
   lyricUrl     String
   chordsUrl    String
-
   artistID   Int
   keyID      Int
   ministryID Int
   artist     Artist   @relation(fields: [artistID], references: [artistID])
   key        SongKey  @relation(fields: [keyID], references: [songKeyID])
   ministry   Ministry @relation(fields: [ministryID], references: [ministryID])
-  Scale      Scale[]
+  scale      Scale[]
 }
 
 model Artist {
   artistID Int    @id @default(autoincrement())
   name     String
-  Song     Song[]
+  song     Song[]
 }

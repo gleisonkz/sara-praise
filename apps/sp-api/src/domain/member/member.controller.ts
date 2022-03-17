@@ -5,7 +5,7 @@ import {
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
-import { MemberListItemResponse } from '@sp/shared-interfaces';
+import { eMinistryRole, MemberListItemResponse } from '@sp/shared-interfaces';
 
 import { UpdateMemberDto } from 'apps/sp-api/src/domain/member/dto/update-member.dto';
 import { MinistryNotFoundError } from 'apps/sp-api/src/domain/ministry/ministry.error';
@@ -28,8 +28,8 @@ export class MemberController {
   @Get('')
   async getMembers(
     @Param('ministryID') ministryID: number,
-    @Query('roles') roles,
-    @Res({ passthrough: true }) res: Response
+    @Res({ passthrough: true }) res: Response,
+    @Query('roles') roles?: eMinistryRole[]
   ): Promise<MemberListItemResponse[]> {
     try {
       const members = await this.memberService.getMembers(+ministryID, roles);

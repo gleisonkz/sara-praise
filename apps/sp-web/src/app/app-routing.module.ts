@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'apps/sp-web/src/app/domain/auth/guards/auth.guard';
 import { IsLoggedInGuard } from 'apps/sp-web/src/app/domain/auth/guards/logged-in.guard';
 
-const routes: Routes = [
+const ROUTES: Routes = [
   { path: '', redirectTo: 'ministerios', pathMatch: 'full' },
   {
     path: 'ministerios',
@@ -20,7 +20,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(ROUTES)],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

@@ -2,9 +2,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
-    KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse, MinistryKeyRequest,
-    MinistryListItemResponse, MinistryRequest, ScaleDetailResponse, ScaleListItemResponse,
-    ScaleRequest, ScaleResponse, ScaleResponseCreate, SongListItemResponse
+    eMinistryRole, KeyResponse, MemberListItemResponse, MinistryKeyListItemResponse,
+    MinistryKeyRequest, MinistryListItemResponse, MinistryRequest, ScaleDetailResponse,
+    ScaleListItemResponse, ScaleRequest, ScaleResponse, ScaleResponseCreate, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { map, Observable } from 'rxjs';
@@ -41,7 +41,7 @@ export class MinistryService {
     const url = `${this.BASE_URL}/${ministryID}/roles`;
     const params = new HttpParams().set('memberID', memberID ? memberID.toString() : '');
 
-    return this.http.get<any[]>(url, { params });
+    return this.http.get<eMinistryRole[]>(url, { params });
   }
 
   getScaleByID(scaleID: number): Observable<ScaleResponse> {

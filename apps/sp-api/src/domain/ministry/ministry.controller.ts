@@ -1,5 +1,5 @@
 import {
-    Body, Controller, Delete, Get, HttpStatus, Param, Post, Res, UseGuards
+    Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Res, UseGuards
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
 
@@ -94,6 +94,27 @@ export class MinistryController {
     }
   }
 
+  @ApiQuery({ name: 'ministryID', required: true })
+  @ApiQuery({ name: 'memberID', required: false })
+  @Get('/:ministryID/roles')
+  async getRolesByMinistryID(
+    @Res({ passthrough: true }) res: Response,
+    @Param('ministryID') ministryID: number,
+    @Query('memberID') memberID?: number
+  ): Promise<any[]> {
+    try {
+      const roles = await this.ministryService.getRolesByMinistryID(+ministryID, memberID);
+      return roles;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        res.status(HttpStatus.BAD_REQUEST).send(error.message);
+        return;
+      }
+
+      throw error;
+    }
+  }
+
   // @Get('/:ministryID/scale-list-items')
   // async getScales(
   //   @Param('ministryID') ministryID: number,
@@ -120,24 +141,6 @@ export class MinistryController {
   //   try {
   //     const participants = await this.ministryService.getParticipants(+ministryID, +scaleID);
   //     return participants;
-  //   } catch (error) {
-  //     if (error instanceof MinistryNotFoundError) {
-  //       return res.status(HttpStatus.BAD_REQUEST).send(error.message);
-  //     }
-
-  //     throw error;
-  //   }
-  // }
-
-  // @Get('/:ministryID/roles')
-  // async getRolesByMinistryID(
-  //   @Res({ passthrough: true }) res: Response,
-  //   @Param('ministryID') ministryID: number,
-  //   @Query('memberID') memberID?: number
-  // ): Promise<any[]> {
-  //   try {
-  //     const roles = await this.ministryService.getRolesByMinistryID(+ministryID, memberID);
-  //     return roles;
   //   } catch (error) {
   //     if (error instanceof MinistryNotFoundError) {
   //       return res.status(HttpStatus.BAD_REQUEST).send(error.message);

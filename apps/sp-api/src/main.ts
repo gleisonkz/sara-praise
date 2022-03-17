@@ -1,8 +1,3 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -34,7 +29,7 @@ async function bootstrap(): Promise<void> {
         description: 'Enter JWT token',
         in: 'header',
       },
-      'JWT-auth' // This name here is important for matching up with @ApiBearerAuth() in your controller!
+      'JWT-auth'
     )
     .build();
 

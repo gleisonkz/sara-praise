@@ -9,7 +9,7 @@ import {
 
 import { MinistryListItemResponseDto } from './dtos';
 import { MinistryNotFoundError, MultipleSongsFoundError } from './ministry.error';
-import { DEFAULT_ROLES, KEYS } from './mocks';
+import { KEYS } from './mocks';
 import { Member, Ministry, MinistryKey, Scale, Song } from './models';
 
 @Injectable()
@@ -17,14 +17,23 @@ export class MinistryService {
   constructor(private readonly prismaService: PrismaService) {}
 
   async createMinistry(ministryRequest: MinistryRequest): Promise<MinistryListItemResponseDto> {
+    const defaultRolesIDs = await this.prismaService.role.findMany({
+      select: {
+        roleID: true,
+      },
+    });
+
     const ministry = await this.prismaService.ministry.create({
       data: {
         name: ministryRequest.name,
         ownerID: ministryRequest.ownerID,
-        Members: {
+        members: {
           create: {
             userID: ministryRequest.ownerID,
           },
+        },
+        roles: {
+          connect: defaultRolesIDs,
         },
       },
     });
@@ -72,10 +81,10 @@ export class MinistryService {
       include: {
         _count: {
           select: {
-            Members: true,
-            Scales: true,
-            Songs: true,
-            SongKeys: true,
+            members: true,
+            scales: true,
+            songs: true,
+            songKeys: true,
           },
         },
       },
@@ -85,20 +94,14 @@ export class MinistryService {
   }
 
   async getRolesByMinistryID(ministryID: number, memberID?: number): Promise<Role[]> {
-    const ministry = this.getMinistryByID(ministryID);
-    const member = ministry.members.find((member) => member.memberID === memberID);
-    if (!memberID)
-      return DEFAULT_ROLES.map((role) => {
-        const roleListItem = {
-          ...role,
-          isChecked: false,
-        };
-
-        return roleListItem;
-      });
-    const roles = DEFAULT_ROLES;
-
-    return roles;
+    return [];
+    // const roles = this.prismaService.role.findMany({
+    //   where: {
+    //     ministryID: {
+    //       equals: ministryID,
+    //     },
+    //   },
+    // });
   }
 
   // async getScaleByIDAsync(scaleID: number): Promise<ScaleResponse> {

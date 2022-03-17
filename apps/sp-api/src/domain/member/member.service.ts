@@ -21,12 +21,12 @@ export class MemberService {
         }
       : {};
 
-    const members = await this.prismaService.ministry.findUnique({
+    const ministry = await this.prismaService.ministry.findUnique({
       where: {
         ministryID,
       },
       select: {
-        Members: {
+        members: {
           include: {
             roles: true,
           },
@@ -35,7 +35,7 @@ export class MemberService {
       },
     });
 
-    const memberListItems = members.Members.map(async (member) => {
+    const memberListItems = ministry.members.map(async (member) => {
       const user = await this.prismaService.user.findUnique({
         where: {
           userID: member.userID,

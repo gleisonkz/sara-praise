@@ -2,6 +2,9 @@
   "name": "sara-praise",
   "version": "0.0.0",
   "license": "MIT",
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "scripts": {
     "ng": "nx",
     "prisma:dev:deploy": "prisma migrate deploy",
@@ -15,7 +18,8 @@
     "build": "nx build",
     "migration:create": "npx typeorm migration:create -f ormconfig.local",
     "migration:run": "ts-node --transpile-only ./node_modules/typeorm/cli.js migration:run -f ormconfig.local",
-    "test": "nx test"
+    "test": "nx test",
+    "ts-node": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"}"
   },
   "private": true,
   "dependencies": {
@@ -90,7 +94,7 @@
     "@nrwl/workspace": "13.6.1",
     "@schematics/angular": "^13.2.2",
     "@types/jest": "27.0.2",
-    "@types/node": "^16.11.7",
+    "@types/node": "^16.11.26",
     "@types/passport-jwt": "^3.0.6",
     "@typescript-eslint/eslint-plugin": "~5.3.0",
     "@typescript-eslint/parser": "~5.3.0",
@@ -102,8 +106,9 @@
     "jest": "27.2.3",
     "jest-preset-angular": "11.0.0",
     "prettier": "^2.5.1",
-    "prisma": "^3.10.0",
+    "prisma": "^3.11.0",
     "ts-jest": "27.0.5",
+    "ts-node": "^10.7.0",
     "typescript": "~4.4.3",
     "wait-on": "^6.0.1"
   }
