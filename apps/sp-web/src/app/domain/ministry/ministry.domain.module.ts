@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -65,6 +66,7 @@ import { SongDetailPage } from './pages/song-detail/song-detail.page';
     ReactiveFormsModule,
     SongListItemWidgetModule,
     MinistryRoutingModule,
+    MatSlideToggleModule,
     MatFormFieldModule,
     MatCardModule,
     MatButtonModule,

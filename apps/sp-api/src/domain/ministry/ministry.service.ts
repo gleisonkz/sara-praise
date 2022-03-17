@@ -94,14 +94,39 @@ export class MinistryService {
   }
 
   async getRolesByMinistryID(ministryID: number, memberID?: number): Promise<Role[]> {
-    return [];
-    // const roles = this.prismaService.role.findMany({
-    //   where: {
-    //     ministryID: {
-    //       equals: ministryID,
-    //     },
-    //   },
-    // });
+    if (memberID)
+      return this.prismaService.role.findMany({
+        where: {
+          members: {
+            some: {
+              memberID,
+            },
+          },
+        },
+      });
+
+    const roles = await this.prismaService.role.findMany({
+      where: {
+        ministry: {
+          some: {
+            ministryID,
+          },
+        },
+      },
+    });
+
+    const rolesResponse = roles.map((role) => {
+      const roleResponse = {
+        roleID: role.roleID,
+        name: role.name,
+        iconUrl: role.iconUrl,
+        isChecked: false,
+      };
+
+      return roleResponse;
+    });
+
+    return rolesResponse;
   }
 
   // async getScaleByIDAsync(scaleID: number): Promise<ScaleResponse> {
