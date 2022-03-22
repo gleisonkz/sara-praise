@@ -1,10 +1,10 @@
 import {
     Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Res, UseGuards
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
-import { MinistryListItemResponse, SongListItemResponse } from '@sp/shared-interfaces';
+import { SongListItemResponse } from '@sp/shared-interfaces';
 
 import { Response } from 'express';
 import { MinistryListItemResponseDto, MinistryRequestDto } from './dtos';
@@ -19,8 +19,12 @@ export class MinistryController {
   constructor(private readonly ministryService: MinistryService) {}
 
   @ApiQuery({ name: 'ministryID', required: false })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: MinistryListItemResponseDto,
+  })
   @Get('/list-item/:ministryID?')
-  async getMinistriesListItems(@Param('ministryID') ministryID?: string): Promise<MinistryListItemResponse[]> {
+  async getMinistriesListItems(@Param('ministryID') ministryID?: string): Promise<MinistryListItemResponseDto[]> {
     const parsedID = ministryID ? +ministryID : undefined;
     const ministries = await this.ministryService.getMinistriesListItems(parsedID);
 

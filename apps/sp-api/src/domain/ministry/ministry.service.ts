@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
 import {
-    eMinistryRole, MinistryKeyListItemResponse, MinistryKeyRequest, MinistryListItemResponse,
-    MinistryRequest, Role, SongListItemResponse
+    eMinistryRole, MinistryKeyListItemResponse, MinistryKeyRequest, MinistryRequest, Role,
+    SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { MinistryListItemResponseDto } from './dtos';
@@ -58,15 +58,15 @@ export class MinistryService {
     });
   }
 
-  async getMinistriesListItems(ministryID?: number): Promise<MinistryListItemResponse[]> {
-    const ministryListItemMapFn = (ministry: any) => {
-      const ministryListItem: MinistryListItemResponse = {
+  async getMinistriesListItems(ministryID?: number): Promise<MinistryListItemResponseDto[]> {
+    const ministryListItemMapFn = (ministry) => {
+      const ministryListItem: MinistryListItemResponseDto = {
         ministryID: ministry.ministryID,
         name: ministry.name,
-        musicsQuantity: ministry._count.Songs,
-        membersQuantity: ministry._count.Members,
-        scalesQuantity: ministry._count.Scales,
-        songKeysQuantity: ministry._count.SongKeys,
+        musicsQuantity: ministry._count.songs,
+        membersQuantity: ministry._count.members,
+        scalesQuantity: ministry._count.scales,
+        songKeysQuantity: ministry._count.songKeys,
       };
 
       return ministryListItem;
@@ -89,7 +89,8 @@ export class MinistryService {
         },
       },
     });
-    const ministriesListItems: MinistryListItemResponse[] = ministries.map(ministryListItemMapFn);
+
+    const ministriesListItems: MinistryListItemResponseDto[] = ministries.map(ministryListItemMapFn);
     return ministriesListItems;
   }
 
