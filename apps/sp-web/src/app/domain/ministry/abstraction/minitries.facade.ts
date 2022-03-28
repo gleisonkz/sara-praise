@@ -7,9 +7,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import {
     MinistryService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.service';
-import {
-    MinistriesState as MinistryState
-} from 'apps/sp-web/src/app/domain/ministry/core/state/ministries.state';
+import { MinistryState } from 'apps/sp-web/src/app/domain/ministry/core/state/ministry.state';
 import { map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })

@@ -1,4 +1,6 @@
-import { eMinistryRole, Role } from '@sp/shared-interfaces';
+import { eMinistryRole } from '@sp/shared-interfaces';
+
+import { Role } from 'apps/sp-api/src/domain/ministry/models/role.model';
 
 export const MOCK_ROLES = {
   [eMinistryRole.MINISTER]: {

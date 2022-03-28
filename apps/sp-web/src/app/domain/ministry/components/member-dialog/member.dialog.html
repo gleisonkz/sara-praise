@@ -8,11 +8,15 @@
   </mat-form-field>
 
   <mat-form-field>
+    <input formControlName="imageUrl" matInput placeholder="Imagem" />
+  </mat-form-field>
+
+  <mat-form-field>
     <input formControlName="password" matInput placeholder="Password" type="password" />
   </mat-form-field>
 
   <mat-accordion class="roles">
-    <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel [expanded]="false">
       <mat-expansion-panel-header>
         <mat-panel-description>
           {{memberForm.controls.roles.length}}/{{ ministryRolesFormArray.controls.length

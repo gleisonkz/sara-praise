@@ -4,7 +4,7 @@ import { FormGroup, Validators } from '@angular/forms';
 
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { MemberListItemResponse, Role } from '@sp/shared-interfaces';
+import { MemberListItemResponse, RoleResponse } from '@sp/shared-interfaces';
 
 import { FormControl } from '@ngneat/reactive-forms';
 import {
@@ -31,7 +31,7 @@ export class ParticipantsDialog implements OnInit {
     selected: FormControl<boolean>;
     roles: {
       form: FormGroup;
-      item: Role;
+      item: RoleResponse;
     }[];
   }[];
 

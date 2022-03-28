@@ -35,13 +35,15 @@ model User {
   password String
   imageURL String     @default("")
   ministry Ministry[]
+  member  Member[]
 }
 
 model Member {
   memberID   Int @id @default(autoincrement())
-  ministryID Int @unique
+  ministryID Int
 
   userID      Int
+  user        User @relation(fields: [userID], references: [userID])
   ministry    Ministry      @relation(fields: [ministryID], references: [ministryID], onDelete: Cascade)
   permissions Permission[]
   participant Participant[]

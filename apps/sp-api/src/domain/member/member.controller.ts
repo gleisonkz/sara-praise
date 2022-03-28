@@ -2,30 +2,40 @@
 import {
     Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Query, Res, UseGuards
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
 import { eMinistryRole, MemberListItemResponse } from '@sp/shared-interfaces';
 
-import { UpdateMemberDto } from 'apps/sp-api/src/domain/member/dto/update-member.dto';
+import { UpdateMemberDto } from 'apps/sp-api/src/domain/member/dtos/update-member.dto';
 import { MinistryNotFoundError } from 'apps/sp-api/src/domain/ministry/ministry.error';
 import { Response } from 'express';
-import { CreateMemberDto } from './dto/create-member.dto';
+import { UnauthenticatedUserResponseDto } from '../../shared';
+import { MemberListItemResponseDto, MemberRequestDto } from './dtos';
 import { MemberService } from './member.service';
 
 @ApiTags('Membros')
 @UseGuards(JwtGuard)
 @ApiBearerAuth('JWT-auth')
 @Controller('ministries/:ministryID/members')
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  type: UnauthenticatedUserResponseDto,
+})
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 
   @Post()
-  create(@Body() createMemberDto: CreateMemberDto) {
-    // return this.memberService.create(createMemberDto);
+  create(@Param('ministryID') ministryID: number, @Body() memberRequestDto: MemberRequestDto) {
+    return this.memberService.create(+ministryID, memberRequestDto);
   }
 
-  @Get('')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: MemberListItemResponseDto,
+  })
+  @ApiQuery({ name: 'roles', required: false })
+  @Get()
   async getMembers(
     @Param('ministryID') ministryID: number,
     @Res({ passthrough: true }) res: Response,
@@ -42,11 +52,6 @@ export class MemberController {
 
       throw error;
     }
-  }
-
-  @Get()
-  findAll() {
-    // return this.memberService.findAll();
   }
 
   @Get(':id')

@@ -8,6 +8,7 @@ import {
 } from '@sp/shared-interfaces';
 
 import { ControlsOf, FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { MemberService } from 'apps/sp-web/src/app/domain/ministry/core/services/member.service';
 import { BehaviorSubject, filter, Observable, switchMap, tap } from 'rxjs';
 import { MinistryService } from '../../core/services/ministry.service';
 
@@ -17,7 +18,11 @@ import { MinistryService } from '../../core/services/ministry.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MinistryKeyDialogComponent implements OnInit {
-  constructor(public readonly ministryService: MinistryService, @Inject(MAT_DIALOG_DATA) private ministryID: number) {}
+  constructor(
+    private readonly memberService: MemberService,
+    public readonly ministryService: MinistryService,
+    @Inject(MAT_DIALOG_DATA) private ministryID: number
+  ) {}
 
   ministryKeyForm: FormGroup<ControlsOf<MinistryKeyRequest>>;
 
@@ -38,7 +43,7 @@ export class MinistryKeyDialogComponent implements OnInit {
     const roles = [eMinistryRole.MINISTER];
 
     this.sntKeys$ = this.ministryService.getKeys();
-    this.ministerMembers$ = this.ministryService.getMemberListItems(this.ministryID, roles);
+    this.ministerMembers$ = this.memberService.getMemberListItems(this.ministryID, roles);
 
     this.memberIdControl.valueChanges
       .pipe(

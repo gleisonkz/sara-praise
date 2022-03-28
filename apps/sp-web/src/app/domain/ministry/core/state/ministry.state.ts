@@ -5,7 +5,7 @@ import { MinistryListItemResponse } from '@sp/shared-interfaces';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class MinistriesState {
+export class MinistryState {
   private ministries$$ = new BehaviorSubject<MinistryListItemResponse[]>([]);
   private activeMinistry$$ = new BehaviorSubject<MinistryListItemResponse>(null as any);
 

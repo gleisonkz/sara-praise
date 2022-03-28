@@ -3,10 +3,11 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
 import {
-    eMinistryRole, MinistryKeyListItemResponse, MinistryKeyRequest, MinistryRequest, Role,
+    eMinistryRole, MinistryKeyListItemResponse, MinistryKeyRequest, MinistryRequest,
     SongListItemResponse
 } from '@sp/shared-interfaces';
 
+import { Role } from '@prisma/client';
 import { MinistryListItemResponseDto } from './dtos';
 import { MinistryNotFoundError, MultipleSongsFoundError } from './ministry.error';
 import { KEYS } from './mocks';

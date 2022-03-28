@@ -5,7 +5,11 @@ import { Validators } from '@angular/forms';
 
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+import { MemberRequest, RoleResponse } from '@sp/shared-interfaces';
+
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { MemberFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/members.facade';
+import { MemberService } from 'apps/sp-web/src/app/domain/ministry/core/services/member.service';
 import { MinistryService } from '../../core/services/ministry.service';
 
 @Component({
@@ -16,6 +20,9 @@ import { MinistryService } from '../../core/services/ministry.service';
 export class MemberDialog implements OnInit {
   constructor(
     public readonly ministryService: MinistryService,
+    public readonly memberService: MemberService,
+    public readonly memberFacade: MemberFacade,
+
     private readonly changeDetectorRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA)
     private dialogData: {
@@ -28,6 +35,7 @@ export class MemberDialog implements OnInit {
     name: FormControl<string | null>;
     email: FormControl<string | null>;
     password: FormControl<string | null>;
+    imageUrl: FormControl<string | null>;
     roles: FormArray<number>;
     // permissions: FormGroup<{
     //   permissionID: FormControl<number | null>;
@@ -37,8 +45,8 @@ export class MemberDialog implements OnInit {
 
   ministryRolesFormArray: FormArray<{
     name: FormControl<string | null>;
-    roleID: FormControl<number | null>;
-    isChecked: FormControl<boolean | null>;
+    roleID: FormControl<number>;
+    isChecked: FormControl<boolean>;
   }>;
 
   ngOnInit(): void {
@@ -46,18 +54,18 @@ export class MemberDialog implements OnInit {
 
     this.ministryService
       .getRolesByMemberID(this.dialogData.ministryID, this.dialogData?.memberID)
-      .subscribe((roles: any[]) => {
+      .subscribe((roles: RoleResponse[]) => {
         this.createForm(roles);
         this.changeDetectorRef.detectChanges();
 
         const memberRolesFormArray = this.memberForm.controls.roles;
 
-        this.ministryRolesFormArray.valueChanges.subscribe((roles: any[]) => {
+        this.ministryRolesFormArray.valueChanges.subscribe((roles) => {
           memberRolesFormArray.clear();
 
           roles
-            .filter((role: any) => role.isChecked)
-            .forEach((role: any) => {
+            .filter((role) => role.isChecked)
+            .forEach((role) => {
               const control = new FormControl(role.roleID);
               memberRolesFormArray.push(control);
             });
@@ -70,6 +78,7 @@ export class MemberDialog implements OnInit {
       name: new FormControl('Gleison', Validators.required),
       email: new FormControl('gleison@teste.com', Validators.required),
       password: new FormControl('123456', Validators.required),
+      imageUrl: new FormControl('https://randomuser.me/api/portraits/men/59.jpg', Validators.required),
       // roles: new FormGroup({
       //   roleID: new FormControl(null, Validators.required),
       //   selected: new FormControl(null, [Validators.required]),
@@ -101,6 +110,7 @@ export class MemberDialog implements OnInit {
   submitForm() {
     if (this.memberForm.invalid) return;
 
-    console.log('member', this.memberForm.value);
+    const member = this.memberForm.value as MemberRequest;
+    this.memberFacade.addMember(this.dialogData.ministryID, member);
   }
 }

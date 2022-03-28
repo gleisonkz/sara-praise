@@ -42,7 +42,7 @@ footer {
     padding: 2em;
     background: whitesmoke;
 
-    button {
+    button[mat-flat-button] {
       background: transparent;
       display: flex;
       flex-direction: column;
@@ -51,6 +51,12 @@ footer {
       span {
         display: block;
       }
+    }
+
+    .floating-button {
+      position: fixed;
+      bottom: 105px;
+      right: 35px;
     }
   }
 

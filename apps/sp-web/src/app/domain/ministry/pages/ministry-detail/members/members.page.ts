@@ -3,9 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 
 import { MemberListItemResponse } from '@sp/shared-interfaces';
 
+import { MemberFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/members.facade';
 import { Observable } from 'rxjs';
 import { MinistryDetailRouteService } from '../../../core/services/ministry-detail-route.service';
-import { MinistryService } from '../../../core/services/ministry.service';
 
 @Component({
   templateUrl: './members.page.html',
@@ -17,12 +17,13 @@ export class MembersPage implements OnInit {
 
   constructor(
     private readonly ministryDetailRouteService: MinistryDetailRouteService,
-    private readonly ministryService: MinistryService,
+    private readonly memberFacade: MemberFacade,
     private readonly activatedRoute: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    this.memberListItems$ = this.memberFacade.members$;
     const ministryID = this.ministryDetailRouteService.getMinistryID(this.activatedRoute);
-    this.memberListItems$ = this.ministryService.getMemberListItems(+ministryID);
+    this.memberFacade.getMembers(ministryID);
   }
 }

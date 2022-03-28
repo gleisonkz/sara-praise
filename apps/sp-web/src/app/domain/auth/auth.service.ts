@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { SignUpRequest, TokenResponse, UserAuthPayload } from '@sp/shared-interfaces';
 import { LocalStorageService } from '@sp/web/shared/services';
@@ -29,7 +30,8 @@ export class AuthService {
   constructor(
     private readonly jwtHelperService: JwtHelperService,
     private readonly localStorageService: LocalStorageService,
-    private readonly http: HttpClient
+    private readonly http: HttpClient,
+    private readonly router: Router
   ) {}
 
   user: UserAuthPayload;
@@ -51,5 +53,10 @@ export class AuthService {
   signUp(signUpRequest: SignUpRequest): Observable<boolean> {
     const url = environment.apiUrl + '/auth/sign-up';
     return this.http.post<TokenResponse>(url, signUpRequest, HTTP_OPTIONS).pipe(setToken, mapTo(true));
+  }
+
+  logout() {
+    this.localStorageService.remove(TOKEN_KEY);
+    this.router.navigate(['/auth']);
   }
 }

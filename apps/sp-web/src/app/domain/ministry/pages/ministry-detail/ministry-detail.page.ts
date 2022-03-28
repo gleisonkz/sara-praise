@@ -60,6 +60,7 @@ export class MinistryDetailPage implements OnInit {
       },
       width: '100%',
       maxWidth: '600px',
+      panelClass: 'member-dialog',
     });
 
     dialogRef

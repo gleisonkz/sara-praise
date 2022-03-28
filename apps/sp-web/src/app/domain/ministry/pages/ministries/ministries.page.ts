@@ -29,6 +29,10 @@ export class MinistriesPage implements OnInit {
     this.ministryFacade.getMinistries();
   }
 
+  logout() {
+    this.authService.logout();
+  }
+
   createMinistry() {
     if (!this.ministryNameControl.valid) return;
 

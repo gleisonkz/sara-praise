@@ -101,18 +101,66 @@
 
 <router-outlet></router-outlet>
 
+<!-- <button
+[class.active]="keyLink.isActive || memberLink.isActive || scaleLink.isActive"
+[disabled]="musicLink.isActive"
+mat-raised-button
+(click)="
+    keyLink.isActive && goToCreateMinistryKey() ||
+    memberLink.isActive && goToCreateMinistryMember() ||
+    scaleLink.isActive && goToCreateScale() ||
+    musicLink.isActive && goToCreateMusic()
+  "
+>
+<mat-icon>add</mat-icon>
+</button> -->
+
 <footer *spMediaIf="510; mode 'lt'">
   <mat-toolbar class="toolbarNav">
-    <button mat-flat-button routerLink="escalas" routerLinkActive="active-link">
+    <button
+      class="floating-button"
+      *spMediaIf="510; mode 'lt'"
+      (click)="
+      keysLink.isActive && goToCreateMinistryKey() ||
+      membersLink.isActive && goToCreateMinistryMember() ||
+      scalesLink.isActive && goToCreateScale() ||
+      musicsLink.isActive && goToCreateMusic()"
+      mat-fab
+      aria-label="Example icon button with a delete icon"
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+
+    <button
+      #musicsLink="routerLinkActive"
+      mat-flat-button
+      routerLink="escalas"
+      routerLinkActive="active-link"
+    >
       <mat-icon>today</mat-icon>
     </button>
-    <button mat-flat-button routerLink="musicas" routerLinkActive="active-link">
+    <button
+      #scalesLink="routerLinkActive"
+      mat-flat-button
+      routerLink="musicas"
+      routerLinkActive="active-link"
+    >
       <mat-icon>library_music </mat-icon>
     </button>
-    <button mat-flat-button routerLink="membros" routerLinkActive="active-link">
+    <button
+      #membersLink="routerLinkActive"
+      mat-flat-button
+      routerLink="membros"
+      routerLinkActive="active-link"
+    >
       <mat-icon>church</mat-icon>
     </button>
-    <button mat-flat-button routerLink="tonalidades" routerLinkActive="active-link">
+    <button
+      #keysLink="routerLinkActive"
+      mat-flat-button
+      routerLink="tonalidades"
+      routerLinkActive="active-link"
+    >
       <mat-icon>music_note</mat-icon>
     </button>
   </mat-toolbar>
