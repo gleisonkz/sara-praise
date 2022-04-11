@@ -8,9 +8,11 @@ import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MemberRequest, RoleResponse } from '@sp/shared-interfaces';
 
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { MemberFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/members.facade';
-import { MemberService } from 'apps/sp-web/src/app/domain/ministry/core/services/member.service';
-import { MinistryService } from '../../core/services/ministry.service';
+import { MemberFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/member.facade';
+import {
+    MemberApiService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/member.api.service';
+import { MinistryApiService } from '../../core/services/ministry.api.service';
 
 @Component({
   templateUrl: './member.dialog.html',
@@ -19,8 +21,8 @@ import { MinistryService } from '../../core/services/ministry.service';
 })
 export class MemberDialog implements OnInit {
   constructor(
-    public readonly ministryService: MinistryService,
-    public readonly memberService: MemberService,
+    public readonly ministryService: MinistryApiService,
+    public readonly memberService: MemberApiService,
     public readonly memberFacade: MemberFacade,
 
     private readonly changeDetectorRef: ChangeDetectorRef,

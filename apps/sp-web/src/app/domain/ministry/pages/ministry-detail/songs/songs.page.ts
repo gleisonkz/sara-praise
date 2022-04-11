@@ -11,7 +11,7 @@ import {
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry-detail-route.service';
 import { LIST_ANIMATION } from 'apps/sp-web/src/app/shared/animations/list.animation';
 import { Observable } from 'rxjs';
-import { MinistryService } from '../../../core/services/ministry.service';
+import { MinistryApiService } from '../../../core/services/ministry.api.service';
 
 @Component({
   templateUrl: './songs.page.html',
@@ -28,7 +28,7 @@ export class SongsPage implements OnInit {
 
   constructor(
     private readonly ministryDetailRouteService: MinistryDetailRouteService,
-    private readonly ministryService: MinistryService,
+    private readonly ministryService: MinistryApiService,
     private readonly activatedRoute: ActivatedRoute
   ) {}
 

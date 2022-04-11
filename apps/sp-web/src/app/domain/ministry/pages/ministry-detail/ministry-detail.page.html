@@ -14,6 +14,7 @@
       mat-icon-button
       [matMenuTriggerFor]="menu"
       aria-label="Example icon-button with a menu"
+      data-testid="ministry-options"
     >
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -33,7 +34,11 @@
         <mat-icon>file_copy</mat-icon>
         <span>Clonar</span>
       </button>
-      <button mat-menu-item (click)="deleteMinistry(ministryListItem.ministryID)">
+      <button
+        data-testid="delete-ministry-button"
+        mat-menu-item
+        (click)="deleteMinistry(ministryListItem.ministryID)"
+      >
         <mat-icon>delete</mat-icon>
         <span>Deletar</span>
       </button>
@@ -65,6 +70,16 @@
 
     <a
       mat-tab-link
+      [routerLink]="['artistas']"
+      routerLinkActive
+      #artistsLink="routerLinkActive"
+      [active]="artistsLink.isActive"
+    >
+      Autores ({{ ministryListItem.musicsQuantity }})
+    </a>
+
+    <a
+      mat-tab-link
       [routerLink]="['membros']"
       routerLinkActive
       #memberLink="routerLinkActive"
@@ -88,10 +103,11 @@
       [disabled]="musicLink.isActive"
       mat-raised-button
       (click)="
-          keyLink.isActive && goToCreateMinistryKey() ||
-          memberLink.isActive && goToCreateMinistryMember() ||
-          scaleLink.isActive && goToCreateScale() ||
-          musicLink.isActive && goToCreateMusic()
+      scaleLink.isActive && goToCreateScale() ||
+      musicLink.isActive && goToCreateMusic() ||
+      artistsLink.isActive && goToCreateArtist() ||
+      memberLink.isActive && goToCreateMinistryMember() ||
+          keyLink.isActive && goToCreateMinistryKey()
         "
     >
       <mat-icon>add</mat-icon>
@@ -101,30 +117,17 @@
 
 <router-outlet></router-outlet>
 
-<!-- <button
-[class.active]="keyLink.isActive || memberLink.isActive || scaleLink.isActive"
-[disabled]="musicLink.isActive"
-mat-raised-button
-(click)="
-    keyLink.isActive && goToCreateMinistryKey() ||
-    memberLink.isActive && goToCreateMinistryMember() ||
-    scaleLink.isActive && goToCreateScale() ||
-    musicLink.isActive && goToCreateMusic()
-  "
->
-<mat-icon>add</mat-icon>
-</button> -->
-
 <footer *spMediaIf="510; mode 'lt'">
   <mat-toolbar class="toolbarNav">
     <button
       class="floating-button"
       *spMediaIf="510; mode 'lt'"
       (click)="
-      keysLink.isActive && goToCreateMinistryKey() ||
-      membersLink.isActive && goToCreateMinistryMember() ||
       scalesLink.isActive && goToCreateScale() ||
-      musicsLink.isActive && goToCreateMusic()"
+      musicsLink.isActive && goToCreateMusic() ||
+      artistsLink.isActive && goToCreateArtist() ||
+      membersLink.isActive && goToCreateMinistryMember() ||
+      keysLink.isActive && goToCreateMinistryKey()"
       mat-fab
       aria-label="Example icon button with a delete icon"
     >
@@ -132,21 +135,32 @@ mat-raised-button
     </button>
 
     <button
-      #musicsLink="routerLinkActive"
+      #scalesLink="routerLinkActive"
       mat-flat-button
       routerLink="escalas"
       routerLinkActive="active-link"
     >
       <mat-icon>today</mat-icon>
     </button>
+
     <button
-      #scalesLink="routerLinkActive"
+      #artistsLink="routerLinkActive"
+      mat-flat-button
+      routerLink="artistas"
+      routerLinkActive="active-link"
+    >
+      <mat-icon>group</mat-icon>
+    </button>
+
+    <button
+      #musicsLink="routerLinkActive"
       mat-flat-button
       routerLink="musicas"
       routerLinkActive="active-link"
     >
       <mat-icon>library_music </mat-icon>
     </button>
+
     <button
       #membersLink="routerLinkActive"
       mat-flat-button
@@ -155,6 +169,7 @@ mat-raised-button
     >
       <mat-icon>church</mat-icon>
     </button>
+
     <button
       #keysLink="routerLinkActive"
       mat-flat-button

@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { MemberListItemResponse } from '@sp/shared-interfaces';
 
-import { MemberFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/members.facade';
+import { MemberFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/member.facade';
 import { Observable } from 'rxjs';
 import { MinistryDetailRouteService } from '../../../core/services/ministry-detail-route.service';
 
@@ -12,7 +12,7 @@ import { MinistryDetailRouteService } from '../../../core/services/ministry-deta
   styleUrls: ['./members.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MembersPage implements OnInit {
+export class MembersPage implements OnInit, OnDestroy {
   memberListItems$: Observable<MemberListItemResponse[]>;
 
   constructor(
@@ -25,5 +25,9 @@ export class MembersPage implements OnInit {
     this.memberListItems$ = this.memberFacade.members$;
     const ministryID = this.ministryDetailRouteService.getMinistryID(this.activatedRoute);
     this.memberFacade.getMembers(ministryID);
+  }
+
+  ngOnDestroy(): void {
+    this.memberFacade.clearMembers();
   }
 }

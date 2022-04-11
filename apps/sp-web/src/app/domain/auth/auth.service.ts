@@ -6,7 +6,7 @@ import { SignUpRequest, TokenResponse, UserAuthPayload } from '@sp/shared-interf
 import { LocalStorageService } from '@sp/web/shared/services';
 
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { environment } from 'apps/sp-web/src/environments/environment';
+import { ENVIRONMENT } from 'apps/sp-web/src/environments/environment';
 import { mapTo, Observable, tap } from 'rxjs';
 
 const HTTP_OPTIONS = {
@@ -32,7 +32,10 @@ export class AuthService {
     private readonly localStorageService: LocalStorageService,
     private readonly http: HttpClient,
     private readonly router: Router
-  ) {}
+  ) {
+    const windowRef = window as any;
+    windowRef['AuthService'] = this;
+  }
 
   user: UserAuthPayload;
 
@@ -46,12 +49,12 @@ export class AuthService {
   }
 
   signIn(email: string, password: string): Observable<boolean> {
-    const url = environment.apiUrl + '/auth/sign-in';
+    const url = ENVIRONMENT.apiUrl + '/auth/sign-in';
     return this.http.post<TokenResponse>(url, { email, password }).pipe(setToken, mapTo(true));
   }
 
   signUp(signUpRequest: SignUpRequest): Observable<boolean> {
-    const url = environment.apiUrl + '/auth/sign-up';
+    const url = ENVIRONMENT.apiUrl + '/auth/sign-up';
     return this.http.post<TokenResponse>(url, signUpRequest, HTTP_OPTIONS).pipe(setToken, mapTo(true));
   }
 

@@ -5,15 +5,15 @@ import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces
 
 import { HotToastService } from '@ngneat/hot-toast';
 import {
-    MinistryService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.service';
+    MinistryApiService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
 import { MinistryState } from 'apps/sp-web/src/app/domain/ministry/core/state/ministry.state';
 import { map, Observable, of, switchMap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class MinistryFacade {
   constructor(
-    private readonly service: MinistryService,
+    private readonly service: MinistryApiService,
     private readonly state: MinistryState,
     private readonly toastService: HotToastService,
     private readonly router: Router

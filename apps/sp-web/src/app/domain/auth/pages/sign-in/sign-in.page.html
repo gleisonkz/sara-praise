@@ -3,11 +3,22 @@
 
   <form [formGroup]="userForm" class="example-form">
     <mat-form-field class="example-full-width">
-      <input formControlName="email" matInput placeholder="Email" />
+      <input
+        data-testid="email-input"
+        formControlName="email"
+        matInput
+        placeholder="Email"
+      />
     </mat-form-field>
 
     <mat-form-field class="example-full-width">
-      <input type="password" formControlName="password" matInput placeholder="Password" />
+      <input
+        data-testid="password-input"
+        type="password"
+        formControlName="password"
+        matInput
+        placeholder="Password"
+      />
     </mat-form-field>
 
     <div class="actions-container">
@@ -17,6 +28,7 @@
         mat-stroked-button
         color="primary"
         class="btn-block"
+        data-testid="login-button"
       >
         Log in
       </button>
@@ -25,6 +37,7 @@
         mat-stroked-button
         color="accent"
         class="btn-block"
+        data-testid="go-to-register-button"
       >
         Ir para Cadastro
       </button>

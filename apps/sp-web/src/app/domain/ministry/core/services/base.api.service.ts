@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, Injector } from '@angular/core';
 
-import { environment } from 'apps/sp-web/src/environments/environment';
+import { ENVIRONMENT } from 'apps/sp-web/src/environments/environment';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export abstract class BaseApiService<T> {
   protected http: HttpClient;
-  private readonly ENDPOINT = environment.apiUrl;
+  private readonly ENDPOINT = ENVIRONMENT.apiUrl;
 
   constructor(protected injector: Injector) {
     this.http = injector.get(HttpClient);

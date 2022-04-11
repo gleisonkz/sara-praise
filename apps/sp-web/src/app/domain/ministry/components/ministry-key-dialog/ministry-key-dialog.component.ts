@@ -8,9 +8,11 @@ import {
 } from '@sp/shared-interfaces';
 
 import { ControlsOf, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { MemberService } from 'apps/sp-web/src/app/domain/ministry/core/services/member.service';
+import {
+    MemberApiService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/member.api.service';
 import { BehaviorSubject, filter, Observable, switchMap, tap } from 'rxjs';
-import { MinistryService } from '../../core/services/ministry.service';
+import { MinistryApiService } from '../../core/services/ministry.api.service';
 
 @Component({
   templateUrl: './ministry-key-dialog.component.html',
@@ -19,8 +21,8 @@ import { MinistryService } from '../../core/services/ministry.service';
 })
 export class MinistryKeyDialogComponent implements OnInit {
   constructor(
-    private readonly memberService: MemberService,
-    public readonly ministryService: MinistryService,
+    private readonly memberService: MemberApiService,
+    public readonly ministryService: MinistryApiService,
     @Inject(MAT_DIALOG_DATA) private ministryID: number
   ) {}
 

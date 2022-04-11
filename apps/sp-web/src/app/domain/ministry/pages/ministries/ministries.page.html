@@ -1,6 +1,10 @@
 <mat-toolbar>
-  <h1>Ministérios</h1>
-  <mat-icon (click)="logout()" aria-hidden="false" aria-label="Example home icon"
+  <h1 data-testid="ministry-page-title">Ministérios</h1>
+  <mat-icon
+    data-testid="sign-out-button"
+    (click)="logout()"
+    aria-hidden="false"
+    aria-label="Example home icon"
     >logout</mat-icon
   >
 </mat-toolbar>
@@ -12,6 +16,7 @@
     <mat-label>Nome </mat-label>
     <input
       matInput
+      data-testid="ministry-name-input"
       placeholder="Ex. Lagoinha"
       value="Sushi"
       [formControl]="ministryNameControl"
@@ -21,6 +26,7 @@
   <button
     [disabled]="!ministryNameControl.valid"
     (click)="createMinistry()"
+    data-testid="create-ministry-button"
     mat-fab
     aria-label="Example icon-button with a heart icon"
   >
@@ -28,8 +34,9 @@
   </button>
 </div>
 
-<div class="cards">
+<div data-testid="ministry-list" class="cards">
   <mat-card
+    data-testid="ministry-card"
     *ngFor="let ministry of ministries$ | async; let i = index"
     (click)="goToMinistryDetails(ministry.ministryID)"
   >
@@ -45,7 +52,9 @@
       </div>
 
       <div class="tab-label">
-        <mat-icon [matBadge]="ministry.membersQuantity">people</mat-icon>
+        <mat-icon data-testid="members-badge" [matBadge]="ministry.membersQuantity"
+          >people</mat-icon
+        >
         <span class="tab-label-text">Membros</span>
       </div>
 

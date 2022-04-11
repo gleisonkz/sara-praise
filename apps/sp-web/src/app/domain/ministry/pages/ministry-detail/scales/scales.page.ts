@@ -9,7 +9,7 @@ import {
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry-detail-route.service';
 import { FADE_ANIMATION } from 'apps/sp-web/src/app/shared/animations/fade.animation';
 import { Observable } from 'rxjs';
-import { MinistryService } from '../../../core/services/ministry.service';
+import { MinistryApiService } from '../../../core/services/ministry.api.service';
 
 @Component({
   templateUrl: './scales.page.html',
@@ -22,7 +22,7 @@ export class ScalesPage implements OnInit {
 
   constructor(
     private readonly ministryDetailRouteService: MinistryDetailRouteService,
-    private readonly ministryService: MinistryService,
+    private readonly ministryService: MinistryApiService,
     private readonly activatedRoute: ActivatedRoute
   ) {}
   ngOnInit(): void {

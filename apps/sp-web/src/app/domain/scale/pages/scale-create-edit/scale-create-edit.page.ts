@@ -12,8 +12,8 @@ import {
     MinistryDetailRouteService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry-detail-route.service';
 import {
-    MinistryService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.service';
+    MinistryApiService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
 import {
     ParticipantsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/participants/participants.dialog';
@@ -42,7 +42,7 @@ export class ScaleCreateEditPage implements OnInit {
 
   constructor(
     private readonly matDialog: MatDialog,
-    private readonly ministryService: MinistryService,
+    private readonly ministryService: MinistryApiService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly toastService: HotToastService,
     private readonly router: Router,

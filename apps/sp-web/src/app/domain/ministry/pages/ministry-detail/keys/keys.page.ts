@@ -5,7 +5,7 @@ import { MinistryKeyListItemResponse } from '@sp/shared-interfaces';
 
 import { Observable, of } from 'rxjs';
 import { MinistryDetailRouteService } from '../../../core/services/ministry-detail-route.service';
-import { MinistryService } from '../../../core/services/ministry.service';
+import { MinistryApiService } from '../../../core/services/ministry.api.service';
 
 @Component({
   templateUrl: './keys.page.html',
@@ -16,7 +16,7 @@ export class KeysPage implements OnInit {
   keysListItems$: Observable<MinistryKeyListItemResponse[]> = of([]);
   constructor(
     private readonly ministryDetailRouteService: MinistryDetailRouteService,
-    private readonly ministryService: MinistryService,
+    private readonly ministryService: MinistryApiService,
     private readonly activatedRoute: ActivatedRoute
   ) {}
 

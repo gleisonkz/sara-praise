@@ -3,14 +3,16 @@ import { Injectable } from '@angular/core';
 import { MemberListItemResponse, MemberRequest } from '@sp/shared-interfaces';
 
 import { HotToastService } from '@ngneat/hot-toast';
-import { MemberService } from 'apps/sp-web/src/app/domain/ministry/core/services/member.service';
+import {
+    MemberApiService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/member.api.service';
 import { MemberState } from 'apps/sp-web/src/app/domain/ministry/core/state/member.state';
 import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class MemberFacade {
   constructor(
-    private readonly service: MemberService,
+    private readonly service: MemberApiService,
     private readonly state: MemberState,
     private readonly toastService: HotToastService
   ) {}
@@ -28,6 +30,10 @@ export class MemberFacade {
       this.state.addMember(newMember);
       this.toastService.success('Membro criado com sucesso!');
     });
+  }
+
+  clearMembers() {
+    this.state.clearMembers();
   }
 
   // removeMember(ministryID: number): void {

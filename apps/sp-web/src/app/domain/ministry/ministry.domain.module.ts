@@ -28,8 +28,12 @@ import {
 import { RemoveDotsPipeWidgetModule } from '@sp/web/widget/pipes';
 
 import {
+    ArtistDialog
+} from 'apps/sp-web/src/app/domain/ministry/components/artist-dialog/artist-dialog.component';
+import {
     MemberDialog
 } from 'apps/sp-web/src/app/domain/ministry/components/member-dialog/member.dialog';
+import { ArtistListItemComponent } from './components/artist-list-item/artist-list-item.component';
 import {
     MinistryKeyDialogComponent
 } from './components/ministry-key-dialog/ministry-key-dialog.component';
@@ -38,6 +42,7 @@ import {
     KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
 } from './pages';
 import { MemberDetailPage } from './pages/member-detail/member-detail.page';
+import { ArtistsPage } from './pages/ministry-detail/artists/artists.page';
 import { SongDetailPage } from './pages/song-detail/song-detail.page';
 
 @NgModule({
@@ -54,6 +59,9 @@ import { SongDetailPage } from './pages/song-detail/song-detail.page';
     MemberDetailPage,
     MinistryKeyDialogComponent,
     MemberDialog,
+    ArtistsPage,
+    ArtistListItemComponent,
+    ArtistDialog,
   ],
   imports: [
     CommonModule,

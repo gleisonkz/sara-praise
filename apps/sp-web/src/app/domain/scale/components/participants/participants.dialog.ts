@@ -8,8 +8,8 @@ import { MemberListItemResponse, RoleResponse } from '@sp/shared-interfaces';
 
 import { FormControl } from '@ngneat/reactive-forms';
 import {
-    MinistryService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.service';
+    MinistryApiService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
 import { map, Observable } from 'rxjs';
 
 interface ParticipantsDialogData {
@@ -46,7 +46,7 @@ export class ParticipantsDialog implements OnInit {
   // }
 
   constructor(
-    public readonly ministryService: MinistryService,
+    public readonly ministryService: MinistryApiService,
 
     @Inject(MAT_DIALOG_DATA) private data: ParticipantsDialogData
   ) {}

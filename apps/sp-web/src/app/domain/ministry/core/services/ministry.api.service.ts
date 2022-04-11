@@ -12,7 +12,7 @@ import { map, Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root',
 })
-export class MinistryService {
+export class MinistryApiService {
   private readonly URL = '/api/ministries';
 
   constructor(private readonly http: HttpClient) {}

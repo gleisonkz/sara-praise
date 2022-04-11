@@ -6,7 +6,7 @@ import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces
 
 import { FormControl } from '@ngneat/reactive-forms';
 import { AuthService } from 'apps/sp-web/src/app/domain/auth/auth.service';
-import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/minitries.facade';
+import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/ministry.facade';
 import { Observable } from 'rxjs';
 
 @Component({

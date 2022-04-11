@@ -40,3 +40,9 @@ mat-form-field {
   gap: 20px;
   grid-template-columns: 1fr 1fr;
 }
+
+button:disabled {
+  background-color: #e0e0e0;
+  color: #bdbdbd;
+  cursor: not-allowed;
+}

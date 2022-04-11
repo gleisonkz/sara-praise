@@ -37,10 +37,10 @@ export class SignUpPage implements OnInit {
 
   createForm(): void {
     const form = new FormGroup({
-      name: new FormControl('Renato', [Validators.required]),
-      email: new FormControl('renato@teste.com', [Validators.required, Validators.email]),
-      password: new FormControl('123456', Validators.required),
-      confirmPassword: new FormControl('123456', Validators.required),
+      name: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', Validators.required),
+      confirmPassword: new FormControl('', Validators.required),
     });
 
     this.signUpForm = form;

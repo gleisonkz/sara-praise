@@ -6,7 +6,10 @@ import { MatDialog } from '@angular/material/dialog';
 import { MinistryListItemResponse } from '@sp/shared-interfaces';
 
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/minitries.facade';
+import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/ministry.facade';
+import {
+    ArtistDialog
+} from 'apps/sp-web/src/app/domain/ministry/components/artist-dialog/artist-dialog.component';
 import {
     MemberDialog
 } from 'apps/sp-web/src/app/domain/ministry/components/member-dialog/member.dialog';
@@ -50,7 +53,24 @@ export class MinistryDetailPage implements OnInit {
   }
 
   goToCreateMusic() {
-    console.log('createMusic');
+    console.log('goToCreateMusic');
+  }
+  goToCreateArtist() {
+    const dialogRef = this.dialog.open(ArtistDialog, {
+      data: {
+        ministryID: this.ministryID,
+      },
+      width: '100%',
+      maxWidth: '600px',
+      panelClass: 'member-dialog',
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this), filter(Boolean))
+      .subscribe((result: any) => {
+        console.log(result);
+      });
   }
 
   goToCreateMinistryMember() {

@@ -1,7 +1,7 @@
 import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { environment } from 'apps/sp-web/src/environments/environment';
+import { ENVIRONMENT } from 'apps/sp-web/src/environments/environment';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
@@ -9,7 +9,7 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   providedIn: 'root',
 })
 export class LogService {
-  private readonly IS_PROD = environment.production;
+  private readonly IS_PROD = ENVIRONMENT.production;
 
   private readonly METHOD_COLORS = {
     GET: '#61affe',

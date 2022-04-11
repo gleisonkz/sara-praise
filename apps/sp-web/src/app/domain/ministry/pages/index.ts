@@ -6,3 +6,4 @@ export * from './ministry-detail/scales/scales.page';
 export * from './ministry-detail/songs/songs.page';
 export * from './member-detail/member-detail.page';
 export * from './song-detail/song-detail.page';
+export * from './ministry-detail/artists/artists.page';

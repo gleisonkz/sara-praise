@@ -1,0 +1,21 @@
+<form>
+  <mat-form-field appearance="fill">
+    <mat-label>Artista</mat-label>
+    <input
+      [formControl]="artistControl"
+      matInput
+      placeholder="Insira o nome do artista"
+    />
+  </mat-form-field>
+
+  <button
+    type="button"
+    color="accent"
+    mat-raised-button
+    [mat-dialog-close]="submitForm()"
+    [disabled]="artistControl.invalid"
+  >
+    Confirmar
+  </button>
+  <button type="button" mat-dialog-close mat-raised-button>Cancelar</button>
+</form>

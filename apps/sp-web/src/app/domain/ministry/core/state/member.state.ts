@@ -29,4 +29,8 @@ export class MemberState {
     const currentMembers = this.members;
     this.members = currentMembers.filter((member) => member.memberID !== memberID);
   }
+
+  clearMembers(): void {
+    this.members$$.next([]);
+  }
 }

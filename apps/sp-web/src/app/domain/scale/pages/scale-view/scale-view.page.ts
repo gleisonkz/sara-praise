@@ -4,10 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MinistryListItemResponse, ScaleDetailResponse } from '@sp/shared-interfaces';
 
 import { HotToastService } from '@ngneat/hot-toast';
-import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/minitries.facade';
+import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/ministry.facade';
 import {
-    MinistryService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.service';
+    MinistryApiService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
 import { map, Observable, switchMap } from 'rxjs';
 
 @Component({
@@ -21,7 +21,7 @@ export class ScaleViewPage implements OnInit {
     private readonly toastService: HotToastService,
     private readonly ministryFacade: MinistryFacade,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly ministryService: MinistryService
+    private readonly ministryService: MinistryApiService
   ) {}
 
   scaleListItem$: Observable<ScaleDetailResponse>;

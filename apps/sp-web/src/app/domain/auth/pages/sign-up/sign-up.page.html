@@ -1,5 +1,5 @@
 <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
-  <h1>Register</h1>
+  <h1>Cadastro</h1>
 
   <form [formGroup]="signUpForm" (ngSubmit)="signUp()" class="form">
     <mat-card-content>
@@ -10,6 +10,7 @@
           autocomplete="off"
           matInput
           placeholder="Name"
+          data-testid="name-input"
         />
       </mat-form-field>
 
@@ -20,6 +21,7 @@
           autocomplete="off"
           matInput
           placeholder="Email"
+          data-testid="email-input"
         />
       </mat-form-field>
 
@@ -30,6 +32,7 @@
           autocomplete="off"
           matInput
           placeholder="Password"
+          data-testid="password-input"
         />
       </mat-form-field>
 
@@ -40,15 +43,29 @@
           autocomplete="off"
           matInput
           placeholder="Confirm password"
+          data-testid="confirm-password-input"
         />
       </mat-form-field>
     </mat-card-content>
 
     <div class="actions-container">
-      <button type="button" routerLink="/auth/sign-in" mat-stroked-button color="accent">
+      <button
+        data-testid="go-to-sign-in"
+        type="button"
+        routerLink="/auth/sign-in"
+        mat-stroked-button
+        color="accent"
+      >
         Ir para Login
       </button>
-      <button mat-stroked-button color="primary">Cadastrar</button>
+      <button
+        [disabled]="!signUpForm.valid"
+        data-testid="sign-up-button"
+        mat-stroked-button
+        color="primary"
+      >
+        Cadastrar
+      </button>
     </div>
   </form>
 

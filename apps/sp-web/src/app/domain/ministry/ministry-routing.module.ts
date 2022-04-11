@@ -6,7 +6,7 @@ import { MatMenuModule } from '@angular/material/menu';
 
 import { MinistryDetailRouteService } from './core/services/ministry-detail-route.service';
 import {
-    KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
+    ArtistsPage, KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
 } from './pages';
 
 const routes: Routes = [
@@ -18,6 +18,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'escalas', pathMatch: 'full' },
       { path: 'escalas', component: ScalesPage },
       { path: 'musicas', component: SongsPage },
+      { path: 'artistas', component: ArtistsPage },
       { path: 'membros', component: MembersPage },
       { path: 'tonalidades', component: KeysPage },
     ],
