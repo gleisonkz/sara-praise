@@ -14,6 +14,7 @@ model Ministry {
   owner      User      @relation(fields: [ownerID], references: [userID])
   songs      Song[]
   members    Member[]
+  artist    Artist[]
   scales     Scale[]
   songKeys   SongKey[]
   roles      Role[]
@@ -106,6 +107,9 @@ model Song {
 
 model Artist {
   artistID Int    @id @default(autoincrement())
+  ministryID Int
   name     String
-  song     Song[]
+
+  ministry Ministry @relation(fields: [ministryID], references: [ministryID])
+  songs     Song[]
 }

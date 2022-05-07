@@ -20,7 +20,7 @@ export class ArtistDialog {
   constructor(
     public readonly ministryService: MinistryApiService,
     public readonly artistApiService: ArtistApiService,
-    @Inject(MAT_DIALOG_DATA) private ministryID: number
+    @Inject(MAT_DIALOG_DATA) private data: { ministryID: number }
   ) {}
 
   artistControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
@@ -32,6 +32,6 @@ export class ArtistDialog {
       name: this.artistControl.value,
     };
 
-    this.artistApiService.createArtist(this.ministryID, artistRequest);
+    this.artistApiService.createArtist(this.data.ministryID, artistRequest).subscribe();
   }
 }
