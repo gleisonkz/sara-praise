@@ -8,14 +8,17 @@
     />
   </mat-form-field>
 
-  <button
-    type="button"
-    color="accent"
-    mat-raised-button
-    [mat-dialog-close]="submitForm()"
-    [disabled]="artistControl.invalid"
-  >
-    Confirmar
-  </button>
-  <button type="button" mat-dialog-close mat-raised-button>Cancelar</button>
+  <mat-dialog-actions>
+    <button
+      type="submit"
+      color="accent"
+      mat-raised-button
+      mat-dialog-close
+      (click)="submitForm()"
+      [disabled]="artistControl.invalid"
+    >
+      Confirmar
+    </button>
+    <button type="button" mat-dialog-close mat-raised-button>Cancelar</button>
+  </mat-dialog-actions>
 </form>

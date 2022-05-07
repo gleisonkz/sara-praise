@@ -19,6 +19,7 @@ export class ArtistApiService {
   }
 
   createArtist(ministryID: number, artist: ArtistRequest): Observable<ArtistResponse> {
+    console.log({ ministryID, artist });
     const url = `${this.URL}/${ministryID}/artists`;
     return this.http.post<ArtistResponse>(url, artist);
   }

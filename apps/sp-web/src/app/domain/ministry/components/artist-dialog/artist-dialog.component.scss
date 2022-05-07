@@ -10,3 +10,16 @@ button:last-child {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+mat-dialog-actions {
+  display: grid;
+  row-gap: 10px;
+
+  button {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin: 0 !important;
+  }
+}
