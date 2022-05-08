@@ -61,24 +61,6 @@ export class MinistryController {
     }
   }
 
-  @Get('/:ministryID/songs')
-  async getSongs(
-    @Param('ministryID') ministryID: number,
-    @Res({ passthrough: true }) res: Response
-  ): Promise<SongListItemResponse[]> {
-    try {
-      const songs = await this.ministryService.getSongs(+ministryID);
-      return songs;
-    } catch (error) {
-      if (error instanceof MinistryNotFoundError) {
-        res.status(HttpStatus.BAD_REQUEST).send(error.message);
-        return;
-      }
-
-      throw error;
-    }
-  }
-
   @Get('/:ministryID/songs/available/:ministerID')
   async getAvailableSongs(
     @Param('ministryID') ministryID: number,
