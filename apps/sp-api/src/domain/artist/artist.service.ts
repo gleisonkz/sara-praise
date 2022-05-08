@@ -23,9 +23,24 @@ export class ArtistService {
     return artistResponse;
   }
 
-  // findAll() {
-  //   return `This action returns all artist`;
-  // }
+  async findAll(ministryID: number): Promise<ArtistResponseDto[]> {
+    const artistEntities = await this.prismaService.artist.findMany({
+      where: {
+        ministryID,
+      },
+    });
+
+    const artists: ArtistResponseDto[] = artistEntities.map((artist) => {
+      const artistResponse: ArtistResponseDto = {
+        artistID: artist.artistID,
+        name: artist.name,
+      };
+
+      return artistResponse;
+    });
+
+    return artists;
+  }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} artist`;

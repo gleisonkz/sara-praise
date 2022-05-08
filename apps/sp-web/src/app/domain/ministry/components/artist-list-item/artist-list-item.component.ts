@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
+import { ArtistResponse } from '@sp/shared-interfaces';
+
 @Component({
   selector: 'sp-artist-list-item',
   templateUrl: './artist-list-item.component.html',
@@ -7,5 +9,5 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArtistListItemComponent {
-  @Input() artist: any;
+  @Input() artist: ArtistResponse;
 }

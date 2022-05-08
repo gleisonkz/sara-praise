@@ -1,5 +1,8 @@
-<sp-artist-list-item
-  [artist]="artist"
-  *spFor="let artist of artistListItems$ else 'Ainda não foi cadastrado nenhum artista' let length=length"
->
-</sp-artist-list-item>
+<mat-list>
+  <sp-artist-list-item
+    [artist]="artist"
+    *spFor="let artist of artistListItems$ else
+    'Ainda não foi cadastrado nenhum artista'"
+  >
+  </sp-artist-list-item>
+</mat-list>

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
-import { Body, Controller, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
@@ -21,14 +21,13 @@ export class ArtistController {
 
   @Post()
   create(@Param('ministryID') ministryID: number, @Body() artistRequest: ArtistRequestDto): Promise<ArtistResponseDto> {
-    console.log({ ministryID }, { artistRequest });
     return this.artistService.create(+ministryID, artistRequest);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.artistService.findAll();
-  // }
+  @Get()
+  findAll(@Param('ministryID') ministryID: number) {
+    return this.artistService.findAll(+ministryID);
+  }
 
   // @Get(':id')
   // findOne(@Param('id') id: string) {

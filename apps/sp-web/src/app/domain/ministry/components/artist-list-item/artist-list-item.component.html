@@ -1,1 +1,27 @@
-<p>artist-list-item works!</p>
+<mat-list-item>
+  <p>
+    <span>{{ artist.artistID }} </span>
+    <span>&nbsp;-&nbsp;</span>
+    <span>{{ artist.name }}</span>
+  </p>
+
+  <button
+    mat-icon-button
+    [matMenuTriggerFor]="menu"
+    aria-label="Example icon-button with a menu"
+  >
+    <mat-icon>more_vert</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>edit</mat-icon>
+      <span>Editar</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>delete</mat-icon>
+      <span>Remover</span>
+    </button>
+  </mat-menu>
+  <mat-divider></mat-divider>
+</mat-list-item>

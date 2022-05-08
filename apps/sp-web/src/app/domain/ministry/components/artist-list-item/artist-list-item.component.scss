@@ -1,3 +1,7 @@
 :host {
   display: block;
 }
+
+::ng-deep mat-list-item .mat-list-item-content {
+  justify-content: space-between;
+}
