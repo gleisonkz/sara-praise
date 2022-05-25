@@ -100,7 +100,6 @@
 
     <button
       [class.active]="keyLink.isActive || memberLink.isActive || scaleLink.isActive"
-      [disabled]="musicLink.isActive"
       mat-raised-button
       (click)="
       scaleLink.isActive && goToCreateScale() ||

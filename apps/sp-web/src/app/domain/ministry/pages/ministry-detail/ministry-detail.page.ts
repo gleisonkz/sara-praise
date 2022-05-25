@@ -13,6 +13,9 @@ import {
 import {
     MemberDialog
 } from 'apps/sp-web/src/app/domain/ministry/components/member-dialog/member.dialog';
+import {
+    MusicDialogComponent
+} from 'apps/sp-web/src/app/domain/ministry/components/music-dialog/music-dialog.component';
 import { filter, Observable, tap } from 'rxjs';
 import {
     MinistryKeyDialogComponent
@@ -53,7 +56,21 @@ export class MinistryDetailPage implements OnInit {
   }
 
   goToCreateMusic() {
-    console.log('goToCreateMusic');
+    const dialogRef = this.dialog.open(MusicDialogComponent, {
+      data: {
+        ministryID: this.ministryID,
+      },
+      width: '100%',
+      maxWidth: '600px',
+      panelClass: 'member-dialog',
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(untilDestroyed(this), filter(Boolean))
+      .subscribe((result: any) => {
+        console.log(result);
+      });
   }
   goToCreateArtist() {
     const dialogRef = this.dialog.open(ArtistDialog, {

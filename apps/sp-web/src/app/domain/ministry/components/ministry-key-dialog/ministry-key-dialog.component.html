@@ -24,7 +24,7 @@
     <mat-label>Tom</mat-label>
     <mat-select formControlName="keyID">
       <mat-option *ngFor="let key of sntKeys$ | async" [value]="key.keyID">
-        {{ key.key }}
+        {{ key.letter }}
       </mat-option>
     </mat-select>
   </mat-form-field>

@@ -1,4 +1,5 @@
 export interface KeyResponse {
   keyID: number;
-  key: string;
+  letter: string;
+  name: string;
 }

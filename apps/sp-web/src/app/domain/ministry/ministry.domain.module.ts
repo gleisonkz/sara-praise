@@ -44,6 +44,7 @@ import {
 import { MemberDetailPage } from './pages/member-detail/member-detail.page';
 import { ArtistsPage } from './pages/ministry-detail/artists/artists.page';
 import { SongDetailPage } from './pages/song-detail/song-detail.page';
+import { MusicDialogComponent } from './components/music-dialog/music-dialog.component';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { SongDetailPage } from './pages/song-detail/song-detail.page';
     ArtistsPage,
     ArtistListItemComponent,
     ArtistDialog,
+    MusicDialogComponent,
   ],
   imports: [
     CommonModule,
