@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -16,10 +17,8 @@ export class MusicDialogComponent implements OnInit {
   songKeys$: Observable<KeyResponse[]>;
   artists$: Observable<ArtistResponse[]>;
 
-  classifications = [
-    { name: 'Júbilo', value: 1 },
-    { name: 'Adoração', value: 2 },
-  ];
+  toppingsControl = new FormControl([]);
+  classifications: string[] = ['Júbilo', 'Adoração'];
 
   constructor(
     public readonly ministryService: MinistryApiService,
@@ -34,5 +33,18 @@ export class MusicDialogComponent implements OnInit {
 
   submitForm() {
     console.log('submitForm');
+  }
+
+  onToppingRemoved(topping: string) {
+    const toppings = this.toppingsControl.value as string[];
+    this.removeFirst(toppings, topping);
+    this.toppingsControl.setValue(toppings); // To trigger change detection
+  }
+
+  private removeFirst<T>(array: T[], toRemove: T): void {
+    const index = array.indexOf(toRemove);
+    if (index !== -1) {
+      array.splice(index, 1);
+    }
   }
 }

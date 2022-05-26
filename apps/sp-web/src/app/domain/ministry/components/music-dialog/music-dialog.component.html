@@ -15,24 +15,6 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Classificações</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let item of classifications" [value]="item.value">
-        {{ item.name }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill">
-    <mat-label>Tom</mat-label>
-    <mat-select>
-      <mat-option *ngFor="let key of songKeys$ | async" [value]="key.keyID">
-        {{ key.letter }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
-
-  <mat-form-field>
-    <mat-label>Toppings</mat-label>
     <mat-select [formControl]="toppingsControl" multiple>
       <mat-select-trigger>
         <mat-chip-list>
@@ -47,15 +29,22 @@
         </mat-chip-list>
       </mat-select-trigger>
 
-      <mat-option *ngFor="let topping of toppingList" [value]="topping">{{
-        topping
-      }}</mat-option>
+      <mat-option
+        *ngFor="let classification of classifications"
+        [value]="classification"
+        >{{ classification }}</mat-option
+      >
     </mat-select>
   </mat-form-field>
 
-  <br />
-  <!-- only for debug -->
-  {{ toppingsControl.value | json }}
+  <mat-form-field appearance="fill">
+    <mat-label>Tom</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let key of songKeys$ | async" [value]="key.keyID">
+        {{ key.letter }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
   <mat-form-field appearance="fill">
     <mat-label>Observações</mat-label>

@@ -6,6 +6,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -37,6 +38,7 @@ import { ArtistListItemComponent } from './components/artist-list-item/artist-li
 import {
     MinistryKeyDialogComponent
 } from './components/ministry-key-dialog/ministry-key-dialog.component';
+import { MusicDialogComponent } from './components/music-dialog/music-dialog.component';
 import { MinistryRoutingModule } from './ministry-routing.module';
 import {
     KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
@@ -44,7 +46,6 @@ import {
 import { MemberDetailPage } from './pages/member-detail/member-detail.page';
 import { ArtistsPage } from './pages/ministry-detail/artists/artists.page';
 import { SongDetailPage } from './pages/song-detail/song-detail.page';
-import { MusicDialogComponent } from './components/music-dialog/music-dialog.component';
 
 @NgModule({
   declarations: [
@@ -68,6 +69,7 @@ import { MusicDialogComponent } from './components/music-dialog/music-dialog.com
   imports: [
     CommonModule,
     MatBadgeModule,
+    MatChipsModule,
     RemoveDotsPipeWidgetModule,
     EmptyListNoMessageWidgetModule,
     MatSelectModule,
