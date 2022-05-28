@@ -20,6 +20,7 @@ export class SongService {
         youtubeUrl: songRequestDto.youtubeUrl,
         tags: songRequestDto.tags,
         keyID: songRequestDto.keyID,
+
         observations: songRequestDto.observations,
       },
     });

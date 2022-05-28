@@ -1,37 +1,34 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, Injector } from '@angular/core';
+import { Injector } from '@angular/core';
 
-import { ENVIRONMENT } from 'apps/sp-web/src/environments/environment';
 import { Observable } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
-export abstract class BaseApiService<T> {
+export abstract class BaseApiService {
   protected http: HttpClient;
-  private readonly ENDPOINT = ENVIRONMENT.apiUrl;
+  private baseEndpoint = '/api';
 
-  constructor(protected injector: Injector) {
+  constructor(protected readonly injector: Injector, readonly segment: string) {
     this.http = injector.get(HttpClient);
+    this.baseEndpoint = `${this.baseEndpoint}/${segment}`;
   }
 
-  protected getAll(): Observable<T> {
-    return this.http.get<T>(`${this.ENDPOINT}`);
+  protected getAll<T>(): Observable<T> {
+    return this.http.get<T>(`${this.baseEndpoint}`);
   }
 
   protected postEntity<T>(obj: T): Observable<T> {
-    return this.http.post<T>(this.ENDPOINT, obj);
+    return this.http.post<T>(this.baseEndpoint, obj);
   }
 
-  protected putEntity(id: number, obj: T): Observable<T> {
-    return this.http.put<T>(`${this.ENDPOINT}/${id}`, obj);
+  protected putEntity<T>(id: number, obj: T): Observable<T> {
+    return this.http.put<T>(`${this.baseEndpoint}/${id}`, obj);
   }
 
-  protected getEntity(id: number): Observable<T> {
-    return this.http.get<T>(`${this.ENDPOINT}/${id}`);
+  protected getEntity<T>(id: number): Observable<T> {
+    return this.http.get<T>(`${this.baseEndpoint}/${id}`);
   }
 
-  protected deleteEntity(id: number): Observable<T> {
-    return this.http.delete<T>(`${this.ENDPOINT}/${id}`);
+  protected deleteEntity<T>(id: number, ...args: any): Observable<T> {
+    return this.http.delete<T>(`${this.baseEndpoint}/${id}`, ...args);
   }
 }

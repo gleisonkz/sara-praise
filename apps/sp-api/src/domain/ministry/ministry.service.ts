@@ -10,7 +10,7 @@ import {
 import { Role } from '@prisma/client';
 import { MinistryListItemResponseDto } from './dtos';
 import { MinistryNotFoundError, MultipleSongsFoundError } from './ministry.error';
-import { KEYS } from './mocks';
+import { SONG_KEYS } from './mocks';
 import { Member, Ministry, MinistryKey, Scale, Song } from './models';
 
 @Injectable()
@@ -85,7 +85,6 @@ export class MinistryService {
             members: true,
             scales: true,
             songs: true,
-            songKeys: true,
           },
         },
       },
@@ -283,7 +282,7 @@ export class MinistryService {
 
       const [song] = songs;
 
-      const ministryKeyLabel = KEYS.find((key) => key.keyID === ministryKey.keyID).key;
+      const ministryKeyLabel = SONG_KEYS.find((key) => key.keyID === ministryKey.keyID).key;
 
       const member = ministry.members.find((member) => member.memberID === ministryKey.memberID);
 
@@ -394,7 +393,7 @@ export class MinistryService {
 
     if (!ministryKey) return `Não possui tom cadastrado para o ministro(a) ${minister.user.name}`;
 
-    const keyName = KEYS.find((key) => key.keyID === ministryKey.keyID).key;
+    const keyName = SONG_KEYS.find((key) => key.keyID === ministryKey.keyID).key;
     return keyName;
   }
 

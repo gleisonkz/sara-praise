@@ -21,23 +21,23 @@ export class SongRequestDto implements SongRequest {
   @IsNumber()
   keyID: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   audioUrl: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   youtubeUrl: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   lyricUrl: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   chordsUrl: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
   observations: string;
 }

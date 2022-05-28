@@ -32,10 +32,7 @@ export class AuthService {
     private readonly localStorageService: LocalStorageService,
     private readonly http: HttpClient,
     private readonly router: Router
-  ) {
-    const windowRef = window as any;
-    windowRef['AuthService'] = this;
-  }
+  ) {}
 
   user: UserAuthPayload;
 

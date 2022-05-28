@@ -20,11 +20,13 @@ export class SongController {
 
   @Post()
   create(@Param('ministryID') ministryID: number, @Body() songRequestDto: SongRequestDto): Promise<SongResponseDto> {
+    console.log({ ministryID, songRequestDto });
     return this.songService.create(+ministryID, songRequestDto);
   }
 
   @Get()
   findAll(@Param('ministryID') ministryID: number): Promise<SongResponseDto[]> {
+    console.log({ ministryID });
     const songs = this.songService.findAll(+ministryID);
     return songs as any;
   }

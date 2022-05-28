@@ -16,7 +16,6 @@ model Ministry {
   members    Member[]
   artist    Artist[]
   scales     Scale[]
-  songKeys   SongKey[]
   roles      Role[]
 }
 
@@ -69,10 +68,9 @@ model Participant {
 
 model SongKey {
   songKeyID  Int      @id @default(autoincrement())
+  notation       String
   name       String
   song       Song[]
-  ministryID Int
-  ministry   Ministry @relation(fields: [ministryID], references: [ministryID])
 }
 
 model Scale {

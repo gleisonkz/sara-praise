@@ -13,6 +13,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
+        console.log({ error });
         if (error.error instanceof ErrorEvent) {
           this.toastService.error(error.error.message);
           return throwError(() => error.error.message);

@@ -14,6 +14,7 @@ export class LogInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const path = request.url;
+    console.log({ path });
     const payload = request.body;
     const method = request.method as HttpMethod;
     const headers = request.headers;
@@ -22,6 +23,7 @@ export class LogInterceptor implements HttpInterceptor {
       tap((event: HttpEvent<any>) => {
         if (event instanceof HttpResponse) {
           const responseData = event.body;
+
           this.logService.logHttp(path, payload, responseData, method, headers);
         }
       })
