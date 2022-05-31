@@ -10,7 +10,6 @@ import {
 import { Role } from '@prisma/client';
 import { MinistryListItemResponseDto } from './dtos';
 import { MinistryNotFoundError, MultipleSongsFoundError } from './ministry.error';
-import { SONG_KEYS } from './mocks';
 import { Member, Ministry, MinistryKey, Scale, Song } from './models';
 
 @Injectable()
@@ -200,26 +199,6 @@ export class MinistryService {
 
   //   return scales;
   // }
-
-  async getSongs(ministryID: number): Promise<SongListItemResponse[]> {
-    const songs: SongListItemResponse[] = ([] as any).songs.map((song) => {
-      const songListItem: SongListItemResponse = {
-        songID: song.songID,
-        title: song.title,
-        tags: song.tags,
-        artistName: song.artist.name,
-        hasAudioLink: !!song.audioLink,
-        hasChordsLink: !!song.chordsLink,
-        hasLyricLink: !!song.lyricLink,
-        hasYoutubeLink: !!song.youtubeLink,
-        key: song.key,
-      };
-
-      return songListItem;
-    });
-
-    return songs;
-  }
 
   // async getParticipants(ministryID: number, scaleID: number): Promise<any[]> {
   //   const ministry = this.ministries.find((ministry) => ministry.ministryID === ministryID);

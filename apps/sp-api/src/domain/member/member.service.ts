@@ -21,7 +21,12 @@ export class MemberService {
         email: memberRequestDto.email,
         password: passwordHash,
         member: {
-          create: { ministryID },
+          create: {
+            ministryID,
+            roles: {
+              connect: memberRequestDto.roles.map((role) => ({ roleID: role })),
+            },
+          },
         },
       },
       include: {
@@ -69,6 +74,8 @@ export class MemberService {
       },
     });
 
+    console.log({ ministry });
+
     const memberListItems = ministry.members.map(async (member) => {
       const user = await this.prismaService.user.findUnique({
         where: {
@@ -87,6 +94,8 @@ export class MemberService {
 
       return memberListItem;
     });
+
+    console.log({ memberListItems });
 
     return Promise.all(memberListItems);
   }

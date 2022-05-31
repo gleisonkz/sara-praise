@@ -39,10 +39,11 @@ export class MemberController {
   async getMembers(
     @Param('ministryID') ministryID: number,
     @Res({ passthrough: true }) res: Response,
-    @Query('roles') roles?: eMinistryRole[]
+    @Query('roles') roles?: string
   ): Promise<MemberListItemResponse[]> {
     try {
-      const members = await this.memberService.getMembers(+ministryID, roles);
+      const parsedRoles: eMinistryRole[] = !roles ? '' : JSON.parse(roles);
+      const members = await this.memberService.getMembers(+ministryID, parsedRoles);
       return members;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
