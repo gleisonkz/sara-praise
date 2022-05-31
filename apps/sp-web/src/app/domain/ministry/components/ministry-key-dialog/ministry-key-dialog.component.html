@@ -1,4 +1,6 @@
 <form [formGroup]="ministryKeyForm">
+  <h2>Vincular Tonalidades</h2>
+
   <mat-form-field appearance="fill">
     <mat-label>Ministro</mat-label>
     <mat-select formControlName="memberID">
@@ -15,7 +17,7 @@
     <mat-label>Música</mat-label>
     <mat-select formControlName="songID">
       <mat-option *ngFor="let songs of songs$ | async" [value]="songs.songID">
-        {{ songs.title }}
+        {{ songs.title }} - {{ songs.artistName }}
       </mat-option>
     </mat-select>
   </mat-form-field>

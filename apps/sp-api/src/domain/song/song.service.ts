@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
-import { SongListItemResponse } from '@sp/shared-interfaces';
+import { AvailableSongResponse, SongListItemResponse } from '@sp/shared-interfaces';
 
 import { SongRequestDto, SongResponseDto } from 'apps/sp-api/src/domain/song/dto/song.dto';
 
@@ -67,6 +67,60 @@ export class SongService {
     });
 
     return songListItemResponses;
+  }
+
+  async getAvailableSongs(ministryID: number, ministerID: number): Promise<AvailableSongResponse[]> {
+    const songs = await this.prismaService.song.findMany({
+      where: {
+        ministryID,
+        AND: {
+          ministerSongKey: {
+            none: {
+              memberID: ministerID,
+            },
+          },
+        },
+      },
+      include: {
+        artist: {
+          select: { name: true },
+        },
+      },
+    });
+
+    const availableSongs: AvailableSongResponse[] = songs.map((song) => {
+      const availableSong: AvailableSongResponse = {
+        songID: song.songID,
+        title: song.title,
+        artistName: song.artist.name,
+      };
+
+      return availableSong;
+    });
+
+    return availableSongs;
+
+    // const ministryKeys: MinistryKey[] = ministry.ministryKeys.filter((key) => key.memberID === ministerID);
+
+    // const songs: SongListItemResponse[] = ministry.songs
+    //   .filter((song) => !ministryKeys.some((key) => key.songID === song.songID))
+    //   .map((song) => {
+    //     const songListItem: SongListItemResponse = {
+    //       songID: song.songID,
+    //       title: song.title,
+    //       tags: song.tags,
+    //       artistName: song.artist.name,
+    //       hasAudioLink: !!song.audioLink,
+    //       hasChordsLink: !!song.chordsLink,
+    //       hasLyricLink: !!song.lyricLink,
+    //       hasYoutubeLink: !!song.youtubeLink,
+    //       key: song.key,
+    //     };
+
+    //     return songListItem;
+    //   });
+
+    // return songs;
   }
 
   // findOne(id: number) {

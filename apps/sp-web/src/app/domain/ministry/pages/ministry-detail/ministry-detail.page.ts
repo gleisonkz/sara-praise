@@ -3,8 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { MinistryListItemResponse } from '@sp/shared-interfaces';
+import { MinisterSongKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
+import { MinistryApiService } from '@sp/web/domain/ministry/services';
 
+import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/ministry.facade';
 import {
@@ -16,7 +18,7 @@ import {
 import {
     MusicDialogComponent
 } from 'apps/sp-web/src/app/domain/ministry/components/music-dialog/music-dialog.component';
-import { filter, Observable, tap } from 'rxjs';
+import { filter, Observable, switchMap, tap } from 'rxjs';
 import {
     MinistryKeyDialogComponent
 } from '../../components/ministry-key-dialog/ministry-key-dialog.component';
@@ -35,7 +37,9 @@ export class MinistryDetailPage implements OnInit {
     private readonly ministryFacade: MinistryFacade,
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
-    private readonly dialog: MatDialog
+    private readonly dialog: MatDialog,
+    private readonly ministryApiService: MinistryApiService,
+    private readonly toastService: HotToastService
   ) {}
 
   ngOnInit(): void {
@@ -115,13 +119,17 @@ export class MinistryDetailPage implements OnInit {
       maxWidth: '600px',
     });
 
-    // dialogRef
-    //   .afterClosed()
-    //   .pipe(untilDestroyed(this), filter(Boolean))
-    //   .subscribe((result: MinistryKeyRequest) => {
-    //     this.ministryService.createMinistryKey(this.ministryID, result).subscribe((ministryKey) => {
-    //       console.log(ministryKey);
-    //     });
-    //   });
+    dialogRef
+      .afterClosed()
+      .pipe(
+        untilDestroyed(this),
+        filter(Boolean),
+        switchMap((ministerSongKeyRequest: MinisterSongKeyRequest) =>
+          this.ministryApiService.createMinisterSongKey(this.ministryID, ministerSongKeyRequest)
+        )
+      )
+      .subscribe(() => {
+        this.toastService.success('Cadastrado com sucesso');
+      });
   }
 }

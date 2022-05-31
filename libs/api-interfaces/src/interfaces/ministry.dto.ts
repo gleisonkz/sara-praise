@@ -5,6 +5,7 @@ export interface MinistryListItemResponse {
   membersQuantity: number;
   scalesQuantity: number;
   songKeysQuantity: number;
+  artistQuantity: number;
 }
 
 export interface MinistryRequest {

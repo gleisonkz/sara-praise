@@ -4,7 +4,7 @@ import {
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
-import { SongListItemResponse } from '@sp/shared-interfaces';
+import { MinisterSongKeyListItemResponse, MinisterSongKeyRequest } from '@sp/shared-interfaces';
 
 import { Response } from 'express';
 import { MinistryListItemResponseDto, MinistryRequestDto } from './dtos';
@@ -37,9 +37,45 @@ export class MinistryController {
     type: MinistryListItemResponseDto,
   })
   async createMinistry(@Body() ministryRequest: MinistryRequestDto): Promise<MinistryListItemResponseDto> {
-    console.log('ministryRequest', ministryRequest);
     const ministryListItem = this.ministryService.createMinistry(ministryRequest);
     return ministryListItem;
+  }
+
+  @ApiQuery({ name: 'ministryID', required: false })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: MinistryListItemResponseDto,
+  })
+  @Get('/:ministryID/minister-song-key')
+  async getMinisterSongKeysListItem(
+    @Param('ministryID') ministryID?: string
+  ): Promise<MinisterSongKeyListItemResponse[]> {
+    const ministerSongKeys = await this.ministryService.getMinisterSongKeysListItem(+ministryID);
+
+    return ministerSongKeys;
+  }
+
+  @Post('/:ministryID/minister-song-key')
+  @ApiCreatedResponse({
+    description: 'The minister song key has been successfully created.',
+    type: MinistryListItemResponseDto,
+  })
+  async createMinisterSongKey(
+    @Res({ passthrough: true }) res: Response,
+    @Param('ministryID') ministryID: number,
+    @Body() ministerSongKeyRequest: MinisterSongKeyRequest
+  ): Promise<any> {
+    try {
+      const ministerSongKey = await this.ministryService.createMinisterSongKey(+ministryID, ministerSongKeyRequest);
+      return ministerSongKey;
+    } catch (error) {
+      if (error instanceof MinistryNotFoundError) {
+        res.status(HttpStatus.BAD_REQUEST).send(error.message);
+        return;
+      }
+
+      throw error;
+    }
   }
 
   @Delete('/:ministryID')
@@ -53,25 +89,6 @@ export class MinistryController {
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
         console.error('error.message', error.message);
-        res.status(HttpStatus.BAD_REQUEST).send(error.message);
-        return;
-      }
-
-      throw error;
-    }
-  }
-
-  @Get('/:ministryID/songs/available/:ministerID')
-  async getAvailableSongs(
-    @Param('ministryID') ministryID: number,
-    @Param('ministerID') ministerID: number,
-    @Res({ passthrough: true }) res: Response
-  ): Promise<SongListItemResponse[]> {
-    try {
-      const songs = await this.ministryService.getAvailableSongs(+ministryID, +ministerID);
-      return songs;
-    } catch (error) {
-      if (error instanceof MinistryNotFoundError) {
         res.status(HttpStatus.BAD_REQUEST).send(error.message);
         return;
       }

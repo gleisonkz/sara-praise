@@ -213,7 +213,5 @@ export class ParticipantsDialog implements OnInit {
 
         return participant;
       });
-
-    console.log('participants', participants);
   }
 }

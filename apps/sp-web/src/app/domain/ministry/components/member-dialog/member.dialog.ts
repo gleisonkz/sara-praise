@@ -52,8 +52,6 @@ export class MemberDialog implements OnInit {
   }>;
 
   ngOnInit(): void {
-    console.log('dialogData', this.dialogData);
-
     this.ministryService
       .getRolesByMemberID(this.dialogData.ministryID, this.dialogData?.memberID)
       .subscribe((roles: RoleResponse[]) => {

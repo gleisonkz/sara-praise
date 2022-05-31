@@ -20,9 +20,7 @@ export class SongApiService {
   }
 
   createSong(ministryID: number, song: SongRequest): Observable<SongResponse> {
-    console.log({ ministryID, song });
     const url = `${this.URL}/${ministryID}/songs`;
-
     return this.http.post<SongResponse>(url, song);
   }
 }

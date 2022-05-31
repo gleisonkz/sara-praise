@@ -12,7 +12,6 @@ declare namespace Cypress {
 
 Cypress.Commands.add('login', (email = 'renato@teste.com', password = '123456') => {
   cy.window().then((window: any) => {
-    console.log('window', window);
     window.AuthService.signIn({ email, password }).subscribe();
   });
 });

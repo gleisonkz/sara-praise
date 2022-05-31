@@ -14,12 +14,8 @@ export class MemberApiService {
   constructor(private readonly http: HttpClient) {}
 
   getMemberListItems(ministryID: number, roles?: number[]): Observable<MemberListItemResponse[]> {
-    console.log('roles before', roles);
-
     const url = `${this.URL}/${ministryID}/members`;
     const params = new HttpParams().set('roles', roles ? JSON.stringify(roles) : '');
-
-    console.log('roles after', params.get('roles'));
 
     return this.http.get<MemberListItemResponse[]>(url, { params });
   }

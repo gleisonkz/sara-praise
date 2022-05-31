@@ -74,16 +74,12 @@ export class MemberService {
       },
     });
 
-    console.log({ ministry });
-
     const memberListItems = ministry.members.map(async (member) => {
       const user = await this.prismaService.user.findUnique({
         where: {
           userID: member.userID,
         },
       });
-
-      console.log({ roles: member.roles });
 
       const memberListItem: MemberListItemResponse = {
         memberID: member.memberID,
@@ -94,8 +90,6 @@ export class MemberService {
 
       return memberListItem;
     });
-
-    console.log({ memberListItems });
 
     return Promise.all(memberListItems);
   }

@@ -4,7 +4,8 @@ import { Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import {
-    eMinistryRole, KeyResponse, MemberListItemResponse, MinistryKeyRequest, SongListItemResponse
+    AvailableSongResponse, eMinistryRole, KeyResponse, MemberListItemResponse,
+    MinisterSongKeyRequest
 } from '@sp/shared-interfaces';
 
 import { ControlsOf, FormControl, FormGroup } from '@ngneat/reactive-forms';
@@ -26,10 +27,10 @@ export class MinistryKeyDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private ministryID: number
   ) {}
 
-  ministryKeyForm: FormGroup<ControlsOf<MinistryKeyRequest>>;
+  ministryKeyForm: FormGroup<ControlsOf<MinisterSongKeyRequest>>;
 
   ministerMembers$: Observable<MemberListItemResponse[]>;
-  songs$ = new BehaviorSubject<SongListItemResponse[]>([]);
+  songs$ = new BehaviorSubject<AvailableSongResponse[]>([]);
   sntKeys$: Observable<KeyResponse[]>;
 
   public get memberIdControl(): FormControl<number> {
@@ -56,9 +57,9 @@ export class MinistryKeyDialogComponent implements OnInit {
       .subscribe(this.songs$);
   }
 
-  createForm(memberID?: number, songID?: number, keyID?: number) {
+  createForm(ministerID?: number, songID?: number, keyID?: number) {
     this.ministryKeyForm = new FormGroup({
-      memberID: new FormControl(memberID, Validators.required),
+      memberID: new FormControl(ministerID, Validators.required),
       songID: new FormControl(songID, Validators.required),
       keyID: new FormControl(keyID, Validators.required),
     });
@@ -66,7 +67,6 @@ export class MinistryKeyDialogComponent implements OnInit {
 
   submitForm() {
     if (this.ministryKeyForm.invalid) return;
-
     return this.ministryKeyForm.value;
   }
 }

@@ -1,7 +1,8 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
+import { AvailableSongResponse } from '@sp/shared-interfaces';
 
 import { SongRequestDto, SongResponseDto } from 'apps/sp-api/src/domain/song/dto/song.dto';
 import { UnauthenticatedUserResponseDto } from 'apps/sp-api/src/shared';
@@ -20,15 +21,33 @@ export class SongController {
 
   @Post()
   create(@Param('ministryID') ministryID: number, @Body() songRequestDto: SongRequestDto): Promise<SongResponseDto> {
-    console.log({ ministryID, songRequestDto });
     return this.songService.create(+ministryID, songRequestDto);
   }
 
   @Get()
   findAll(@Param('ministryID') ministryID: number): Promise<SongResponseDto[]> {
-    console.log({ ministryID });
     const songs = this.songService.findAll(+ministryID);
     return songs as any;
+  }
+
+  @Get('/available/:ministerID')
+  async getAvailableSongs(
+    @Param('ministryID') ministryID: number,
+    @Param('ministerID') ministerID: number,
+    @Res({ passthrough: true }) res: Response
+  ): Promise<AvailableSongResponse[]> {
+    // try {
+
+    const songs = await this.songService.getAvailableSongs(+ministryID, +ministerID);
+    return songs;
+    // } catch (error) {
+    //   if (error instanceof MinistryNotFoundError) {
+    //     res.status(HttpStatus.BAD_REQUEST).send(error.message);
+    //     return;
+    //   }
+
+    //   throw error;
+    // }
   }
 
   // @Get(':id')

@@ -52,7 +52,7 @@ export class AuthService {
         name: userRequest.name,
         email: userRequest.email,
         password: passwordHash,
-        imageURL: '',
+        imageURL: 'https://i.pravatar.cc/300',
       },
       select: {
         userID: true,

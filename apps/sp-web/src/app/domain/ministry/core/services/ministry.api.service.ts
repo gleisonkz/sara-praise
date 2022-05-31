@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
-    KeyResponse, MinistryKeyListItemResponse, MinistryKeyRequest, MinistryListItemResponse,
+    KeyResponse, MinisterSongKeyListItemResponse, MinisterSongKeyRequest, MinistryListItemResponse,
     MinistryRequest, RoleResponse, ScaleDetailResponse, ScaleListItemResponse, ScaleRequest,
     ScaleResponse, ScaleResponseCreate, SongListItemResponse
 } from '@sp/shared-interfaces';
@@ -36,6 +36,16 @@ export class MinistryApiService {
     return this.http.put<ScaleResponse>(url, scaleRequest);
   }
 
+  createMinisterSongKey(ministryID: number, ministerSongKeyRequest: MinisterSongKeyRequest): Observable<boolean> {
+    const url = `${this.URL}/${ministryID}/minister-song-key`;
+    return this.http.post<boolean>(url, ministerSongKeyRequest);
+  }
+
+  getMinisterSongKeys(ministryID: number): Observable<MinisterSongKeyListItemResponse[]> {
+    const url = `${this.URL}/${ministryID}/minister-song-key`;
+    return this.http.get<MinisterSongKeyListItemResponse[]>(url);
+  }
+
   getRolesByMemberID(ministryID: number, memberID?: number) {
     const url = `${this.URL}/${ministryID}/roles`;
     const params = new HttpParams().set('memberID', memberID ? memberID.toString() : '');
@@ -55,9 +65,9 @@ export class MinistryApiService {
     );
   }
 
-  createMinistryKey(ministryID: number, key: MinistryKeyRequest): Observable<MinistryKeyListItemResponse> {
+  createMinistryKey(ministryID: number, key: MinisterSongKeyRequest): Observable<MinisterSongKeyListItemResponse> {
     const url = `${this.URL}/${ministryID}/keys`;
-    return this.http.post<MinistryKeyListItemResponse>(url, key);
+    return this.http.post<MinisterSongKeyListItemResponse>(url, key);
   }
 
   getMinistryListItems(ministryID?: number): Observable<MinistryListItemResponse[]> {
@@ -85,11 +95,6 @@ export class MinistryApiService {
   getAvailableSongListItems(ministryID: number, ministerID: number): Observable<SongListItemResponse[]> {
     const url = `${this.URL}/${ministryID}/songs/available/${ministerID}`;
     return this.http.get<SongListItemResponse[]>(url);
-  }
-
-  getKeyListItem(ministryID: number): Observable<MinistryKeyListItemResponse[]> {
-    const url = `${this.URL}/${ministryID}/keys`;
-    return this.http.get<MinistryKeyListItemResponse[]>(url);
   }
 
   getKeys(): Observable<KeyResponse[]> {

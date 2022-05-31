@@ -1,29 +1,27 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 
-import { MinistryKeyListItemResponse } from '@sp/shared-interfaces';
+import { MinisterSongKeyListItemResponse } from '@sp/shared-interfaces';
 
+import {
+    MINISTRY_ID, MINISTRY_ID_PROVIDER
+} from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.provider';
 import { Observable, of } from 'rxjs';
-import { MinistryDetailRouteService } from '../../../core/services/ministry-detail-route.service';
 import { MinistryApiService } from '../../../core/services/ministry.api.service';
 
 @Component({
   templateUrl: './keys.page.html',
   styleUrls: ['./keys.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [MINISTRY_ID_PROVIDER],
 })
 export class KeysPage implements OnInit {
-  keysListItems$: Observable<MinistryKeyListItemResponse[]> = of([]);
+  keysListItems$: Observable<MinisterSongKeyListItemResponse[]> = of([]);
   constructor(
-    private readonly ministryDetailRouteService: MinistryDetailRouteService,
     private readonly ministryService: MinistryApiService,
-    private readonly activatedRoute: ActivatedRoute
+    @Inject(MINISTRY_ID) private readonly ministryID: number
   ) {}
 
   ngOnInit(): void {
-    const ministryID = this.ministryDetailRouteService.getMinistryID(this.activatedRoute);
-
-    // this.keysListItems$ = this.ministryService.ministryKeyListItems$;
-    // this.ministryService.getKeyListItem(ministryID).subscribe();
+    this.keysListItems$ = this.ministryService.getMinisterSongKeys(this.ministryID);
   }
 }

@@ -11,7 +11,11 @@ export interface SongResponse {
   observations: string;
 }
 
-export type SongRequest = Omit<SongResponse, 'songID'>;
+export interface AvailableSongResponse {
+  songID: number;
+  title: string;
+  artistName: string;
+}
 
 export interface SongListItemResponse {
   songID: number;
@@ -24,3 +28,5 @@ export interface SongListItemResponse {
   hasLyricLink: boolean;
   hasChordsLink: boolean;
 }
+
+export type SongRequest = Omit<SongResponse, 'songID'>;
