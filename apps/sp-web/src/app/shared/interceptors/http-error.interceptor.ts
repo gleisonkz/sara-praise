@@ -2,13 +2,14 @@ import {
     HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpStatusCode
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { HotToastService } from '@ngneat/hot-toast';
 import { catchError, Observable, throwError } from 'rxjs';
 
 @Injectable()
 export class HttpErrorInterceptor implements HttpInterceptor {
-  constructor(private readonly toastService: HotToastService) {}
+  constructor(private readonly router: Router, private readonly toastService: HotToastService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     return next.handle(request).pipe(
@@ -28,8 +29,9 @@ export class HttpErrorInterceptor implements HttpInterceptor {
             break;
           }
           case HttpStatusCode.Unauthorized: {
-            const message = error?.error?.message || 'Você não está autorizado a realizar esta operação.';
+            const message = error?.error?.message || 'Você não está autenticado para realizar esta operação.';
             this.toastService.error(message);
+            this.router.navigate(['/login']);
             break;
           }
           case HttpStatusCode.Forbidden:

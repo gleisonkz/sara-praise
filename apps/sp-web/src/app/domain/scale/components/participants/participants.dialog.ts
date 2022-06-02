@@ -1,10 +1,11 @@
 /* eslint-disable @ngneat/reactive-forms/no-angular-forms-imports */
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, Validators } from '@angular/forms';
 
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { MemberListItemResponse, RoleResponse } from '@sp/shared-interfaces';
+import { MemberApiService } from '@sp/web/domain/ministry/services';
 
 import { FormControl } from '@ngneat/reactive-forms';
 import {
@@ -47,40 +48,45 @@ export class ParticipantsDialog implements OnInit {
 
   constructor(
     public readonly ministryService: MinistryApiService,
+    private readonly memberApiService: MemberApiService,
 
     @Inject(MAT_DIALOG_DATA) private data: ParticipantsDialogData
   ) {}
 
   ngOnInit(): void {
-    // this.ministryService
-    //   .getMemberListItems(this.data.ministryID)
-    //   .pipe(
-    //     map((members: MemberListItemResponse[]) => {
-    //       const membersGroup = members.map((member: MemberListItemResponse) => {
-    //         const group = new FormGroup({
-    //           ministryID: new FormControl(this.data.ministryID),
-    //           scaleID: new FormControl(this.data.scaleId),
-    //           participantID: new FormControl(member.participantID),
-    //           memberID: new FormControl(member.memberID),
-    //         });
-    //         const roles = member.roles.map((role) => {
-    //           const form = new FormGroup({
-    //             roleID: new FormControl(role.roleID),
-    //             selected: new FormControl(null, [Validators.required]),
-    //           });
-    //           const tuple = {
-    //             form,
-    //             item: role,
-    //           };
-    //           return tuple;
-    //         });
-    //         const selectedControl = new FormControl(false);
-    //         return { item: member, form: group, selected: selectedControl, roles };
-    //       });
-    //       return membersGroup;
-    //     })
-    //   )
-    //   .subscribe((members: any[]) => (this.members = members));
+    this.memberApiService
+      .getMemberListItems(this.data.ministryID)
+      .pipe(
+        map((members: MemberListItemResponse[]) => {
+          const membersGroup = members.map((member: MemberListItemResponse) => {
+            const group = new FormGroup({
+              ministryID: new FormControl(this.data.ministryID),
+              scaleID: new FormControl(this.data.scaleId),
+              participantID: new FormControl(member.participantID),
+              memberID: new FormControl(member.memberID),
+            });
+
+            const roles = member.roles.map((role) => {
+              const form = new FormGroup({
+                roleID: new FormControl(role.roleID),
+                selected: new FormControl(null, [Validators.required]),
+              });
+
+              const tuple = {
+                form,
+                item: role,
+              };
+              return tuple;
+            });
+
+            const selectedControl = new FormControl(false);
+            return { item: member, form: group, selected: selectedControl, roles };
+          });
+
+          return membersGroup;
+        })
+      )
+      .subscribe((members: any[]) => (this.members = members));
   }
 
   // toggleChanged(
@@ -207,5 +213,7 @@ export class ParticipantsDialog implements OnInit {
 
         return participant;
       });
+
+    console.log('participants', participants);
   }
 }

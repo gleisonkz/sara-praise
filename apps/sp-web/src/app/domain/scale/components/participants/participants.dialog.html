@@ -2,8 +2,8 @@
 
 <mat-dialog-content class="mat-typography">
   <mat-form-field class="search" appearance="outline">
-    <mat-label>Fill in your name</mat-label>
-    <input matInput placeholder="Placeholder" />
+    <mat-label>Pesquisar por nome</mat-label>
+    <input matInput placeholder="Nome do participante" />
   </mat-form-field>
 
   <mat-list>
@@ -13,8 +13,6 @@
         <div mat-line class="subtitle">{{ member.item.name }}</div>
         <div class="flex"></div>
         <mat-slide-toggle [formControl]="member.selected" #toggle></mat-slide-toggle>
-
-        {{member.selected.value }}
       </mat-list-item>
       <mat-accordion
         [formGroup]="member.form"
