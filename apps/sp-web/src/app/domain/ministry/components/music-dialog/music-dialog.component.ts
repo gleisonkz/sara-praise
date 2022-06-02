@@ -1,6 +1,6 @@
 /* eslint-disable @ngneat/reactive-forms/no-angular-forms-imports */
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
@@ -23,7 +23,7 @@ export class MusicDialogComponent implements OnInit {
 
   tags: string[] = ['Júbilo', 'Adoração'];
 
-  songForm: FormGroup;
+  songForm: UntypedFormGroup;
 
   constructor(
     public readonly ministryService: MinistryApiService,
@@ -40,16 +40,16 @@ export class MusicDialogComponent implements OnInit {
   }
 
   buildForm() {
-    this.songForm = new FormGroup({
-      title: new FormControl('Deus cuida de mim'),
-      artistID: new FormControl(''),
-      tags: new FormControl(''),
-      keyID: new FormControl(''),
-      observations: new FormControl('Teste'),
-      audioUrl: new FormControl(''),
-      youtubeUrl: new FormControl(''),
-      lyricUrl: new FormControl(''),
-      chordsUrl: new FormControl(''),
+    this.songForm = new UntypedFormGroup({
+      title: new UntypedFormControl('Deus cuida de mim'),
+      artistID: new UntypedFormControl(''),
+      tags: new UntypedFormControl(''),
+      keyID: new UntypedFormControl(''),
+      observations: new UntypedFormControl('Teste'),
+      audioUrl: new UntypedFormControl(''),
+      youtubeUrl: new UntypedFormControl(''),
+      lyricUrl: new UntypedFormControl(''),
+      chordsUrl: new UntypedFormControl(''),
     });
   }
 
@@ -61,7 +61,7 @@ export class MusicDialogComponent implements OnInit {
   }
 
   onTagRemoved(tag: string) {
-    const tagsControl = this.songForm.get('tags') as FormControl;
+    const tagsControl = this.songForm.get('tags') as UntypedFormControl;
     const tags = tagsControl?.value as string[];
     this.removeFirst(tags, tag);
     tagsControl.setValue(tags); // To trigger change detection

@@ -1,6 +1,6 @@
 /* eslint-disable @ngneat/reactive-forms/no-angular-forms-imports */
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { FormGroup, Validators } from '@angular/forms';
+import { UntypedFormGroup, Validators } from '@angular/forms';
 
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -28,10 +28,10 @@ export class ParticipantsDialog implements OnInit {
 
   members: {
     item: MemberListItemResponse;
-    form: FormGroup;
+    form: UntypedFormGroup;
     selected: FormControl<boolean>;
     roles: {
-      form: FormGroup;
+      form: UntypedFormGroup;
       item: RoleResponse;
     }[];
   }[];
@@ -59,7 +59,7 @@ export class ParticipantsDialog implements OnInit {
       .pipe(
         map((members: MemberListItemResponse[]) => {
           const membersGroup = members.map((member: MemberListItemResponse) => {
-            const group = new FormGroup({
+            const group = new UntypedFormGroup({
               ministryID: new FormControl(this.data.ministryID),
               scaleID: new FormControl(this.data.scaleId),
               participantID: new FormControl(member.participantID),
@@ -67,7 +67,7 @@ export class ParticipantsDialog implements OnInit {
             });
 
             const roles = member.roles.map((role) => {
-              const form = new FormGroup({
+              const form = new UntypedFormGroup({
                 roleID: new FormControl(role.roleID),
                 selected: new FormControl(null, [Validators.required]),
               });
