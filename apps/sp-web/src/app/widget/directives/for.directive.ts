@@ -11,7 +11,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
   selector: '[spFor]',
 })
 export class SpForDirective<T> implements OnInit, OnDestroy {
-  @Input('spForOf') items$: Observable<T[]>;
+  @Input('spForOf') items$: Observable<T[]> | T[];
   @Input('spForElse') emptyMessage: string;
   readonly destroy$ = new Subject<void>();
 
@@ -22,21 +22,10 @@ export class SpForDirective<T> implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    if (!(this.items$ instanceof Observable)) return this.createView(this.items$);
+
     this.items$.pipe(takeUntil(this.destroy$)).subscribe((items) => {
-      const hasNoItems = !items || items.length === 0;
-
-      this.viewContainer.clear();
-
-      if (hasNoItems) return this.renderNoMessage();
-
-      items.forEach((item) => {
-        this.viewContainer.createEmbeddedView(this.templateRef, {
-          $implicit: item,
-          length: items.length,
-        });
-      });
-
-      this.changeDetector.detectChanges();
+      this.createView(items);
     });
   }
 
@@ -44,7 +33,24 @@ export class SpForDirective<T> implements OnInit, OnDestroy {
     this.destroy$.next();
   }
 
-  renderNoMessage(): void {
+  private createView(items: T[]) {
+    items.forEach((item) => {
+      this.viewContainer.createEmbeddedView(this.templateRef, {
+        $implicit: item,
+        length: items.length,
+      });
+    });
+
+    this.renderNoMessage(items);
+
+    this.changeDetector.detectChanges();
+  }
+
+  private renderNoMessage(items: T[]): void {
+    const hasItems = items?.length > 0;
+    if (hasItems) return;
+
+    this.viewContainer.clear();
     const componentRef = this.viewContainer.createComponent(EmptyListNoMessageComponent);
     componentRef.instance.message = this.emptyMessage;
     this.changeDetector.detectChanges();

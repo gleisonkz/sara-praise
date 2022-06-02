@@ -27,12 +27,12 @@ export class MinistryApiService {
   }
 
   createScale(ministryID: number, scaleRequest: ScaleRequest): Observable<ScaleResponseCreate> {
-    const url = `${this.URL}/${ministryID}/scale`;
+    const url = `${this.URL}/${ministryID}/scales`;
     return this.http.post<ScaleResponseCreate>(url, scaleRequest);
   }
 
-  updateScale(scaleRequest: ScaleRequest, scaleID: number): Observable<ScaleResponse> {
-    const url = `${this.URL}/scales/${scaleID}`;
+  updateScale(ministryID: number, scaleRequest: ScaleRequest, scaleID: number): Observable<ScaleResponse> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
     return this.http.put<ScaleResponse>(url, scaleRequest);
   }
 
@@ -53,8 +53,8 @@ export class MinistryApiService {
     return this.http.get<RoleResponse[]>(url, { params });
   }
 
-  getScaleByID(scaleID: number): Observable<ScaleResponse> {
-    const url = `${this.URL}/scales/${scaleID}`;
+  getScaleByID(ministryID: number, scaleID: number): Observable<ScaleResponse> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
     return this.http.get<ScaleResponse>(url).pipe(
       map((scale) => {
         return {
@@ -78,12 +78,12 @@ export class MinistryApiService {
   }
 
   getScaleListItems(ministryID: number): Observable<ScaleListItemResponse[]> {
-    const url = `${this.URL}/${ministryID}/scale-list-items`;
+    const url = `${this.URL}/${ministryID}/scales`;
     return this.http.get<ScaleListItemResponse[]>(url);
   }
 
-  getScaleListItemDetails(scaleID: number): Observable<ScaleDetailResponse> {
-    const url = `${this.URL}/scale-details/${scaleID}`;
+  getScaleListItemDetails(ministryID: number, scaleID: number): Observable<ScaleDetailResponse> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
     return this.http.get<ScaleDetailResponse>(url);
   }
 

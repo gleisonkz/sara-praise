@@ -52,4 +52,11 @@
       transform: translateX(5px);
     }
   }
+
+  ::ng-deep sp-list-no-message p {
+    text-align: left;
+    color: #bbbbbb;
+    font-size: 14px;
+    margin-bottom: 0;
+  }
 }

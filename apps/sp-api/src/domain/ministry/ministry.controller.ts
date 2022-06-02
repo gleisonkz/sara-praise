@@ -233,21 +233,4 @@ export class MinistryController {
   //     throw error;
   //   }
   // }
-
-  // @Get('/scale-details/:scaleID')
-  // async getScaleDetails(
-  //   @Param('scaleID') scaleID: number,
-  //   @Res({ passthrough: true }) res: Response
-  // ): Promise<ScaleDetailResponse> {
-  //   try {
-  //     const scaleDetails: ScaleDetailResponse = await this.ministryService.getScaleDetails(+scaleID);
-  //     return scaleDetails;
-  //   } catch (error) {
-  //     if (error instanceof MinistryNotFoundError) {
-  //       return res.status(HttpStatus.BAD_REQUEST).send(error.message);
-  //     }
-
-  //     throw error;
-  //   }
-  // }
 }

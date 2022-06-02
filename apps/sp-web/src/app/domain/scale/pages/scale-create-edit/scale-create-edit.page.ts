@@ -17,7 +17,7 @@ import {
 import {
     ParticipantsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/participants/participants.dialog';
-import { filter, map, startWith, switchMap, tap } from 'rxjs';
+import { filter, map, skip, switchMap, tap } from 'rxjs';
 
 @Component({
   templateUrl: './scale-create-edit.page.html',
@@ -60,12 +60,13 @@ export class ScaleCreateEditPage implements OnInit {
     this.scaleFormGroup.controls.date.valueChanges
       .pipe(
         filter((date) => !!date),
-        startWith(this.scaleFormGroup.controls.date.value)
+        tap((date) => {
+          this.dateGroup.controls.date.setValue(date, { emitEvent: false });
+          this.dateGroup.controls.time.setValue(date, { emitEvent: false });
+        }),
+        skip(1)
       )
-      .subscribe((date) => {
-        this.dateGroup.controls.date.setValue(date, { emitEvent: false });
-        this.dateGroup.controls.time.setValue(date, { emitEvent: false });
-      });
+      .subscribe(() => this.scaleFormGroup.controls.date.markAsDirty());
 
     this.dateGroup.valueChanges.pipe(filter(({ date, time }) => !!date && !!time)).subscribe(({ date, time }) => {
       const day = date.getDate();
@@ -85,7 +86,7 @@ export class ScaleCreateEditPage implements OnInit {
         map(({ scaleID }) => +scaleID),
         filter((scaleID) => !!scaleID),
         tap((id) => (this.scaleID = id)),
-        switchMap((scaleID) => this.ministryService.getScaleByID(scaleID))
+        switchMap((scaleID) => this.ministryService.getScaleByID(this.ministryID, scaleID))
       )
       .subscribe((scale: ScaleResponse) => {
         this.scaleFormGroup.patchValue(scale);
@@ -118,8 +119,11 @@ export class ScaleCreateEditPage implements OnInit {
     };
 
     if (this.scaleID)
-      return this.ministryService.updateScale(scaleRequest, this.scaleID).subscribe(() => {
+      return this.ministryService.updateScale(this.ministryID, scaleRequest, this.scaleID).subscribe(() => {
         this.toastService.success('Escala atualizada com sucesso!');
+        this.router.navigate([this.scaleID, 'view'], {
+          relativeTo: this.activatedRoute.parent,
+        });
       });
 
     return this.ministryService.createScale(this.ministryID, scaleRequest).subscribe(({ scaleID }) => {

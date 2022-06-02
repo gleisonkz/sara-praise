@@ -45,18 +45,20 @@
 
     <span class="icon-container">
       <mat-icon>today</mat-icon>
-      <span>29/01</span>
+      <span> {{ scale.date | date : 'dd/MM' }}</span>
     </span>
 
     <span class="icon-container">
       <mat-icon>schedule</mat-icon>
-      <span> 21:03</span>
+      <span> {{ scale.date | date : 'HH:mm' }}</span>
     </span>
   </div>
 
   <mat-divider></mat-divider>
 
-  <p class="scale-name">Arena</p>
+  <p class="scale-notes">{{ scale.notes }}</p>
+
+  <p class="scale-name">{{ scale.title }}</p>
 
   <mat-divider></mat-divider>
 
@@ -71,6 +73,7 @@
         </sp-song-list-item>
       </mat-list>
     </mat-tab>
+
     <mat-tab label="Participantes ( {{ scale.participants.length }} )">
       <mat-list>
         <mat-list-item class="member" *ngFor="let participant of scale.participants">

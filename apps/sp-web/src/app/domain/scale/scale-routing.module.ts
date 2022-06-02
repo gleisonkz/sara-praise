@@ -18,6 +18,7 @@ const routes: Routes = [
     component: ScaleViewPage,
   },
   { path: ':scaleID', redirectTo: ':scaleID/view', pathMatch: 'full' },
+  { path: '', redirectTo: 'create', pathMatch: 'full' },
 ];
 
 @NgModule({

@@ -13,6 +13,7 @@ export interface ScaleDetailResponse {
   scaleID: number;
   title: string;
   date: Date;
+  notes: string;
   songs: SongListItemResponse[];
   participants: MemberListItemResponse[];
 }
@@ -21,7 +22,7 @@ export interface ScaleResponse {
   scaleID: number;
   title: string;
   date: Date;
-  notes: string;
+  notes?: string;
 }
 
 export type ScaleResponseCreate = Pick<ScaleResponse, 'scaleID'>;

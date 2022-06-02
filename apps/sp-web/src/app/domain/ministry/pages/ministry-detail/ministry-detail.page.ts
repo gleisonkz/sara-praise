@@ -107,8 +107,8 @@ export class MinistryDetailPage implements OnInit {
     dialogRef
       .afterClosed()
       .pipe(untilDestroyed(this), filter(Boolean))
-      .subscribe((result: any) => {
-        console.log(result);
+      .subscribe(() => {
+        this.toastService.success('Cadastrado com sucesso');
       });
   }
 

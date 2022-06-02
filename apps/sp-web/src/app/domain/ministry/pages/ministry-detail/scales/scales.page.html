@@ -11,12 +11,17 @@
         <span>{{scale.date | date : 'dd/MMM' }}</span>
         <span>{{scale.date | date : 'HH:mm'}}</span>
       </div>
+
       <div class="main">
         <span>{{scale.title}}</span>
         <p>{{scale.notes}}</p>
 
         <div class="container-image">
-          <img *ngFor="let url of scale.imagesUrl" [src]="url" alt="user image" />
+          <img
+            [src]="url"
+            alt="user image"
+            *spFor="let url of scale.imagesUrl else 'Ainda não foi cadastrado nenhum participante'"
+          />
         </div>
       </div>
 

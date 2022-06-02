@@ -58,7 +58,7 @@
     mat-card-content {
       margin-top: 25px;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
       width: 100%;
       grid-gap: 20px;
     }
@@ -76,7 +76,7 @@
 
   .cards {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(246px, 1fr));
     width: 100%;
     grid-gap: 20px;
     text-align: center;

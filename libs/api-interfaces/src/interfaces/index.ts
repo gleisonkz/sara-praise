@@ -3,7 +3,7 @@ export * from './member.dto';
 export * from './minister-song-key.interface';
 export * from './ministry.dto';
 export * from './role.dto';
-export * from './scale.dto';
+export * from './scale.interface';
 export * from './song.dto';
 export * from './user-auth-payload.interface';
 export * from './user.interface';

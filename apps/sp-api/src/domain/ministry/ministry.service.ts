@@ -312,52 +312,6 @@ export class MinistryService {
   //   return keys;
   // }
 
-  // async getScaleDetails(scaleID: number): Promise<ScaleDetailResponse> {
-  //   const ministry = await this.getMinistryByScaleID(scaleID);
-  //   const scale: Scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
-
-  //   const members: MemberListItemResponse[] = scale.participants.map((participant) => {
-  //     const memberListItem: MemberListItemResponse = {
-  //       memberID: participant.member.memberID,
-  //       name: participant.member.user.name,
-  //       imageUrl: participant.member.user.imageUrl,
-  //       roles: participant.member.roles,
-  //     };
-
-  //     return memberListItem;
-  //   });
-
-  //   const minister = this.findMinister(scale);
-
-  //   const songs: SongListItemResponse[] = scale.songs.map((song) => {
-  //     const ministryKey = this.getMinistryKeyName(ministry, song, minister);
-
-  //     const songListItem: SongListItemResponse = {
-  //       songID: song.songID,
-  //       title: song.title,
-  //       artistName: song.artist.name,
-  //       tags: song.tags,
-  //       hasAudioLink: !!song.audioLink,
-  //       hasChordsLink: !!song.chordsLink,
-  //       hasLyricLink: !!song.lyricLink,
-  //       hasYoutubeLink: !!song.youtubeLink,
-  //       key: ministryKey,
-  //     };
-
-  //     return songListItem;
-  //   });
-
-  //   const scaleDetail: ScaleDetailResponse = {
-  //     scaleID: scaleID,
-  //     title: scale.title,
-  //     date: scale.date,
-  //     participants: members,
-  //     songs: songs,
-  //   };
-
-  //   return scaleDetail;
-  // }
-
   // async deleteScale(scaleID: number): Promise<void> {
   //   const ministry = this.ministries.find((ministry) => {
   //     const scale = ministry.scales.find((scale) => scale.scaleID === scaleID);
@@ -368,26 +322,6 @@ export class MinistryService {
   //   ministry.scales = ministry.scales.filter((scale) => scale.scaleID !== scaleID);
 
   //   this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
-  // }
-
-  // async createScale(ministryID: number, scaleRequest: ScaleRequest): Promise<number> {
-  //   const ministry = this.getMinistryByID(ministryID);
-
-  //   const nextScaleID = ministry.scales.length + 1;
-
-  //   const scale: Scale = {
-  //     scaleID: nextScaleID,
-  //     title: scaleRequest.title,
-  //     date: scaleRequest.date,
-  //     notes: scaleRequest.notes,
-  //     songs: [],
-  //     participants: [],
-  //   };
-
-  //   ministry.scales.push(scale);
-  //   this.ministryRepository.saveDataBase(this.ministries, 'ministriesMock');
-
-  //   return nextScaleID;
   // }
 
   // private getMinistryKeyName(ministry: Ministry, song: Song, minister: Member): string {
