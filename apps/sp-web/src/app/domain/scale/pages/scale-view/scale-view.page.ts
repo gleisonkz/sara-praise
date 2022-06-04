@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MinistryListItemResponse, ScaleDetailResponse } from '@sp/shared-interfaces';
 
-import { HotToastService } from '@ngneat/hot-toast';
 import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/ministry.facade';
 import {
     MinistryApiService
@@ -22,7 +21,7 @@ import { map, Observable, switchMap } from 'rxjs';
 export class ScaleViewPage implements OnInit {
   constructor(
     private readonly router: Router,
-    private readonly toastService: HotToastService,
+    // private readonly toastService: HotToastService,
     private readonly ministryFacade: MinistryFacade,
     private readonly activatedRoute: ActivatedRoute,
     private readonly ministryService: MinistryApiService,
@@ -48,7 +47,7 @@ export class ScaleViewPage implements OnInit {
   deleteScale() {
     this.ministryService.deleteScale(this.scaleID).subscribe(() => {
       this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
-      this.toastService.success(`Escala apagada com sucesso!`);
+      // this.toastService.success(`Escala apagada com sucesso!`);
     });
   }
 }

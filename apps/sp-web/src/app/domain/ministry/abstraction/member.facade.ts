@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { MemberListItemResponse, MemberRequest } from '@sp/shared-interfaces';
 
-import { HotToastService } from '@ngneat/hot-toast';
 import {
     MemberApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/member.api.service';
@@ -11,11 +10,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class MemberFacade {
-  constructor(
-    private readonly service: MemberApiService,
-    private readonly state: MemberState,
-    private readonly toastService: HotToastService
-  ) {}
+  constructor(private readonly service: MemberApiService, private readonly state: MemberState) {}
 
   members$: Observable<MemberListItemResponse[]> = this.state.members$;
 
@@ -28,7 +23,7 @@ export class MemberFacade {
   addMember(ministryID: number, memberRequest: MemberRequest): void {
     this.service.createMember(ministryID, memberRequest).subscribe((newMember) => {
       this.state.addMember(newMember);
-      this.toastService.success('Membro criado com sucesso!');
+      // this.toastService.success('Membro criado com sucesso!');
     });
   }
 

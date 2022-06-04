@@ -12,7 +12,6 @@ const routes: Routes = [
     component: AuthComponent,
     children: [
       {
-        canActivate: [IsLoggedInGuard],
         path: '',
         redirectTo: 'sign-in',
         pathMatch: 'full',

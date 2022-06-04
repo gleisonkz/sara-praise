@@ -30,6 +30,11 @@ export class ScaleController {
     return scales;
   }
 
+  @Get('/:scaleID/participants')
+  findParticipants(@Param('ministryID') ministryID: number, @Param('scaleID') scaleID: number): any {
+    return this.scaleService.findParticipants(+ministryID, +scaleID);
+  }
+
   @Get(':scaleID')
   findOne(@Param('ministryID') ministryID: number, @Param('scaleID') scaleID: number): Promise<ScaleResponse> {
     return this.scaleService.findOne(+ministryID, +scaleID);

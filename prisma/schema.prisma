@@ -25,8 +25,10 @@ model Role {
   name    String
   iconUrl String
 
-  members  Member[]
-  ministry Ministry[]
+  members     Member[]
+  ministry    Ministry[]
+  Participant Participant[]
+
 }
 
 model User {
@@ -65,6 +67,7 @@ model Participant {
   scaleID       Int
   member        Member @relation(fields: [memberID], references: [memberID])
   scale         Scale  @relation(fields: [scaleID], references: [scaleID])
+  roles         Role[]
 }
 
 model Scale {

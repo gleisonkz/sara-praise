@@ -4,9 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { ScaleRequest, ScaleResponse } from '@sp/shared-interfaces';
+import { ParticipantRequest, ScaleRequest, ScaleResponse } from '@sp/shared-interfaces';
 
-import { HotToastService } from '@ngneat/hot-toast';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
     MinistryDetailRouteService
@@ -17,7 +16,7 @@ import {
 import {
     ParticipantsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/participants/participants.dialog';
-import { filter, map, skip, switchMap, tap } from 'rxjs';
+import { EMPTY, filter, map, skip, switchMap, tap } from 'rxjs';
 
 @Component({
   templateUrl: './scale-create-edit.page.html',
@@ -44,7 +43,7 @@ export class ScaleCreateEditPage implements OnInit {
     private readonly matDialog: MatDialog,
     private readonly ministryService: MinistryApiService,
     private readonly activatedRoute: ActivatedRoute,
-    private readonly toastService: HotToastService,
+    // private readonly toastService: HotToastService,
     private readonly router: Router,
     private readonly ministryDetailRouteService: MinistryDetailRouteService
   ) {}
@@ -94,7 +93,7 @@ export class ScaleCreateEditPage implements OnInit {
   }
 
   addMember() {
-    this.matDialog.open(ParticipantsDialog, {
+    const dialogRef = this.matDialog.open(ParticipantsDialog, {
       data: {
         scaleId: this.scaleID,
         ministryID: this.ministryID,
@@ -104,6 +103,19 @@ export class ScaleCreateEditPage implements OnInit {
       width: '100%',
       panelClass: 'sp-scale-modal',
     });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter((participantRequest: ParticipantRequest) => !!participantRequest),
+        switchMap(
+          (participantRequest: ParticipantRequest) => EMPTY
+          // this.ministryService.createParticipant(this.ministryID, participantRequest)
+        )
+      )
+      .subscribe(() => {
+        console.log('participant created');
+      });
   }
 
   onSubmitScale() {
@@ -120,14 +132,14 @@ export class ScaleCreateEditPage implements OnInit {
 
     if (this.scaleID)
       return this.ministryService.updateScale(this.ministryID, scaleRequest, this.scaleID).subscribe(() => {
-        this.toastService.success('Escala atualizada com sucesso!');
+        // this.toastService.success('Escala atualizada com sucesso!');
         this.router.navigate([this.scaleID, 'view'], {
           relativeTo: this.activatedRoute.parent,
         });
       });
 
     return this.ministryService.createScale(this.ministryID, scaleRequest).subscribe(({ scaleID }) => {
-      this.toastService.success(`Escala criada com sucesso!`);
+      // this.toastService.success(`Escala criada com sucesso!`);
       this.scaleFormGroup.reset();
       this.router.navigate([scaleID, 'edit'], {
         relativeTo: this.activatedRoute.parent,

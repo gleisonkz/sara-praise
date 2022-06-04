@@ -2,7 +2,7 @@
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 import { MemberListItemResponse, RoleResponse } from '@sp/shared-interfaces';
 import { MemberApiService } from '@sp/web/domain/ministry/services';
@@ -11,6 +11,7 @@ import { FormControl } from '@ngneat/reactive-forms';
 import {
     MinistryApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
+import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { map, Observable } from 'rxjs';
 
 interface ParticipantsDialogData {
@@ -25,6 +26,7 @@ interface ParticipantsDialogData {
 })
 export class ParticipantsDialog implements OnInit {
   members$: Observable<any[]>;
+  ministryID = injectMinistryID();
 
   members: {
     item: MemberListItemResponse;
@@ -49,11 +51,15 @@ export class ParticipantsDialog implements OnInit {
   constructor(
     public readonly ministryService: MinistryApiService,
     private readonly memberApiService: MemberApiService,
-
+    private readonly dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) private data: ParticipantsDialogData
   ) {}
 
   ngOnInit(): void {
+    this.ministryService.getParticipants(this.data.ministryID).subscribe((participants) => {
+      console.log(participants);
+    });
+
     this.memberApiService
       .getMemberListItems(this.data.ministryID)
       .pipe(
@@ -202,7 +208,7 @@ export class ParticipantsDialog implements OnInit {
 
   submitForm() {
     const participants = this.members
-      .filter((member) => member.selected.value)
+      .filter((member) => member.selected.value && !member.item.participantID)
       .map((member) => {
         const roles = member.roles.filter((role) => role.form.value.selected).map((role) => role.item.roleID);
 
@@ -214,6 +220,6 @@ export class ParticipantsDialog implements OnInit {
         return participant;
       });
 
-    console.log('participants', participants);
+    this.dialogRef.close(participants);
   }
 }

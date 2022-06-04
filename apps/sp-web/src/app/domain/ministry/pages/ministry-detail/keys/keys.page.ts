@@ -1,10 +1,8 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { MinisterSongKeyListItemResponse } from '@sp/shared-interfaces';
 
-import {
-    MINISTRY_ID, MINISTRY_ID_PROVIDER
-} from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.provider';
+import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { Observable, of } from 'rxjs';
 import { MinistryApiService } from '../../../core/services/ministry.api.service';
 
@@ -12,14 +10,11 @@ import { MinistryApiService } from '../../../core/services/ministry.api.service'
   templateUrl: './keys.page.html',
   styleUrls: ['./keys.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [MINISTRY_ID_PROVIDER],
 })
 export class KeysPage implements OnInit {
   keysListItems$: Observable<MinisterSongKeyListItemResponse[]> = of([]);
-  constructor(
-    private readonly ministryService: MinistryApiService,
-    @Inject(MINISTRY_ID) private readonly ministryID: number
-  ) {}
+  ministryID = injectMinistryID();
+  constructor(private readonly ministryService: MinistryApiService) {}
 
   ngOnInit(): void {
     this.keysListItems$ = this.ministryService.getMinisterSongKeys(this.ministryID);

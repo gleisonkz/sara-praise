@@ -31,6 +31,11 @@ export class MinistryApiService {
     return this.http.post<ScaleResponseCreate>(url, scaleRequest);
   }
 
+  getParticipants(ministryID: number): Observable<any> {
+    const url = `${this.URL}/${ministryID}/scales/1/participants`;
+    return this.http.get<any>(url);
+  }
+
   updateScale(ministryID: number, scaleRequest: ScaleRequest, scaleID: number): Observable<ScaleResponse> {
     const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
     return this.http.put<ScaleResponse>(url, scaleRequest);

@@ -5,12 +5,11 @@ import { Injectable } from '@angular/core';
 
 import { HttpMethod, LogService } from '@sp/web/shared/services';
 
-import { HotToastService } from '@ngneat/hot-toast';
 import { Observable, tap } from 'rxjs';
 
 @Injectable()
 export class LogInterceptor implements HttpInterceptor {
-  constructor(private readonly logService: LogService, private readonly toastService: HotToastService) {}
+  constructor(private readonly logService: LogService) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     const path = request.url;

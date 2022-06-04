@@ -66,6 +66,42 @@ export class ScaleService {
     return scaleDetailResponse;
   }
 
+  //   imageUrl: "https://i.pravatar.cc/150?img=38"
+  // memberID: 2
+  // name: "Debora"
+  // roles: [
+  // {      iconUrl: "assets/images/roles/microphone.svg"
+  //     name: "Ministro"
+  //     roleID: 1}
+  // ]
+
+  async findParticipants(ministryID: number, scaleID: number): any {
+    const member = this.prismaService.member.findMany({
+      where: {
+        ministryID,
+      },
+      select: {
+        memberID: true,
+        roles: true,
+        participant: {
+          where: {
+            scaleID,
+          },
+          select: {
+            participantID: true,
+            roles: {
+              select: {
+                roleID: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    return member;
+  }
+
   async findAll(ministryID: number): Promise<ScaleListItemResponse[]> {
     const scales = await this.prismaService.scale.findMany({
       where: { ministryID },
