@@ -4,10 +4,12 @@ import {
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
-import { MinisterSongKeyListItemResponse, MinisterSongKeyRequest } from '@sp/shared-interfaces';
+import {
+    MinisterSongKeyListItemResponse, MinisterSongKeyRequest, MinistryListItemResponse
+} from '@sp/shared-interfaces';
 
 import { Response } from 'express';
-import { MinistryListItemResponseDto, MinistryRequestDto } from './dtos';
+import { MinistryRequestDto } from './dtos';
 import { MinistryNotFoundError } from './ministry.error';
 import { MinistryService } from './ministry.service';
 
@@ -21,10 +23,10 @@ export class MinistryController {
   @ApiQuery({ name: 'ministryID', required: false })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: MinistryListItemResponseDto,
+    type: MinistryListItemResponse,
   })
   @Get('/list-item/:ministryID?')
-  async getMinistriesListItems(@Param('ministryID') ministryID?: string): Promise<MinistryListItemResponseDto[]> {
+  async getMinistriesListItems(@Param('ministryID') ministryID?: string): Promise<MinistryListItemResponse[]> {
     const parsedID = ministryID ? +ministryID : undefined;
     const ministries = await this.ministryService.getMinistriesListItems(parsedID);
 
@@ -34,9 +36,9 @@ export class MinistryController {
   @Post()
   @ApiCreatedResponse({
     description: 'The record has been successfully created.',
-    type: MinistryListItemResponseDto,
+    type: MinistryListItemResponse,
   })
-  async createMinistry(@Body() ministryRequest: MinistryRequestDto): Promise<MinistryListItemResponseDto> {
+  async createMinistry(@Body() ministryRequest: MinistryRequestDto): Promise<MinistryListItemResponse> {
     const ministryListItem = this.ministryService.createMinistry(ministryRequest);
     return ministryListItem;
   }
@@ -44,7 +46,7 @@ export class MinistryController {
   @ApiQuery({ name: 'ministryID', required: false })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: MinistryListItemResponseDto,
+    type: MinistryListItemResponse,
   })
   @Get('/:ministryID/minister-song-key')
   async getMinisterSongKeysListItem(
@@ -58,7 +60,7 @@ export class MinistryController {
   @Post('/:ministryID/minister-song-key')
   @ApiCreatedResponse({
     description: 'The minister song key has been successfully created.',
-    type: MinistryListItemResponseDto,
+    type: MinistryListItemResponse,
   })
   async createMinisterSongKey(
     @Res({ passthrough: true }) res: Response,

@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MinisterSongKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 import { MinistryApiService } from '@sp/web/domain/ministry/services';
 
+import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/ministry.facade';
 import {
@@ -37,9 +38,9 @@ export class MinistryDetailPage implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
     private readonly dialog: MatDialog,
-    private readonly ministryApiService: MinistryApiService
-  ) // private readonly toastService: HotToastService
-  {}
+    private readonly ministryApiService: MinistryApiService,
+    private readonly toastService: HotToastService
+  ) {}
 
   ngOnInit(): void {
     this.ministryListItem$ = this.ministryFacade.ministry$.pipe(
@@ -107,7 +108,7 @@ export class MinistryDetailPage implements OnInit {
       .afterClosed()
       .pipe(untilDestroyed(this), filter(Boolean))
       .subscribe(() => {
-        // this.toastService.success('Cadastrado com sucesso');
+        this.toastService.success('Cadastrado com sucesso');
       });
   }
 
@@ -128,7 +129,7 @@ export class MinistryDetailPage implements OnInit {
         )
       )
       .subscribe(() => {
-        // this.toastService.success('Cadastrado com sucesso');
+        this.toastService.success('Cadastrado com sucesso');
       });
   }
 }

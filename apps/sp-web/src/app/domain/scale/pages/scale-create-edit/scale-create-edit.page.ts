@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { ParticipantRequest, ScaleRequest, ScaleResponse } from '@sp/shared-interfaces';
 
+import { HotToastService } from '@ngneat/hot-toast';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
     MinistryDetailRouteService
@@ -43,7 +44,7 @@ export class ScaleCreateEditPage implements OnInit {
     private readonly matDialog: MatDialog,
     private readonly ministryService: MinistryApiService,
     private readonly activatedRoute: ActivatedRoute,
-    // private readonly toastService: HotToastService,
+    private readonly toastService: HotToastService,
     private readonly router: Router,
     private readonly ministryDetailRouteService: MinistryDetailRouteService
   ) {}
@@ -132,14 +133,14 @@ export class ScaleCreateEditPage implements OnInit {
 
     if (this.scaleID)
       return this.ministryService.updateScale(this.ministryID, scaleRequest, this.scaleID).subscribe(() => {
-        // this.toastService.success('Escala atualizada com sucesso!');
+        this.toastService.success('Escala atualizada com sucesso!');
         this.router.navigate([this.scaleID, 'view'], {
           relativeTo: this.activatedRoute.parent,
         });
       });
 
     return this.ministryService.createScale(this.ministryID, scaleRequest).subscribe(({ scaleID }) => {
-      // this.toastService.success(`Escala criada com sucesso!`);
+      this.toastService.success(`Escala criada com sucesso!`);
       this.scaleFormGroup.reset();
       this.router.navigate([scaleID, 'edit'], {
         relativeTo: this.activatedRoute.parent,

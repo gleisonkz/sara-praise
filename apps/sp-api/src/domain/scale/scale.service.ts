@@ -75,7 +75,7 @@ export class ScaleService {
   //     roleID: 1}
   // ]
 
-  async findParticipants(ministryID: number, scaleID: number): any {
+  async findParticipants(ministryID: number, scaleID: number): Promise<any> {
     const member = this.prismaService.member.findMany({
       where: {
         ministryID,

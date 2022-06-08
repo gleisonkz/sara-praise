@@ -25,7 +25,18 @@ interface ParticipantsDialogData {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ParticipantsDialog implements OnInit {
-  members$: Observable<any[]>;
+  members$: Observable<
+    {
+      item: MemberListItemResponse;
+      form: UntypedFormGroup;
+      selected: FormControl<boolean>;
+      roles: {
+        form: UntypedFormGroup;
+        item: RoleResponse;
+      }[];
+    }[]
+  >;
+
   ministryID = injectMinistryID();
 
   members: {
@@ -60,39 +71,38 @@ export class ParticipantsDialog implements OnInit {
       console.log(participants);
     });
 
-    this.memberApiService
-      .getMemberListItems(this.data.ministryID)
-      .pipe(
-        map((members: MemberListItemResponse[]) => {
-          const membersGroup = members.map((member: MemberListItemResponse) => {
-            const group = new UntypedFormGroup({
-              ministryID: new FormControl(this.data.ministryID),
-              scaleID: new FormControl(this.data.scaleId),
-              participantID: new FormControl(member.participantID),
-              memberID: new FormControl(member.memberID),
-            });
+    return;
 
-            const roles = member.roles.map((role) => {
-              const form = new UntypedFormGroup({
-                roleID: new FormControl(role.roleID),
-                selected: new FormControl(null, [Validators.required]),
-              });
-
-              const tuple = {
-                form,
-                item: role,
-              };
-              return tuple;
-            });
-
-            const selectedControl = new FormControl(false);
-            return { item: member, form: group, selected: selectedControl, roles };
+    this.members$ = this.memberApiService.getMemberListItems(this.data.ministryID).pipe(
+      map((members: MemberListItemResponse[]) => {
+        const membersGroup = members.map((member: MemberListItemResponse) => {
+          const group = new UntypedFormGroup({
+            ministryID: new FormControl(this.data.ministryID),
+            scaleID: new FormControl(this.data.scaleId),
+            participantID: new FormControl(member.participantID),
+            memberID: new FormControl(member.memberID),
           });
 
-          return membersGroup;
-        })
-      )
-      .subscribe((members: any[]) => (this.members = members));
+          const roles = member.roles.map((role) => {
+            const form = new UntypedFormGroup({
+              roleID: new FormControl(role.roleID),
+              selected: new FormControl(null, [Validators.required]),
+            });
+
+            const tuple = {
+              form,
+              item: role,
+            };
+            return tuple;
+          });
+
+          const selectedControl = new FormControl(false);
+          return { item: member, form: group, selected: selectedControl, roles };
+        });
+
+        return membersGroup;
+      })
+    );
   }
 
   // toggleChanged(

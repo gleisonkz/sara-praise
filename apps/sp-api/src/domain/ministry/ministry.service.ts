@@ -3,18 +3,18 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
 import {
-    eMinistryRole, MinisterSongKeyListItemResponse, MinisterSongKeyRequest, MinistryRequest
+    eMinistryRole, MinisterSongKeyListItemResponse, MinisterSongKeyRequest,
+    MinistryListItemResponse, MinistryRequest
 } from '@sp/shared-interfaces';
 
 import { Role } from '@prisma/client';
-import { MinistryListItemResponseDto } from './dtos';
 import { Member, Ministry, Scale } from './models';
 
 @Injectable()
 export class MinistryService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async createMinistry(ministryRequest: MinistryRequest): Promise<MinistryListItemResponseDto> {
+  async createMinistry(ministryRequest: MinistryRequest): Promise<MinistryListItemResponse> {
     const defaultRolesIDs = await this.prismaService.role.findMany({
       select: {
         roleID: true,
@@ -36,7 +36,7 @@ export class MinistryService {
       },
     });
 
-    const ministryListItem: MinistryListItemResponseDto = {
+    const ministryListItem: MinistryListItemResponse = {
       ministryID: ministry.ministryID,
       name: ministry.name,
       musicsQuantity: 0,
@@ -114,9 +114,9 @@ export class MinistryService {
     });
   }
 
-  async getMinistriesListItems(ministryID?: number): Promise<MinistryListItemResponseDto[]> {
+  async getMinistriesListItems(ministryID?: number): Promise<MinistryListItemResponse[]> {
     const ministryListItemMapFn = (ministry) => {
-      const ministryListItem: MinistryListItemResponseDto = {
+      const ministryListItem: MinistryListItemResponse = {
         ministryID: ministry.ministryID,
         name: ministry.name,
         musicsQuantity: ministry._count.songs,
@@ -148,7 +148,7 @@ export class MinistryService {
       },
     });
 
-    const ministriesListItems: MinistryListItemResponseDto[] = ministries.map(ministryListItemMapFn);
+    const ministriesListItems: MinistryListItemResponse[] = ministries.map(ministryListItemMapFn);
     return ministriesListItems;
   }
 

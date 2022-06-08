@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
@@ -7,15 +7,18 @@ import {
     ScaleResponse, ScaleResponseCreate, SongListItemResponse
 } from '@sp/shared-interfaces';
 
+import { BaseApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/base.api.service';
 import { map, Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MinistryApiService {
+export class MinistryApiService extends BaseApiService {
   private readonly URL = '/api/ministries';
 
-  constructor(private readonly http: HttpClient) {}
+  constructor() {
+    super('/ministries');
+  }
 
   createMinistry(ministry: MinistryRequest): Observable<MinistryListItemResponse> {
     return this.http.post<MinistryListItemResponse>(this.URL, ministry);
@@ -79,7 +82,7 @@ export class MinistryApiService {
     const idParamPath = ministryID ? `/${ministryID}` : '';
     const url = `${this.URL}/list-item${idParamPath}`;
 
-    return this.http.get<MinistryListItemResponse[]>(url);
+    return this.getWithRuntimeValidation<MinistryListItemResponse[]>(url, MinistryListItemResponse);
   }
 
   getScaleListItems(ministryID: number): Observable<ScaleListItemResponse[]> {

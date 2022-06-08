@@ -1,17 +1,55 @@
 import { HttpClient } from '@angular/common/http';
-import { Injector } from '@angular/core';
+import { inject } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { HotToastService } from '@ngneat/hot-toast';
+import { validate } from 'class-validator';
+import { EMPTY, Observable, tap } from 'rxjs';
+
+type Unpacked<T> = T extends Array<infer U> ? U : T;
 
 export abstract class BaseApiService {
-  protected http: HttpClient;
   private baseEndpoint = '/api';
+  protected readonly http = inject(HttpClient);
+  protected readonly toastService = inject(HotToastService);
 
-  constructor(protected readonly injector: Injector, readonly segment: string) {
-    this.http = injector.get(HttpClient);
+  constructor(readonly segment: string) {
     this.baseEndpoint = `${this.baseEndpoint}/${segment}`;
   }
 
+  protected getWithRuntimeValidation<T extends object>(url: string, ExpectedType: new () => Unpacked<T>) {
+    return this.http.get<T>(url).pipe(
+      tap((response) => {
+        if (Array.isArray(response)) {
+          response.forEach((item) => {
+            const instance = new ExpectedType();
+            Object.assign(instance, item);
+
+            validate(instance)
+              .then((errors) => {
+                const hasErros = errors.length > 0;
+                if (!hasErros) return EMPTY;
+
+                this.toastService.error(`Erro com o objeto ${ExpectedType.name}`);
+                console.error(errors);
+                throw errors;
+              })
+              .catch(() => EMPTY);
+          });
+        } else {
+          const instance = new ExpectedType();
+          Object.assign(instance, response);
+
+          validate(instance)
+            .then((errors) => {
+              this.toastService.error(`Erro com o objeto ${ExpectedType.name}`);
+              console.error(errors);
+              throw errors;
+            })
+            .catch(() => EMPTY);
+        }
+      })
+    );
+  }
   protected getAll<T>(): Observable<T> {
     return this.http.get<T>(`${this.baseEndpoint}`);
   }

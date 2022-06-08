@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { DEFAULT_ROLES } from './seeds/roles.seed';
 import { SONG_KEYS } from './seeds/song-keys.seed';
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({});
 
 async function main() {
   await prisma.role.createMany({
