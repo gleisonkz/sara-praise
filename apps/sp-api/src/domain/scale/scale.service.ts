@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
 import {
-    ScaleDetailResponse, ScaleListItemResponse, ScaleRequest, ScaleResponse
+    RoleResponse, ScaleDetailResponse, ScaleListItemResponse, ScaleRequest, ScaleResponse
 } from '@sp/shared-interfaces';
 
+import { MemberListItemResponseDto } from 'apps/sp-api/src/domain/member/dtos';
 import { ScaleRequestDto } from 'apps/sp-api/src/domain/scale/dto/scale.dto';
 
 @Injectable()
@@ -76,13 +77,14 @@ export class ScaleService {
   // ]
 
   async findParticipants(ministryID: number, scaleID: number): Promise<any> {
-    const member = this.prismaService.member.findMany({
+    const members = await this.prismaService.member.findMany({
       where: {
         ministryID,
       },
       select: {
         memberID: true,
         roles: true,
+        user: true,
         participant: {
           where: {
             scaleID,
@@ -99,7 +101,28 @@ export class ScaleService {
       },
     });
 
-    return member;
+    const membersResponse: MemberListItemResponseDto[] = members.map((member) => {
+      const memberResponse: MemberListItemResponseDto = {
+        imageUrl: member.user.imageURL,
+        memberID: member.memberID,
+        name: member.user.name,
+        participantID: member.participant[0]?.participantID,
+        roles: member.roles.map((role) => {
+          const roleResponse: RoleResponse = {
+            iconUrl: role.iconUrl,
+            name: role.name,
+            roleID: role.roleID,
+            isChecked: !!member.participant[0]?.roles.find((participantRole) => participantRole.roleID === role.roleID),
+          };
+
+          return roleResponse;
+        }),
+      };
+
+      return memberResponse;
+    });
+
+    return membersResponse;
   }
 
   async findAll(ministryID: number): Promise<ScaleListItemResponse[]> {

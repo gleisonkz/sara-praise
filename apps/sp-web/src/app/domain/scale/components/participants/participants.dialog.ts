@@ -12,11 +12,19 @@ import {
     MinistryApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
-import { map, Observable } from 'rxjs';
+import { BehaviorSubject, defer, filter, map, MonoTypeOperatorFunction, Observable } from 'rxjs';
 
 interface ParticipantsDialogData {
   scaleId: number;
   ministryID: number;
+}
+
+export function initialize<T>(initializer: () => void): MonoTypeOperatorFunction<T> {
+  return (source: Observable<T>) =>
+    defer(() => {
+      initializer();
+      return source;
+    });
 }
 
 @Component({
@@ -30,6 +38,7 @@ export class ParticipantsDialog implements OnInit {
       item: MemberListItemResponse;
       form: UntypedFormGroup;
       selected: FormControl<boolean>;
+      checkedRoles$: BehaviorSubject<number>;
       roles: {
         form: UntypedFormGroup;
         item: RoleResponse;
@@ -43,6 +52,7 @@ export class ParticipantsDialog implements OnInit {
     item: MemberListItemResponse;
     form: UntypedFormGroup;
     selected: FormControl<boolean>;
+
     roles: {
       form: UntypedFormGroup;
       item: RoleResponse;
@@ -67,13 +77,8 @@ export class ParticipantsDialog implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.ministryService.getParticipants(this.data.ministryID).subscribe((participants) => {
-      console.log(participants);
-    });
-
-    return;
-
-    this.members$ = this.memberApiService.getMemberListItems(this.data.ministryID).pipe(
+    // this.memberApiService.getMemberListItems(this.data.ministryID).subscribe(console.log);
+    this.members$ = this.ministryService.getParticipants(this.data.ministryID).pipe(
       map((members: MemberListItemResponse[]) => {
         const membersGroup = members.map((member: MemberListItemResponse) => {
           const group = new UntypedFormGroup({
@@ -83,21 +88,39 @@ export class ParticipantsDialog implements OnInit {
             memberID: new FormControl(member.memberID),
           });
 
+          const checkedRoles$ = new BehaviorSubject<number>(0);
+
           const roles = member.roles.map((role) => {
-            const form = new UntypedFormGroup({
+            const rolesForm = new UntypedFormGroup({
               roleID: new FormControl(role.roleID),
-              selected: new FormControl(null, [Validators.required]),
+              selected: new FormControl(role.isChecked, [Validators.required]),
             });
 
-            const tuple = {
-              form,
+            const selectedRoleControl = rolesForm.get('selected') as FormControl<boolean>;
+            const initialValue = selectedRoleControl.value ? 1 : 0;
+            checkedRoles$.next(initialValue + checkedRoles$.value);
+
+            selectedRoleControl.valueChanges.pipe(map((selected) => (selected ? 1 : -1))).subscribe((value) => {
+              const currentValue = checkedRoles$.value + value;
+              const nextValue = currentValue > 0 ? currentValue : 0;
+              checkedRoles$.next(nextValue);
+            });
+
+            return {
+              form: rolesForm,
               item: role,
             };
-            return tuple;
           });
 
-          const selectedControl = new FormControl(false);
-          return { item: member, form: group, selected: selectedControl, roles };
+          const selectedControl = new FormControl(!!member?.participantID);
+
+          return {
+            checkedRoles$,
+            item: member,
+            form: group,
+            selected: selectedControl,
+            roles,
+          };
         });
 
         return membersGroup;
