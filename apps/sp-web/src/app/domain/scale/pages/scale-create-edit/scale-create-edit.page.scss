@@ -52,3 +52,44 @@ button.save {
   padding: 3px;
   align-self: end;
 }
+
+.participant {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+  text-align: left;
+
+  &__image {
+    grid-row: 1/-1;
+  }
+
+  &__name {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  &__roles {
+    grid-column: 2;
+    grid-row: 2;
+  }
+}
+
+::ng-deep .mat-list-base .mat-list-item .mat-list-item-content,
+::ng-deep .mat-list-base .mat-list-option .mat-list-item-content {
+  justify-content: space-between;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    margin-right: 5px;
+  }
+
+  &__text {
+    font-size: 18px;
+  }
+}

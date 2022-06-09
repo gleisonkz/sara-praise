@@ -4,8 +4,7 @@ import { UntypedFormGroup, Validators } from '@angular/forms';
 
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
-import { MemberListItemResponse, RoleResponse } from '@sp/shared-interfaces';
-import { MemberApiService } from '@sp/web/domain/ministry/services';
+import { IRoleResponse, MemberListItemResponse } from '@sp/shared-interfaces';
 
 import { FormControl } from '@ngneat/reactive-forms';
 import {
@@ -41,7 +40,7 @@ export class ParticipantsDialog implements OnInit {
       checkedRoles$: BehaviorSubject<number>;
       roles: {
         form: UntypedFormGroup;
-        item: RoleResponse;
+        item: IRoleResponse;
       }[];
     }[]
   >;
@@ -55,7 +54,7 @@ export class ParticipantsDialog implements OnInit {
 
     roles: {
       form: UntypedFormGroup;
-      item: RoleResponse;
+      item: IRoleResponse;
     }[];
   }[];
 
@@ -71,13 +70,11 @@ export class ParticipantsDialog implements OnInit {
 
   constructor(
     public readonly ministryService: MinistryApiService,
-    private readonly memberApiService: MemberApiService,
     private readonly dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) private data: ParticipantsDialogData
   ) {}
 
   ngOnInit(): void {
-    // this.memberApiService.getMemberListItems(this.data.ministryID).subscribe(console.log);
     this.members$ = this.ministryService.getParticipants(this.data.ministryID).pipe(
       map((members: MemberListItemResponse[]) => {
         const membersGroup = members.map((member: MemberListItemResponse) => {
@@ -123,6 +120,7 @@ export class ParticipantsDialog implements OnInit {
           };
         });
 
+        this.members = membersGroup;
         return membersGroup;
       })
     );
@@ -239,9 +237,9 @@ export class ParticipantsDialog implements OnInit {
   //   return roleControl.disabled;
   // }
 
-  submitForm() {
+  async submitForm() {
     const participants = this.members
-      .filter((member) => member.selected.value && !member.item.participantID)
+      .filter((member) => member.selected.value)
       .map((member) => {
         const roles = member.roles.filter((role) => role.form.value.selected).map((role) => role.item.roleID);
 
@@ -253,6 +251,8 @@ export class ParticipantsDialog implements OnInit {
         return participant;
       });
 
-    this.dialogRef.close(participants);
+    console.log('participants', participants);
+
+    // this.dialogRef.close(participants);
   }
 }

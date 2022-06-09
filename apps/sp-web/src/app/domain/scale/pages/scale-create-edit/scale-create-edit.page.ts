@@ -14,10 +14,11 @@ import {
 import {
     MinistryApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
+import { injectRouteParam } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import {
     ParticipantsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/participants/participants.dialog';
-import { EMPTY, filter, map, skip, switchMap, tap } from 'rxjs';
+import { EMPTY, filter, Observable, of, skip, switchMap, tap } from 'rxjs';
 
 @Component({
   templateUrl: './scale-create-edit.page.html',
@@ -25,13 +26,46 @@ import { EMPTY, filter, map, skip, switchMap, tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScaleCreateEditPage implements OnInit {
-  scaleID: number;
+  scaleID = injectRouteParam('scaleID');
   ministryID: number;
 
   dateGroup = new FormGroup({
     date: new FormControl<Date>(),
     time: new FormControl<Date>(),
   });
+
+  participantListItems$: Observable<any> = of([
+    {
+      name: 'João',
+      imageUrl: 'https://randomuser.me/api/portraits/men/53.jpg',
+      roles: [
+        {
+          id: 1,
+          name: 'Ministro',
+        },
+      ],
+    },
+    {
+      name: 'João',
+      imageUrl: 'https://randomuser.me/api/portraits/men/53.jpg',
+      roles: [
+        {
+          id: 1,
+          name: 'Ministro',
+        },
+      ],
+    },
+    {
+      name: 'João',
+      imageUrl: 'https://randomuser.me/api/portraits/men/53.jpg',
+      roles: [
+        {
+          id: 1,
+          name: 'Ministro',
+        },
+      ],
+    },
+  ]);
 
   scaleFormGroup: FormGroup<{
     scaleID?: FormControl<number>;
@@ -81,16 +115,11 @@ export class ScaleCreateEditPage implements OnInit {
       this.scaleFormGroup.controls.date.setValue(fullDate);
     });
 
-    parentRoute.params
-      .pipe(
-        map(({ scaleID }) => +scaleID),
-        filter((scaleID) => !!scaleID),
-        tap((id) => (this.scaleID = id)),
-        switchMap((scaleID) => this.ministryService.getScaleByID(this.ministryID, scaleID))
-      )
-      .subscribe((scale: ScaleResponse) => {
-        this.scaleFormGroup.patchValue(scale);
-      });
+    this.participantListItems$ = this.ministryService.getParticipantListItems(this.ministryID, this.scaleID);
+
+    this.ministryService.getScaleByID(this.ministryID, this.scaleID).subscribe((scale: ScaleResponse) => {
+      this.scaleFormGroup.patchValue(scale);
+    });
   }
 
   addMember() {

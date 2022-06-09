@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
 import {
-    RoleResponse, ScaleDetailResponse, ScaleListItemResponse, ScaleRequest, ScaleResponse
+    ParticipantListItem, ParticipantListItemRole, RoleResponse, ScaleDetailResponse,
+    ScaleListItemResponse, ScaleRequest, ScaleResponse
 } from '@sp/shared-interfaces';
 
 import { MemberListItemResponseDto } from 'apps/sp-api/src/domain/member/dtos';
@@ -123,6 +124,47 @@ export class ScaleService {
     });
 
     return membersResponse;
+  }
+
+  async findParticipantListItems(ministryID: number, scaleID: number): Promise<any> {
+    const participants = await this.prismaService.participant.findMany({
+      where: {
+        scaleID,
+      },
+      include: {
+        member: {
+          include: {
+            user: true,
+          },
+        },
+        roles: true,
+      },
+    });
+
+    console.log({ participants });
+
+    const participantlistItems: ParticipantListItem[] = participants.map((participant) => {
+      const participantListItem: ParticipantListItem = {
+        name: participant.member.user.name,
+        imageUrl: participant.member.user.imageURL,
+        roles: participant.roles.map((role) => {
+          const roleResponse: ParticipantListItemRole = {
+            iconUrl: role.iconUrl,
+            name: role.name,
+            roleID: role.roleID,
+          };
+
+          return roleResponse;
+        }),
+      };
+
+      return participantListItem;
+    });
+
+    return participantlistItems;
+
+    console.log('findParticipantListItems');
+    console.log({ ministryID }, { scaleID });
   }
 
   async findAll(ministryID: number): Promise<ScaleListItemResponse[]> {

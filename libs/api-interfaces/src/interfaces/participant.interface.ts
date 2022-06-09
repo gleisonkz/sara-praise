@@ -1,4 +1,6 @@
-import { RoleResponse } from '@sp/shared-interfaces';
+import { IRoleResponse, RoleResponse } from '@sp/shared-interfaces';
+
+import { IsString } from 'class-validator';
 
 export interface ParticipantRequest {
   ministryID: number;
@@ -12,7 +14,7 @@ export interface ParticipantResponse {
   memberID: number;
   name: string;
   imageUrl: string;
-  roles: RoleResponse[];
+  roles: IRoleResponse[];
   participant: ParticipantItem;
 }
 
@@ -23,4 +25,14 @@ interface ParticipantItem {
 
 export interface ParticipantRole {
   roleID: number;
+}
+
+export type ParticipantListItemRole = Omit<RoleResponse, 'isChecked'>;
+
+export class ParticipantListItem {
+  @IsString()
+  name: string;
+  @IsString()
+  imageUrl: string;
+  roles: ParticipantListItemRole[];
 }

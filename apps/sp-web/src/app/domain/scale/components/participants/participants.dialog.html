@@ -7,13 +7,9 @@
   </mat-form-field>
 
   <mat-list>
-    <div *ngFor="let member of members$ | async; let participantIndex=index">
+    <div *ngFor="let member of members$ | async as members; let participantIndex=index">
       <mat-list-item>
-        <img
-          matListAvatar
-          src="https://randomuser.me/api/portraits/men/92.jpg"
-          alt="member avatar"
-        />
+        <img matListAvatar [src]="member.item.imageUrl" alt="member avatar" />
         <div mat-line class="subtitle">{{ member.item.name }}</div>
         <div class="flex"></div>
         <mat-slide-toggle [formControl]="member.selected" #toggle></mat-slide-toggle>
@@ -23,7 +19,7 @@
         *ngIf="toggle.checked"
         [hidden]="!toggle.checked"
       >
-        <mat-expansion-panel [expanded]="false">
+        <mat-expansion-panel [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-description>
               {{member.checkedRoles$| async}}/{{ member.item.roles.length }} funções
@@ -36,7 +32,6 @@
               class="radio-button-container"
               *ngFor="let tupleRole of member.roles; let roleIndex=index"
             >
-              <p>Roles : {{ tupleRole.form.value | json }}</p>
               <ng-container [formGroup]="tupleRole.form">
                 <div class="icon-container">
                   <mat-icon svgIcon="bass"></mat-icon>
@@ -54,13 +49,12 @@
         </mat-expansion-panel>
       </mat-accordion>
 
-      {{ member.form.value | json }} }
       <mat-divider></mat-divider>
     </div>
   </mat-list>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button mat-dialog-close>Close</button>
-  <button (click)="submitForm()" mat-button color="primary">Submit</button>
+  <button mat-button mat-dialog-close>Cancelar</button>
+  <button (click)="submitForm()" mat-button color="primary">Salvar</button>
 </mat-dialog-actions>

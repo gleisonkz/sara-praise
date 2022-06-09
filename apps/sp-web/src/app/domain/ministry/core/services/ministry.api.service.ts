@@ -2,9 +2,10 @@ import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
-    KeyResponse, MinisterSongKeyListItemResponse, MinisterSongKeyRequest, MinistryListItemResponse,
-    MinistryRequest, RoleResponse, ScaleDetailResponse, ScaleListItemResponse, ScaleRequest,
-    ScaleResponse, ScaleResponseCreate, SongListItemResponse
+    IRoleResponse, KeyResponse, MemberListItemResponse, MinisterSongKeyListItemResponse,
+    MinisterSongKeyRequest, MinistryListItemResponse, MinistryRequest, ParticipantListItem,
+    ScaleDetailResponse, ScaleListItemResponse, ScaleRequest, ScaleResponse, ScaleResponseCreate,
+    SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { BaseApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/base.api.service';
@@ -34,9 +35,14 @@ export class MinistryApiService extends BaseApiService {
     return this.http.post<ScaleResponseCreate>(url, scaleRequest);
   }
 
-  getParticipants(ministryID: number): Observable<any> {
+  getParticipants(ministryID: number): Observable<MemberListItemResponse[]> {
     const url = `${this.URL}/${ministryID}/scales/1/participants`;
-    return this.http.get<any>(url);
+    return this.http.get<MemberListItemResponse[]>(url);
+  }
+
+  getParticipantListItems(ministryID: number, scaleID: number): Observable<ParticipantListItem[]> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}/participant-list-items`;
+    return this.getWithRuntimeValidation<ParticipantListItem[]>(url, ParticipantListItem);
   }
 
   updateScale(ministryID: number, scaleRequest: ScaleRequest, scaleID: number): Observable<ScaleResponse> {
@@ -58,7 +64,7 @@ export class MinistryApiService extends BaseApiService {
     const url = `${this.URL}/${ministryID}/roles`;
     const params = new HttpParams().set('memberID', memberID ? memberID.toString() : '');
 
-    return this.http.get<RoleResponse[]>(url, { params });
+    return this.http.get<IRoleResponse[]>(url, { params });
   }
 
   getScaleByID(ministryID: number, scaleID: number): Observable<ScaleResponse> {

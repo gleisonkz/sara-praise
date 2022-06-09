@@ -5,7 +5,7 @@ import { Validators } from '@angular/forms';
 
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { MemberRequest, RoleResponse } from '@sp/shared-interfaces';
+import { IRoleResponse, MemberRequest } from '@sp/shared-interfaces';
 
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { MemberFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/member.facade';
@@ -54,7 +54,7 @@ export class MemberDialog implements OnInit {
   ngOnInit(): void {
     this.ministryService
       .getRolesByMemberID(this.dialogData.ministryID, this.dialogData?.memberID)
-      .subscribe((roles: RoleResponse[]) => {
+      .subscribe((roles: IRoleResponse[]) => {
         this.createForm(roles);
         this.changeDetectorRef.detectChanges();
 

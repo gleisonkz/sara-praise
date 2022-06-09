@@ -39,4 +39,9 @@ export class ScaleController {
   findParticipants(@Param('ministryID') ministryID: number, @Param('scaleID') scaleID: number): any {
     return this.scaleService.findParticipants(+ministryID, +scaleID);
   }
+
+  @Get('/:scaleID/participant-list-items')
+  findParticipantListItems(@Param('ministryID') ministryID: number, @Param('scaleID') scaleID: number): any {
+    return this.scaleService.findParticipantListItems(+ministryID, +scaleID);
+  }
 }
