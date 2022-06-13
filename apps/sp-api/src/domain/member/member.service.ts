@@ -20,7 +20,7 @@ export class MemberService {
         imageURL: memberRequestDto.imageUrl,
         email: memberRequestDto.email,
         password: passwordHash,
-        member: {
+        members: {
           create: {
             ministryID,
             roles: {
@@ -30,7 +30,7 @@ export class MemberService {
         },
       },
       include: {
-        member: {
+        members: {
           where: {
             ministryID,
           },
@@ -39,7 +39,7 @@ export class MemberService {
     });
 
     const memberListItem = {
-      memberID: user.member[0].memberID,
+      memberID: user.members[0].memberID,
       name: user.name,
       imageUrl: memberRequestDto.imageUrl,
     };

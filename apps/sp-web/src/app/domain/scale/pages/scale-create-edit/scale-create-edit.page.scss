@@ -43,7 +43,8 @@ form {
 }
 
 .date-time {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   column-gap: 10px;
 }
 
@@ -92,4 +93,14 @@ button.save {
   &__text {
     font-size: 18px;
   }
+}
+
+.add-music-btn {
+  margin-bottom: 10px;
+}
+
+.song-list-items {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
 }

@@ -7,9 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ArtistResponse, KeyResponse } from '@sp/shared-interfaces';
 import { ArtistApiService, MinistryApiService } from '@sp/web/domain/ministry/services';
 
-import {
-    SongApiService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/song/song.api.service';
+import { SongApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/song.api.service';
 import { Observable } from 'rxjs';
 
 @Component({

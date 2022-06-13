@@ -12,7 +12,10 @@
         <img matListAvatar [src]="member.item.imageUrl" alt="member avatar" />
         <div mat-line class="subtitle">{{ member.item.name }}</div>
         <div class="flex"></div>
-        <mat-slide-toggle [formControl]="member.selected" #toggle></mat-slide-toggle>
+        <mat-slide-toggle
+          [formControl]="$any(member.form.controls).selected"
+          #toggle
+        ></mat-slide-toggle>
       </mat-list-item>
       <mat-accordion
         [formGroup]="member.form"

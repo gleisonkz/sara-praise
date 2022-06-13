@@ -74,7 +74,7 @@ export class SongService {
       where: {
         ministryID,
         AND: {
-          ministerSongKey: {
+          ministerSongKeys: {
             none: {
               memberID: ministerID,
             },

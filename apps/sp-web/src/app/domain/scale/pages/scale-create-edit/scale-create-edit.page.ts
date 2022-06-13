@@ -4,17 +4,21 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { ParticipantRequest, ScaleRequest, ScaleResponse } from '@sp/shared-interfaces';
+import {
+    IScaleResponse, ParticipantRequest, ScaleRequest, SongListItemResponse
+} from '@sp/shared-interfaces';
 
 import { HotToastService } from '@ngneat/hot-toast';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
-    MinistryDetailRouteService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry-detail-route.service';
-import {
     MinistryApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
-import { injectRouteParam } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
+import {
+    ScaleApiService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/scale.api.service';
+import {
+    injectMinistryID, injectRouteParam
+} from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import {
     ParticipantsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/participants/participants.dialog';
@@ -27,7 +31,7 @@ import { EMPTY, filter, Observable, of, skip, switchMap, tap } from 'rxjs';
 })
 export class ScaleCreateEditPage implements OnInit {
   scaleID = injectRouteParam('scaleID');
-  ministryID: number;
+  ministryID = injectMinistryID();
 
   dateGroup = new FormGroup({
     date: new FormControl<Date>(),
@@ -67,6 +71,53 @@ export class ScaleCreateEditPage implements OnInit {
     },
   ]);
 
+  songListItems$: Observable<SongListItemResponse[]> = of([
+    {
+      songID: 1,
+      title: 'Song 1',
+      artistName: 'Artist 1',
+      tags: ['Tag 1', 'Tag 2'],
+      key: 'C',
+      hasAudioLink: true,
+      hasYoutubeLink: false,
+      hasLyricLink: false,
+      hasChordsLink: true,
+    },
+    {
+      songID: 1,
+      title: 'Song 1',
+      artistName: 'Artist 1',
+      tags: ['Tag 1', 'Tag 2'],
+      key: 'C',
+      hasAudioLink: false,
+      hasYoutubeLink: true,
+      hasLyricLink: true,
+      hasChordsLink: false,
+    },
+    {
+      songID: 1,
+      title: 'Song 1',
+      artistName: 'Artist 1',
+      tags: ['Tag 1', 'Tag 2'],
+      key: 'C',
+      hasAudioLink: false,
+      hasYoutubeLink: false,
+      hasLyricLink: true,
+      hasChordsLink: true,
+    },
+    {
+      songID: 1,
+      title: 'Song 1',
+      artistName: 'Artist 1',
+      tags: ['Tag 1', 'Tag 2'],
+      key: 'C',
+      hasAudioLink: true,
+      hasYoutubeLink: true,
+      hasLyricLink: true,
+      hasChordsLink: true,
+    },
+  ]);
+
   scaleFormGroup: FormGroup<{
     scaleID?: FormControl<number>;
     date: FormControl<Date>;
@@ -80,15 +131,10 @@ export class ScaleCreateEditPage implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly toastService: HotToastService,
     private readonly router: Router,
-    private readonly ministryDetailRouteService: MinistryDetailRouteService
+    private readonly scaleApiService: ScaleApiService
   ) {}
 
   ngOnInit(): void {
-    this.ministryID = this.ministryDetailRouteService.getMinistryID(this.activatedRoute);
-
-    const parentRoute = this.activatedRoute;
-    if (!parentRoute) throw new Error('parentRoute is undefined');
-
     this.createForm();
 
     this.scaleFormGroup.controls.date.valueChanges
@@ -116,8 +162,11 @@ export class ScaleCreateEditPage implements OnInit {
     });
 
     this.participantListItems$ = this.ministryService.getParticipantListItems(this.ministryID, this.scaleID);
+    // this.songListItems$ = this.scaleApiService.findAllSongListItems(this.ministryID, this.scaleID);
 
-    this.ministryService.getScaleByID(this.ministryID, this.scaleID).subscribe((scale: ScaleResponse) => {
+    if (!this.scaleID) return;
+
+    this.ministryService.getScaleByID(this.ministryID, this.scaleID).subscribe((scale: IScaleResponse) => {
       this.scaleFormGroup.patchValue(scale);
     });
   }

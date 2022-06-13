@@ -131,25 +131,37 @@
   </mat-tab>
 
   <mat-tab label="Músicas" *ngIf="scaleID">
-    <ng-template mat-tab-label>
-      <div class="tab-label">
-        <div class="icon-container">
-          <mat-icon>library_music</mat-icon>
-          <span class="icon-container__text">5</span>
+    <ng-container *ngIf="songListItems$ | async as songListItems">
+      <ng-template mat-tab-label>
+        <div class="tab-label">
+          <div class="icon-container">
+            <mat-icon>library_music</mat-icon>
+            <span class="icon-container__text">{{songListItems.length}}</span>
+          </div>
+          <span class="tab-label-text">Músicas</span>
         </div>
-        <span class="tab-label-text">Músicas</span>
+      </ng-template>
+      <button class="add-music-btn" type="button" mat-raised-button color="primary">
+        <mat-icon>add</mat-icon> Adicionar Música
+      </button>
+      <div class="song-list-items">
+        <sp-song-list-item
+          [song]="song"
+          *spFor="let song of songListItems else 'Ainda não foi cadastrada nenhuma música' let length=length; let index=index"
+          [songOrder]="index + 1"
+        >
+          <img
+            style="border-radius: 50%; width: 50px; height: 50px"
+            alt="user image"
+            src="https://randomuser.me/api/portraits/women/13.jpg"
+          />
+        </sp-song-list-item>
       </div>
-    </ng-template>
-
-    <button type="button" mat-raised-button color="primary">
-      <mat-icon>add</mat-icon> Adicionar Música
-    </button>
-
-    <p>A escala ainda não possui nenhuma música</p>
+    </ng-container>
   </mat-tab>
 </mat-tab-group>
 
-<br />
+<!-- <br />
 <br />
 <br />
 <br />
@@ -159,4 +171,4 @@
 
 <p>Valido {{ scaleFormGroup.valid }}</p>
 <p>Dirty {{ scaleFormGroup.dirty }}</p>
-<p>Scale ID {{ scaleID }}</p>
+<p>Scale ID {{ scaleID }}</p> -->

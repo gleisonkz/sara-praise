@@ -1,4 +1,4 @@
-export interface MinisterSongKeyListItemResponse {
+export interface IMinisterSongKeyListItemResponse {
   memberImageUrl: string;
   memberName: string;
   artistName: string;
@@ -6,7 +6,7 @@ export interface MinisterSongKeyListItemResponse {
   songKey: string;
 }
 
-export interface MinisterSongKeyRequest {
+export interface IMinisterSongKeyRequest {
   memberID: number;
   songID: number;
   keyID: number;

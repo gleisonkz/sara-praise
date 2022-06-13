@@ -5,16 +5,17 @@ import { SongListItemResponse } from '@sp/shared-interfaces';
 @Component({
   selector: 'sp-song-list-item',
   template: `
+    <div *ngIf="songOrder" class="ribbon">
+      <span>{{ songOrder }}º</span>
+    </div>
     <div class="icon">
       <ng-content> </ng-content>
     </div>
-
     <div class="description">
       <span> {{ song.artistName }}</span>
       <span> {{ song.title }}</span>
       <span class="key"> Tom: {{ song.key }} </span>
     </div>
-
     <div class="links">
       <mat-icon [ngStyle]="{ color: song.hasLyricLink ? '#f0f086' : '' }">format_color_text</mat-icon>
       <mat-icon [ngStyle]="{ color: song.hasChordsLink ? '#5ce85c' : '' }">format_indent_increase</mat-icon>
@@ -26,5 +27,6 @@ import { SongListItemResponse } from '@sp/shared-interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SongListItemComponent {
+  @Input() songOrder: number;
   @Input() song: SongListItemResponse;
 }

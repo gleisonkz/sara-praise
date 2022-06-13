@@ -2,10 +2,10 @@ import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
-    IRoleResponse, KeyResponse, MemberListItemResponse, MinisterSongKeyListItemResponse,
-    MinisterSongKeyRequest, MinistryListItemResponse, MinistryRequest, ParticipantListItem,
-    ScaleDetailResponse, ScaleListItemResponse, ScaleRequest, ScaleResponse, ScaleResponseCreate,
-    SongListItemResponse
+    IMinisterSongKeyListItemResponse, IMinisterSongKeyRequest, IRoleResponse, IScaleResponse,
+    KeyResponse, MemberListItemResponse, MinistryListItemResponse, MinistryRequest,
+    ParticipantListItem, ScaleDetailResponse, ScaleListItemResponse, ScaleRequest,
+    ScaleResponseCreate, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { BaseApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/base.api.service';
@@ -45,19 +45,19 @@ export class MinistryApiService extends BaseApiService {
     return this.getWithRuntimeValidation<ParticipantListItem[]>(url, ParticipantListItem);
   }
 
-  updateScale(ministryID: number, scaleRequest: ScaleRequest, scaleID: number): Observable<ScaleResponse> {
+  updateScale(ministryID: number, scaleRequest: ScaleRequest, scaleID: number): Observable<IScaleResponse> {
     const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
-    return this.http.put<ScaleResponse>(url, scaleRequest);
+    return this.http.put<IScaleResponse>(url, scaleRequest);
   }
 
-  createMinisterSongKey(ministryID: number, ministerSongKeyRequest: MinisterSongKeyRequest): Observable<boolean> {
+  createMinisterSongKey(ministryID: number, ministerSongKeyRequest: IMinisterSongKeyRequest): Observable<boolean> {
     const url = `${this.URL}/${ministryID}/minister-song-key`;
     return this.http.post<boolean>(url, ministerSongKeyRequest);
   }
 
-  getMinisterSongKeys(ministryID: number): Observable<MinisterSongKeyListItemResponse[]> {
+  getMinisterSongKeys(ministryID: number): Observable<IMinisterSongKeyListItemResponse[]> {
     const url = `${this.URL}/${ministryID}/minister-song-key`;
-    return this.http.get<MinisterSongKeyListItemResponse[]>(url);
+    return this.http.get<IMinisterSongKeyListItemResponse[]>(url);
   }
 
   getRolesByMemberID(ministryID: number, memberID?: number) {
@@ -67,9 +67,9 @@ export class MinistryApiService extends BaseApiService {
     return this.http.get<IRoleResponse[]>(url, { params });
   }
 
-  getScaleByID(ministryID: number, scaleID: number): Observable<ScaleResponse> {
+  getScaleByID(ministryID: number, scaleID: number): Observable<IScaleResponse> {
     const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
-    return this.http.get<ScaleResponse>(url).pipe(
+    return this.http.get<IScaleResponse>(url).pipe(
       map((scale) => {
         return {
           ...scale,
@@ -79,9 +79,9 @@ export class MinistryApiService extends BaseApiService {
     );
   }
 
-  createMinistryKey(ministryID: number, key: MinisterSongKeyRequest): Observable<MinisterSongKeyListItemResponse> {
+  createMinistryKey(ministryID: number, key: IMinisterSongKeyRequest): Observable<IMinisterSongKeyListItemResponse> {
     const url = `${this.URL}/${ministryID}/keys`;
-    return this.http.post<MinisterSongKeyListItemResponse>(url, key);
+    return this.http.post<IMinisterSongKeyListItemResponse>(url, key);
   }
 
   getMinistryListItems(ministryID?: number): Observable<MinistryListItemResponse[]> {
@@ -145,8 +145,8 @@ export class MinistryApiService extends BaseApiService {
     return this.http.get<KeyResponse[]>(url);
   }
 
-  deleteScale(scaleID: number): Observable<ScaleResponse> {
+  deleteScale(scaleID: number): Observable<IScaleResponse> {
     const url = `${this.URL}/scales/${scaleID}`;
-    return this.http.delete<ScaleResponse>(url);
+    return this.http.delete<IScaleResponse>(url);
   }
 }

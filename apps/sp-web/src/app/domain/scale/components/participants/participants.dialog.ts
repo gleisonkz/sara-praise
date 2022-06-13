@@ -11,19 +11,11 @@ import {
     MinistryApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
-import { BehaviorSubject, defer, filter, map, MonoTypeOperatorFunction, Observable } from 'rxjs';
+import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 
 interface ParticipantsDialogData {
   scaleId: number;
   ministryID: number;
-}
-
-export function initialize<T>(initializer: () => void): MonoTypeOperatorFunction<T> {
-  return (source: Observable<T>) =>
-    defer(() => {
-      initializer();
-      return source;
-    });
 }
 
 @Component({
@@ -36,7 +28,6 @@ export class ParticipantsDialog implements OnInit {
     {
       item: MemberListItemResponse;
       form: UntypedFormGroup;
-      selected: FormControl<boolean>;
       checkedRoles$: BehaviorSubject<number>;
       roles: {
         form: UntypedFormGroup;
@@ -50,7 +41,6 @@ export class ParticipantsDialog implements OnInit {
   members: {
     item: MemberListItemResponse;
     form: UntypedFormGroup;
-    selected: FormControl<boolean>;
 
     roles: {
       form: UntypedFormGroup;
@@ -79,6 +69,7 @@ export class ParticipantsDialog implements OnInit {
       map((members: MemberListItemResponse[]) => {
         const membersGroup = members.map((member: MemberListItemResponse) => {
           const group = new UntypedFormGroup({
+            selected: new FormControl(!!member.participantID),
             ministryID: new FormControl(this.data.ministryID),
             scaleID: new FormControl(this.data.scaleId),
             participantID: new FormControl(member.participantID),
@@ -109,13 +100,10 @@ export class ParticipantsDialog implements OnInit {
             };
           });
 
-          const selectedControl = new FormControl(!!member?.participantID);
-
           return {
             checkedRoles$,
             item: member,
             form: group,
-            selected: selectedControl,
             roles,
           };
         });
@@ -239,7 +227,7 @@ export class ParticipantsDialog implements OnInit {
 
   async submitForm() {
     const participants = this.members
-      .filter((member) => member.selected.value)
+      .filter((member) => member.form.value.selected || member.form.value.participantID)
       .map((member) => {
         const roles = member.roles.filter((role) => role.form.value.selected).map((role) => role.item.roleID);
 

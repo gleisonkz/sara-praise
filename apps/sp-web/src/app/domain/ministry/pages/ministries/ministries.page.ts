@@ -6,7 +6,7 @@ import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces
 
 import { FormControl } from '@ngneat/reactive-forms';
 import { AuthService } from 'apps/sp-web/src/app/domain/auth/auth.service';
-import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/ministry.facade';
+import { MinistryStore } from 'apps/sp-web/src/app/shared/state/ministry.store';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -21,12 +21,11 @@ export class MinistriesPage implements OnInit {
   constructor(
     private readonly authService: AuthService,
     private readonly router: Router,
-    private readonly ministryFacade: MinistryFacade
+    private readonly ministryStore: MinistryStore
   ) {}
 
   ngOnInit(): void {
-    this.ministries$ = this.ministryFacade.ministries$;
-    this.ministryFacade.getMinistries();
+    this.ministries$ = this.ministryStore.findAll();
   }
 
   logout() {
@@ -41,11 +40,11 @@ export class MinistriesPage implements OnInit {
       ownerID: this.authService.user.userID,
     };
 
-    this.ministryFacade.addMinistry(ministry);
+    this.ministryStore.create(ministry);
   }
 
   goToMinistryDetails(ministryID: number) {
-    this.ministryFacade.setActiveMinistry(ministryID);
+    this.ministryStore.setActiveMinistry(ministryID);
     this.router.navigate(['ministerios', ministryID]);
   }
 }

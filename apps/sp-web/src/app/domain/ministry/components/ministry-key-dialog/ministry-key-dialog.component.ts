@@ -4,8 +4,8 @@ import { Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import {
-    AvailableSongResponse, eMinistryRole, KeyResponse, MemberListItemResponse,
-    MinisterSongKeyRequest
+    AvailableSongResponse, eMinistryRole, IMinisterSongKeyRequest, KeyResponse,
+    MemberListItemResponse
 } from '@sp/shared-interfaces';
 
 import { ControlsOf, FormControl, FormGroup } from '@ngneat/reactive-forms';
@@ -27,7 +27,7 @@ export class MinistryKeyDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) private ministryID: number
   ) {}
 
-  ministryKeyForm: FormGroup<ControlsOf<MinisterSongKeyRequest>>;
+  ministryKeyForm: FormGroup<ControlsOf<IMinisterSongKeyRequest>>;
 
   ministerMembers$: Observable<MemberListItemResponse[]>;
   songs$ = new BehaviorSubject<AvailableSongResponse[]>([]);

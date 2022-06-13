@@ -3,12 +3,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MatDialog } from '@angular/material/dialog';
 
-import { MinisterSongKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
+import { IMinisterSongKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 import { MinistryApiService } from '@sp/web/domain/ministry/services';
 
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { MinistryFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/ministry.facade';
 import {
     ArtistDialog
 } from 'apps/sp-web/src/app/domain/ministry/components/artist-dialog/artist-dialog.component';
@@ -18,7 +17,9 @@ import {
 import {
     MusicDialogComponent
 } from 'apps/sp-web/src/app/domain/ministry/components/music-dialog/music-dialog.component';
-import { filter, Observable, switchMap, tap } from 'rxjs';
+import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
+import { MinistryStore } from 'apps/sp-web/src/app/shared/state/ministry.store';
+import { filter, Observable, switchMap } from 'rxjs';
 import {
     MinistryKeyDialogComponent
 } from '../../components/ministry-key-dialog/ministry-key-dialog.component';
@@ -31,27 +32,23 @@ import {
 })
 export class MinistryDetailPage implements OnInit {
   ministryListItem$: Observable<MinistryListItemResponse>;
-  ministryID: number;
+  ministryID: number = injectMinistryID();
 
   constructor(
-    private readonly ministryFacade: MinistryFacade,
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
     private readonly dialog: MatDialog,
     private readonly ministryApiService: MinistryApiService,
-    private readonly toastService: HotToastService
+    private readonly toastService: HotToastService,
+    private readonly ministryStore: MinistryStore
   ) {}
 
   ngOnInit(): void {
-    this.ministryListItem$ = this.ministryFacade.ministry$.pipe(
-      tap((ministry: MinistryListItemResponse) => {
-        this.ministryID = ministry.ministryID;
-      })
-    );
+    this.ministryListItem$ = this.ministryStore.findByID(this.ministryID);
   }
 
   deleteMinistry(ministryID: number) {
-    this.ministryFacade.removeMinistry(ministryID);
+    this.ministryStore.remove(ministryID);
     this.router.navigate(['/ministerios']);
   }
 
@@ -124,7 +121,7 @@ export class MinistryDetailPage implements OnInit {
       .pipe(
         untilDestroyed(this),
         filter(Boolean),
-        switchMap((ministerSongKeyRequest: MinisterSongKeyRequest) =>
+        switchMap((ministerSongKeyRequest: IMinisterSongKeyRequest) =>
           this.ministryApiService.createMinisterSongKey(this.ministryID, ministerSongKeyRequest)
         )
       )

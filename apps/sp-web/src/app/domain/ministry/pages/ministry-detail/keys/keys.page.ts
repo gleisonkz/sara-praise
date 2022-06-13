@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
-import { MinisterSongKeyListItemResponse } from '@sp/shared-interfaces';
+import { IMinisterSongKeyListItemResponse } from '@sp/shared-interfaces';
 
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { Observable, of } from 'rxjs';
@@ -12,7 +12,7 @@ import { MinistryApiService } from '../../../core/services/ministry.api.service'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class KeysPage implements OnInit {
-  keysListItems$: Observable<MinisterSongKeyListItemResponse[]> = of([]);
+  keysListItems$: Observable<IMinisterSongKeyListItemResponse[]> = of([]);
   ministryID = injectMinistryID();
   constructor(private readonly ministryService: MinistryApiService) {}
 

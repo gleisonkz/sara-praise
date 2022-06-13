@@ -1,5 +1,7 @@
 import { MemberListItemResponse, SongListItemResponse } from '@sp/shared-interfaces';
 
+import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+
 export interface ScaleListItemResponse {
   scaleID: number;
   title: string;
@@ -18,13 +20,28 @@ export interface ScaleDetailResponse {
   participants: MemberListItemResponse[];
 }
 
-export interface ScaleResponse {
+export interface IScaleResponse {
   scaleID: number;
   title: string;
   date: Date;
   notes?: string;
 }
 
-export type ScaleResponseCreate = Pick<ScaleResponse, 'scaleID'>;
+export class ScaleResponse implements IScaleResponse {
+  @IsNumber()
+  scaleID: number;
 
-export type ScaleRequest = Omit<ScaleResponse, 'scaleID'>;
+  @IsString()
+  title: string;
+
+  @IsDate()
+  date: Date;
+
+  @IsString()
+  @IsOptional()
+  notes?: string;
+}
+
+export type ScaleResponseCreate = Pick<IScaleResponse, 'scaleID'>;
+
+export type ScaleRequest = Omit<IScaleResponse, 'scaleID'>;

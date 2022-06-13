@@ -3,11 +3,12 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
 import {
-    eMinistryRole, MinisterSongKeyListItemResponse, MinisterSongKeyRequest,
+    eMinistryRole, IMinisterSongKeyListItemResponse, IMinisterSongKeyRequest,
     MinistryListItemResponse, MinistryRequest
 } from '@sp/shared-interfaces';
 
 import { Role } from '@prisma/client';
+import { MinisterSongKeyListItemResponse } from 'apps/sp-api/src/domain/ministry/dtos';
 import { Member, Ministry, Scale } from './models';
 
 @Injectable()
@@ -49,7 +50,7 @@ export class MinistryService {
     return ministryListItem;
   }
 
-  createMinisterSongKey(ministryID: number, ministerSongKeyRequest: MinisterSongKeyRequest) {
+  createMinisterSongKey(ministryID: number, ministerSongKeyRequest: IMinisterSongKeyRequest) {
     const ministerSongKey = this.prismaService.ministerSongKey.create({
       data: {
         ministryID,
@@ -91,8 +92,8 @@ export class MinistryService {
       },
     });
 
-    const ministerSongKeysListItem: MinisterSongKeyListItemResponse[] = ministerSongKeys.map((ministerSongKey) => {
-      const ministerSongKeyListItem: MinisterSongKeyListItemResponse = {
+    const ministerSongKeysListItem: IMinisterSongKeyListItemResponse[] = ministerSongKeys.map((ministerSongKey) => {
+      const ministerSongKeyListItem: IMinisterSongKeyListItemResponse = {
         memberImageUrl: ministerSongKey.member.user.imageURL,
         memberName: ministerSongKey.member.user.name,
         artistName: ministerSongKey.song.artist.name,
@@ -121,9 +122,9 @@ export class MinistryService {
         name: ministry.name,
         musicsQuantity: ministry._count.songs,
         membersQuantity: ministry._count.members,
-        artistQuantity: ministry._count.artist,
+        artistQuantity: ministry._count.artists,
         scalesQuantity: ministry._count.scales,
-        songKeysQuantity: ministry._count.ministerSongKey,
+        songKeysQuantity: ministry._count.ministerSongKeys,
       };
 
       return ministryListItem;
@@ -141,8 +142,8 @@ export class MinistryService {
             members: true,
             scales: true,
             songs: true,
-            artist: true,
-            ministerSongKey: true,
+            artists: true,
+            ministerSongKeys: true,
           },
         },
       },
@@ -166,7 +167,7 @@ export class MinistryService {
 
     const roles = await this.prismaService.role.findMany({
       where: {
-        ministry: {
+        ministries: {
           some: {
             ministryID,
           },

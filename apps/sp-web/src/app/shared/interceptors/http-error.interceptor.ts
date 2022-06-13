@@ -29,7 +29,7 @@ export class HttpErrorInterceptor implements HttpInterceptor {
           case HttpStatusCode.Unauthorized: {
             const message = error?.error?.message || 'Você não está autenticado para realizar esta operação.';
             this.toastService.error(message);
-            this.router.navigate(['/login']);
+            this.router.navigate(['/auth/sign-in']);
             break;
           }
           case HttpStatusCode.Forbidden:

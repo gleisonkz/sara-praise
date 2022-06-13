@@ -34,10 +34,11 @@ export class SpForDirective<T> implements OnInit, OnDestroy {
   }
 
   private createView(items: T[]) {
-    items.forEach((item) => {
+    items.forEach((item, index) => {
       this.viewContainer.createEmbeddedView(this.templateRef, {
         $implicit: item,
         length: items.length,
+        index: index,
       });
     });
 

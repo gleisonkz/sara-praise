@@ -51,7 +51,7 @@ export class ScaleService {
         ministryID,
       },
       include: {
-        songs: true,
+        scaleSongs: true,
         participants: true,
       },
     });
@@ -86,7 +86,7 @@ export class ScaleService {
         memberID: true,
         roles: true,
         user: true,
-        participant: {
+        participants: {
           where: {
             scaleID,
           },
@@ -107,13 +107,15 @@ export class ScaleService {
         imageUrl: member.user.imageURL,
         memberID: member.memberID,
         name: member.user.name,
-        participantID: member.participant[0]?.participantID,
+        participantID: member.participants[0]?.participantID,
         roles: member.roles.map((role) => {
           const roleResponse: RoleResponse = {
             iconUrl: role.iconUrl,
             name: role.name,
             roleID: role.roleID,
-            isChecked: !!member.participant[0]?.roles.find((participantRole) => participantRole.roleID === role.roleID),
+            isChecked: !!member.participants[0]?.roles.find(
+              (participantRole) => participantRole.roleID === role.roleID
+            ),
           };
 
           return roleResponse;
@@ -141,9 +143,7 @@ export class ScaleService {
       },
     });
 
-    console.log({ participants });
-
-    const participantlistItems: ParticipantListItem[] = participants.map((participant) => {
+    const participantListItems: ParticipantListItem[] = participants.map((participant) => {
       const participantListItem: ParticipantListItem = {
         name: participant.member.user.name,
         imageUrl: participant.member.user.imageURL,
@@ -161,17 +161,14 @@ export class ScaleService {
       return participantListItem;
     });
 
-    return participantlistItems;
-
-    console.log('findParticipantListItems');
-    console.log({ ministryID }, { scaleID });
+    return participantListItems;
   }
 
   async findAll(ministryID: number): Promise<ScaleListItemResponse[]> {
     const scales = await this.prismaService.scale.findMany({
       where: { ministryID },
       include: {
-        songs: true,
+        scaleSongs: true,
       },
       orderBy: {
         date: 'asc',
@@ -183,7 +180,7 @@ export class ScaleService {
         scaleID: scale.scaleID,
         title: scale.title,
         notes: scale.notes,
-        songsQuantity: scale.songs.length,
+        songsQuantity: scale.scaleSongs.length,
         date: scale.date,
         imagesUrl: [],
       };

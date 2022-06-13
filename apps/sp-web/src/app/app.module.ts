@@ -15,6 +15,9 @@ import {
     HttpErrorInterceptor
 } from 'apps/sp-web/src/app/shared/interceptors/http-error.interceptor';
 import { LogInterceptor } from 'apps/sp-web/src/app/shared/interceptors/log.interceptor';
+import { MinistryStore } from 'apps/sp-web/src/app/shared/state/ministry.store';
+import { environment } from 'apps/sp-web/src/environments/environment.prod';
+import { NgSimpleStateModule } from 'ng-simple-state';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -26,6 +29,10 @@ registerLocaleData(localePT);
     HotToastModule.forRoot(),
     AppRoutingModule,
     BrowserModule,
+    NgSimpleStateModule.forRoot({
+      enableDevTool: !environment.production,
+      enableLocalStorage: false,
+    }),
     HttpClientModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
@@ -38,6 +45,7 @@ registerLocaleData(localePT);
     { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     { provide: LOCALE_ID, useValue: 'pt-BR' },
+    MinistryStore,
   ],
   bootstrap: [AppComponent],
 })
