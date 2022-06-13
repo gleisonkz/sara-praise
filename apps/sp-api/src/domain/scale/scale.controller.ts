@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Put, UseGuards } from '@nestjs/comm
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
-import { ScaleListItemResponse, ScaleResponse } from '@sp/shared-interfaces';
+import { ParticipantRequest, ScaleListItemResponse, ScaleResponse } from '@sp/shared-interfaces';
 
 import { ScaleRequestDto } from 'apps/sp-api/src/domain/scale/dto/scale.dto';
 import { ScaleService } from './scale.service';
@@ -43,5 +43,10 @@ export class ScaleController {
   @Get('/:scaleID/participant-list-items')
   findParticipantListItems(@Param('ministryID') ministryID: number, @Param('scaleID') scaleID: number): any {
     return this.scaleService.findParticipantListItems(+ministryID, +scaleID);
+  }
+
+  @Post('/:scaleID/participants')
+  createParticipant(@Body() participants: ParticipantRequest[]): any {
+    return this.scaleService.createParticipant(participants);
   }
 }

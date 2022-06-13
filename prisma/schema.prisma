@@ -4,7 +4,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["interactiveTransactions"]
 }
 
 model Ministry {
@@ -18,17 +19,6 @@ model Ministry {
   scales           Scale[]
   roles            Role[]
   ministerSongKeys MinisterSongKey[]
-}
-
-model Role {
-  roleID  Int    @id @default(autoincrement())
-  name    String
-  iconUrl String
-
-  members      Member[]
-  ministries   Ministry[]
-  participants Participant[]
-
 }
 
 model User {
@@ -61,13 +51,31 @@ model Permission {
   memberID     Int?
 }
 
+model Role {
+  roleID  Int    @id @default(autoincrement())
+  name    String
+  iconUrl String
+
+  members         Member[]
+  ministries      Ministry[]
+  participantRole ParticipantRole[]
+}
+
 model Participant {
-  participantID Int    @id @default(autoincrement())
-  memberID      Int
-  scaleID       Int
-  member        Member @relation(fields: [memberID], references: [memberID])
-  scale         Scale  @relation(fields: [scaleID], references: [scaleID])
-  roles         Role[]
+  participantID   Int               @id @default(autoincrement())
+  memberID        Int
+  scaleID         Int
+  member          Member            @relation(fields: [memberID], references: [memberID])
+  scale           Scale             @relation(fields: [scaleID], references: [scaleID])
+  participantRole ParticipantRole[]
+}
+
+model ParticipantRole {
+  participantRoleID Int         @id @default(autoincrement())
+  roleID            Int
+  participantID     Int
+  role              Role        @relation(fields: [roleID], references: [roleID])
+  participant       Participant @relation(fields: [participantID], references: [participantID], onDelete: Cascade)
 }
 
 model Scale {

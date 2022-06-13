@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 
-import { IScaleResponse, ScaleRequest, ScaleResponse } from '@sp/shared-interfaces';
+import {
+    IScaleResponse, ParticipantRequest, ScaleRequest, ScaleResponse
+} from '@sp/shared-interfaces';
 
 import { BaseApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/base.api.service';
 import { Observable, of } from 'rxjs';
@@ -29,5 +31,10 @@ export class ScaleApiService extends BaseApiService {
   create(ministryID: number, scale: ScaleRequest): Observable<IScaleResponse> {
     const url = `${this.URL}/${ministryID}/scales`;
     return this.http.post<IScaleResponse>(url, scale);
+  }
+
+  createParticipant(ministryID: number, scaleID: number, participantRequest: ParticipantRequest): any {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}/participants`;
+    return this.http.post<any>(url, participantRequest);
   }
 }

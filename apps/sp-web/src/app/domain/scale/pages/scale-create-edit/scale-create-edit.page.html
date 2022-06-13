@@ -96,9 +96,18 @@
           <span class="tab-label-text">Participantes</span>
         </div>
       </ng-template>
-      <button (click)="addMember()" type="button" mat-raised-button color="primary">
-        <mat-icon>add</mat-icon> Adicionar Participante
-      </button>
+
+      <ng-container *ngIf="!participants.length; else withParticipantsTemplate">
+        <button (click)="addMember()" type="button" mat-raised-button color="primary">
+          <mat-icon>add</mat-icon> Adicionar Participantes
+        </button>
+      </ng-container>
+      <ng-template #withParticipantsTemplate>
+        <button (click)="addMember()" type="button" mat-raised-button color="primary">
+          Gerenciar Participantes
+        </button>
+      </ng-template>
+
       <ng-container>
         <ng-container *ngIf="participants.length; else noParticipantsTemplate">
           <mat-list>

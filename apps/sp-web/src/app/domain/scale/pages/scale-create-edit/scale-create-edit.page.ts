@@ -22,7 +22,7 @@ import {
 import {
     ParticipantsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/participants/participants.dialog';
-import { EMPTY, filter, Observable, of, skip, switchMap, tap } from 'rxjs';
+import { filter, Observable, of, skip, switchMap, tap } from 'rxjs';
 
 @Component({
   templateUrl: './scale-create-edit.page.html',
@@ -187,9 +187,8 @@ export class ScaleCreateEditPage implements OnInit {
       .afterClosed()
       .pipe(
         filter((participantRequest: ParticipantRequest) => !!participantRequest),
-        switchMap(
-          (participantRequest: ParticipantRequest) => EMPTY
-          // this.ministryService.createParticipant(this.ministryID, participantRequest)
+        switchMap((participantRequest: ParticipantRequest) =>
+          this.scaleApiService.createParticipant(this.ministryID, this.scaleID, participantRequest)
         )
       )
       .subscribe(() => {

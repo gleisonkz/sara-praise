@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
 import {
-    ParticipantListItem, ParticipantListItemRole, RoleResponse, ScaleDetailResponse,
-    ScaleListItemResponse, ScaleRequest, ScaleResponse
+    ParticipantListItem, ParticipantListItemRole, ParticipantRequest, RoleResponse,
+    ScaleDetailResponse, ScaleListItemResponse, ScaleRequest, ScaleResponse
 } from '@sp/shared-interfaces';
 
 import { MemberListItemResponseDto } from 'apps/sp-api/src/domain/member/dtos';
@@ -11,6 +11,9 @@ import { ScaleRequestDto } from 'apps/sp-api/src/domain/scale/dto/scale.dto';
 
 @Injectable()
 export class ScaleService {
+  //     roleID: 1}
+  // ]
+
   constructor(private readonly prismaService: PrismaService) {}
 
   async create(ministryID: number, scaleRequest: ScaleRequest): Promise<ScaleResponse> {
@@ -92,7 +95,7 @@ export class ScaleService {
           },
           select: {
             participantID: true,
-            roles: {
+            participantRole: {
               select: {
                 roleID: true,
               },
@@ -113,7 +116,7 @@ export class ScaleService {
             iconUrl: role.iconUrl,
             name: role.name,
             roleID: role.roleID,
-            isChecked: !!member.participants[0]?.roles.find(
+            isChecked: !!member.participants[0]?.participantRole.find(
               (participantRole) => participantRole.roleID === role.roleID
             ),
           };
@@ -139,7 +142,11 @@ export class ScaleService {
             user: true,
           },
         },
-        roles: true,
+        participantRole: {
+          include: {
+            role: true,
+          },
+        },
       },
     });
 
@@ -147,11 +154,11 @@ export class ScaleService {
       const participantListItem: ParticipantListItem = {
         name: participant.member.user.name,
         imageUrl: participant.member.user.imageURL,
-        roles: participant.roles.map((role) => {
+        roles: participant.participantRole.map((participantRole) => {
           const roleResponse: ParticipantListItemRole = {
-            iconUrl: role.iconUrl,
-            name: role.name,
-            roleID: role.roleID,
+            iconUrl: participantRole.role.iconUrl,
+            name: participantRole.role.name,
+            roleID: participantRole.roleID,
           };
 
           return roleResponse;
@@ -189,5 +196,74 @@ export class ScaleService {
     });
 
     return scaleListItemResponses;
+  }
+
+  async createParticipant(participantRequest: ParticipantRequest[]): Promise<any> {
+    const { toUpdate, toDelete, toCreate } = participantRequest.reduce(
+      (acc, participant) => {
+        const shouldDelete = !!participant.participantID && !participant.selected;
+        const shouldUpdate = !!participant.participantID && participant.selected;
+
+        if (shouldDelete) acc.toDelete.push(participant);
+        if (shouldUpdate) acc.toUpdate.push(participant);
+        if (!participant.participantID) acc.toCreate.push(participant);
+
+        return acc;
+      },
+      { toDelete: [], toUpdate: [], toCreate: [] }
+    );
+
+    if (toDelete.length > 0) {
+      await this.prismaService.participant.deleteMany({
+        where: {
+          participantID: {
+            in: toDelete.map((participant) => participant.participantID),
+          },
+        },
+      });
+    }
+
+    if (toCreate.length > 0) {
+      toCreate.forEach(async (participant) => {
+        await this.prismaService.participant.create({
+          data: {
+            memberID: participant.memberID,
+            scaleID: participant.scaleID,
+            participantRole: {
+              createMany: {
+                data: participant.roles.map((role) => ({
+                  roleID: role,
+                })),
+              },
+            },
+          },
+        });
+      });
+    }
+
+    if (toUpdate.length > 0) {
+      toUpdate.forEach(async (participant) => {
+        await this.prismaService.participantRole.deleteMany({
+          where: {
+            participantID: participant.participantID,
+          },
+        });
+
+        await this.prismaService.participant.update({
+          where: {
+            participantID: participant.participantID,
+          },
+          data: {
+            participantRole: {
+              createMany: {
+                data: participant.roles.map((role) => ({
+                  roleID: role,
+                })),
+              },
+            },
+          },
+        });
+      });
+    }
   }
 }

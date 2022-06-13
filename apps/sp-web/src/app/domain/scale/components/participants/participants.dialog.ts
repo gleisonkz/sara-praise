@@ -240,7 +240,6 @@ export class ParticipantsDialog implements OnInit {
       });
 
     console.log('participants', participants);
-
-    // this.dialogRef.close(participants);
+    this.dialogRef.close(participants);
   }
 }

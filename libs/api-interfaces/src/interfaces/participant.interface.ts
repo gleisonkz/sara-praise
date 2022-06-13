@@ -3,6 +3,7 @@ import { IRoleResponse, RoleResponse } from '@sp/shared-interfaces';
 import { IsString } from 'class-validator';
 
 export interface ParticipantRequest {
+  selected: boolean;
   ministryID: number;
   scaleID: number;
   memberID: number;
