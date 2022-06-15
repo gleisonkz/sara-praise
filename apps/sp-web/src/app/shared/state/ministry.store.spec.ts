@@ -162,7 +162,7 @@ describe('MinistryStore', () => {
       ownerID: 1,
     };
 
-    when(mockMinistryApiService.createMinistry(ministryRequest)).thenReturn(of(mockedMinistryResponse));
+    when(mockMinistryApiService.create(ministryRequest)).thenReturn(of(mockedMinistryResponse));
     const ministryApiServiceInstance = instance(mockMinistryApiService);
 
     const { store } = setup(ministryApiServiceInstance, mockHotToastService);
@@ -191,7 +191,7 @@ describe('MinistryStore', () => {
     const mockedMinistries: MinistryListItemResponse[] = [targetMinistry];
 
     when(mockMinistryApiService.getMinistryListItems()).thenReturn(of(mockedMinistries));
-    when(mockMinistryApiService.deleteMinistry(targetMinistry.ministryID)).thenReturn(of(true));
+    when(mockMinistryApiService.delete(targetMinistry.ministryID)).thenReturn(of(true));
 
     const ministryApiServiceInstance = instance(mockMinistryApiService);
     const { store } = setup(ministryApiServiceInstance, mockHotToastService);

@@ -2,14 +2,12 @@ import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
-    IMinisterSongKeyListItemResponse, IMinisterSongKeyRequest, IRoleResponse, IScaleResponse,
-    KeyResponse, MemberListItemResponse, MinistryListItemResponse, MinistryRequest,
-    ParticipantListItem, ScaleDetailResponse, ScaleListItemResponse, ScaleRequest,
-    ScaleResponseCreate, SongListItemResponse
+    IMinisterSongKeyListItemResponse, IMinisterSongKeyRequest, IRoleResponse, KeyResponse,
+    MinistryListItemResponse, MinistryRequest, SongListItemResponse
 } from '@sp/shared-interfaces';
 
 import { BaseApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/base.api.service';
-import { map, Observable, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -21,33 +19,13 @@ export class MinistryApiService extends BaseApiService {
     super('/ministries');
   }
 
-  createMinistry(ministry: MinistryRequest): Observable<MinistryListItemResponse> {
+  create(ministry: MinistryRequest): Observable<MinistryListItemResponse> {
     return this.http.post<MinistryListItemResponse>(this.URL, ministry);
   }
 
-  deleteMinistry(ministryID: number) {
+  delete(ministryID: number) {
     const url = `${this.URL}/${ministryID}`;
     return this.http.delete(url);
-  }
-
-  createScale(ministryID: number, scaleRequest: ScaleRequest): Observable<ScaleResponseCreate> {
-    const url = `${this.URL}/${ministryID}/scales`;
-    return this.http.post<ScaleResponseCreate>(url, scaleRequest);
-  }
-
-  getParticipants(ministryID: number): Observable<MemberListItemResponse[]> {
-    const url = `${this.URL}/${ministryID}/scales/1/participants`;
-    return this.http.get<MemberListItemResponse[]>(url);
-  }
-
-  getParticipantListItems(ministryID: number, scaleID: number): Observable<ParticipantListItem[]> {
-    const url = `${this.URL}/${ministryID}/scales/${scaleID}/participant-list-items`;
-    return this.getWithRuntimeValidation<ParticipantListItem[]>(url, ParticipantListItem);
-  }
-
-  updateScale(ministryID: number, scaleRequest: ScaleRequest, scaleID: number): Observable<IScaleResponse> {
-    const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
-    return this.http.put<IScaleResponse>(url, scaleRequest);
   }
 
   createMinisterSongKey(ministryID: number, ministerSongKeyRequest: IMinisterSongKeyRequest): Observable<boolean> {
@@ -67,18 +45,6 @@ export class MinistryApiService extends BaseApiService {
     return this.http.get<IRoleResponse[]>(url, { params });
   }
 
-  getScaleByID(ministryID: number, scaleID: number): Observable<IScaleResponse> {
-    const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
-    return this.http.get<IScaleResponse>(url).pipe(
-      map((scale) => {
-        return {
-          ...scale,
-          date: new Date(scale.date),
-        };
-      })
-    );
-  }
-
   createMinistryKey(ministryID: number, key: IMinisterSongKeyRequest): Observable<IMinisterSongKeyListItemResponse> {
     const url = `${this.URL}/${ministryID}/keys`;
     return this.http.post<IMinisterSongKeyListItemResponse>(url, key);
@@ -89,16 +55,6 @@ export class MinistryApiService extends BaseApiService {
     const url = `${this.URL}/list-item${idParamPath}`;
 
     return this.getWithRuntimeValidation<MinistryListItemResponse[]>(url, MinistryListItemResponse);
-  }
-
-  getScaleListItems(ministryID: number): Observable<ScaleListItemResponse[]> {
-    const url = `${this.URL}/${ministryID}/scales`;
-    return this.http.get<ScaleListItemResponse[]>(url);
-  }
-
-  getScaleListItemDetails(ministryID: number, scaleID: number): Observable<ScaleDetailResponse> {
-    const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
-    return this.http.get<ScaleDetailResponse>(url);
   }
 
   getSongListItems(ministryID: number): Observable<SongListItemResponse[]> {
@@ -143,10 +99,5 @@ export class MinistryApiService extends BaseApiService {
 
     const url = `${this.URL}/keys`;
     return this.http.get<KeyResponse[]>(url);
-  }
-
-  deleteScale(scaleID: number): Observable<IScaleResponse> {
-    const url = `${this.URL}/scales/${scaleID}`;
-    return this.http.delete<IScaleResponse>(url);
   }
 }

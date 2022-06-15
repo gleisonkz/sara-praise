@@ -28,5 +28,43 @@ export interface SongListItemResponse {
   hasLyricLink: boolean;
   hasChordsLink: boolean;
 }
+export interface ScaleSongResponse {
+  songID: number;
+  title: string;
+  artistName: string;
+  tags: string[];
+  key: string;
+  memberID: number;
+  memberName: string;
+  memberImageUrl: string;
+  hasAudioLink: boolean;
+  hasYoutubeLink: boolean;
+  hasLyricLink: boolean;
+  hasChordsLink: boolean;
+}
+
+export interface AvailableScaleSongResponse {
+  scaleSongID: number;
+  songID: number;
+  title: string;
+  artistName: string;
+  memberID?: number;
+  tags: string[];
+  key: string;
+  hasAudioLink: boolean;
+  hasYoutubeLink: boolean;
+  hasLyricLink: boolean;
+  hasChordsLink: boolean;
+  isChecked: boolean;
+}
 
 export type SongRequest = Omit<SongResponse, 'songID'>;
+export interface ScaleSongRequest {
+  scaleSongID?: number;
+  songID: number;
+  scaleID: number;
+  memberID?: number;
+  isChecked: boolean;
+  artistName: string;
+  songTitle: string;
+}

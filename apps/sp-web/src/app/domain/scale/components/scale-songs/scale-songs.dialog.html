@@ -1,0 +1,117 @@
+<ng-container>
+  <h2 mat-dialog-title>Músicas</h2>
+
+  <mat-dialog-content class="mat-typography">
+    <mat-form-field class="search" appearance="outline">
+      <mat-label>Pesquisar por nome</mat-label>
+      <input matInput placeholder="Nome da música" />
+    </mat-form-field>
+
+    <div class="songs-container">
+      <div
+        class="song"
+        [style.display]="'grid'"
+        *spFor="let song of songListItems$ else 'Ainda não foi cadastrada nenhuma música' let length=length let index=index"
+        (click)="checkboxRef.toggle()"
+        [formGroup]="scaleSongFormArray.controls[index]"
+      >
+        <div class="icon">
+          <mat-icon class="font-color" mat-list-icon>music_note</mat-icon>
+        </div>
+
+        <div class="description">
+          <span> Artista: {{ song.artistName }}</span>
+          <span> Nome: {{ song.title }}</span>
+          <span class="key"> Tom: {{ song.key }} </span>
+        </div>
+
+        <div class="links">
+          <mat-icon [ngStyle]="{ color: song.hasLyricLink ? '#f0f086' : '' }"
+            >format_color_text</mat-icon
+          >
+          <mat-icon [ngStyle]="{ color: song.hasChordsLink ? '#5ce85c' : '' }"
+            >format_indent_increase</mat-icon
+          >
+          <mat-icon [ngStyle]="{ color: song.hasYoutubeLink ? '#f46161' : '' }"
+            >live_tv</mat-icon
+          >
+          <mat-icon [ngStyle]="{ color: song.hasAudioLink ? 'rgb(78 165 255)' : '' }"
+            >music_note</mat-icon
+          >
+        </div>
+
+        <mat-checkbox
+          [checked]="song.isChecked"
+          [formControl]="scaleSongFormArray.controls[index].controls.isChecked"
+          (click)="$event.stopPropagation()"
+          #checkboxRef
+        ></mat-checkbox>
+
+        <mat-form-field
+          (click)="$event.stopPropagation()"
+          minister-select
+          appearance="fill"
+        >
+          <mat-label>Ministro</mat-label>
+          <mat-select
+            [formControl]="scaleSongFormArray.controls[index].controls.memberID"
+            [spDisableControl]="!checkboxRef.checked"
+            [spSetOnSelect]="scaleSongFormArray.controls[index].controls.ministerName"
+          >
+            <mat-option
+              *ngFor="let minister of participantMinisters$ | async"
+              [value]="minister.memberID"
+              [spSetOnSelectValueRef]="{ key: minister.memberID, value: minister.name }"
+            >
+              {{ minister.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- <sp-song-list-item
+        [song]="song"
+        [style.display]="'grid'"
+        *spFor="let song of songListItems$ else 'Ainda não foi cadastrada nenhuma música' let length=length let index=index"
+        (click)="checkboxRef.toggle()"
+        [formGroup]="scaleSongFormArray.controls[index]"
+      >
+
+        <mat-form-field
+          (click)="$event.stopPropagation()"
+          minister-select
+          appearance="fill"
+        >
+          <mat-label>Ministro</mat-label>
+          <mat-select
+            [formControl]="scaleSongFormArray.controls[index].controls.memberID"
+            [spDisableControl]="!checkboxRef.checked"
+            [spSetOnSelect]="scaleSongFormArray.controls[index].controls.ministerName"
+          >
+            <mat-option
+              *ngFor="let minister of participantMinisters$ | async"
+              [value]="minister.memberID"
+              [spSetOnSelectValueRef]="{ key: minister.memberID, value: minister.name }"
+            >
+              {{ minister.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox
+          [checked]="song.isChecked"
+          [formControl]="scaleSongFormArray.controls[index].controls.isChecked"
+          (click)="$event.stopPropagation()"
+          #checkboxRef
+        ></mat-checkbox>
+      </sp-song-list-item> -->
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button [disabled]="!canSubmit" (click)="submitForm()" mat-button color="primary">
+      Salvar
+    </button>
+  </mat-dialog-actions>
+</ng-container>

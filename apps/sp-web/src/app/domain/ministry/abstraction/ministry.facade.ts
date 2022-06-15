@@ -32,7 +32,7 @@ export class MinistryFacade {
   }
 
   addMinistry(ministryRequest: MinistryRequest): void {
-    this.service.createMinistry(ministryRequest).subscribe((newMinistry) => {
+    this.service.create(ministryRequest).subscribe((newMinistry) => {
       this.state.addMinistry(newMinistry);
       this.toastService.success('Ministério criado com sucesso!');
     });
@@ -55,7 +55,7 @@ export class MinistryFacade {
   }
 
   removeMinistry(ministryID: number): void {
-    this.service.deleteMinistry(ministryID).subscribe(() => {
+    this.service.delete(ministryID).subscribe(() => {
       this.state.removeMinistry(ministryID);
       this.toastService.success('Ministério removido com sucesso!');
     });

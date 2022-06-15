@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 export class MinistryIdParamNotFoundError extends Error {
   constructor() {
@@ -14,8 +14,4 @@ export function injectMinistryID(): number {
   const match = fullUrl.url.match(MINISTRY_ID_EXPRESSION);
   if (!match) throw new MinistryIdParamNotFoundError();
   return +match[1];
-}
-
-export function injectRouteParam(paramName: string): number {
-  return +inject(ActivatedRoute).snapshot.params[paramName];
 }

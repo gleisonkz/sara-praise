@@ -1,4 +1,3 @@
-/* eslint-disable @ngneat/reactive-forms/no-angular-forms-imports */
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormGroup, Validators } from '@angular/forms';
 
@@ -10,11 +9,14 @@ import { FormControl } from '@ngneat/reactive-forms';
 import {
     MinistryApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
+import {
+    ScaleApiService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/scale.api.service';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 
 interface ParticipantsDialogData {
-  scaleId: number;
+  scaleID: number;
   ministryID: number;
 }
 
@@ -60,18 +62,19 @@ export class ParticipantsDialog implements OnInit {
 
   constructor(
     public readonly ministryService: MinistryApiService,
+    private readonly scaleApiService: ScaleApiService,
     private readonly dialogRef: MatDialogRef<any>,
     @Inject(MAT_DIALOG_DATA) private data: ParticipantsDialogData
   ) {}
 
   ngOnInit(): void {
-    this.members$ = this.ministryService.getParticipants(this.data.ministryID).pipe(
+    this.members$ = this.scaleApiService.findAllParticipants(this.data.ministryID, this.data.scaleID).pipe(
       map((members: MemberListItemResponse[]) => {
         const membersGroup = members.map((member: MemberListItemResponse) => {
           const group = new UntypedFormGroup({
             selected: new FormControl(!!member.participantID),
             ministryID: new FormControl(this.data.ministryID),
-            scaleID: new FormControl(this.data.scaleId),
+            scaleID: new FormControl(this.data.scaleID),
             participantID: new FormControl(member.participantID),
             memberID: new FormControl(member.memberID),
           });
@@ -239,7 +242,6 @@ export class ParticipantsDialog implements OnInit {
         return participant;
       });
 
-    console.log('participants', participants);
     this.dialogRef.close(participants);
   }
 }

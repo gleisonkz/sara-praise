@@ -23,6 +23,9 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { LogPipeWidgetModule } from '@sp/web/widget/pipes';
 
+import {
+    ScaleSongsDialog
+} from 'apps/sp-web/src/app/domain/scale/components/scale-songs/scale-songs.dialog';
 import { ScaleHostPage } from 'apps/sp-web/src/app/domain/scale/scale.host.component';
 import {
     EmptyListNoMessageWidgetModule
@@ -30,10 +33,17 @@ import {
 import {
     SongListItemWidgetModule
 } from 'apps/sp-web/src/app/widget/components/song-list-item/song-list-item.widget.module';
+import { DisableControlDirective } from 'apps/sp-web/src/app/widget/directives/disable-control';
 import { SpForDirectiveWidgetModule } from 'apps/sp-web/src/app/widget/directives/for.directive';
 import {
     MediaIfDirectiveWidgetModule
 } from 'apps/sp-web/src/app/widget/directives/media-if/media-if.widget.module';
+import {
+    SetOnSelectValueRefDirective
+} from 'apps/sp-web/src/app/widget/directives/set-on-select-value-ref/set-on-select-value-ref.directive';
+import {
+    SetOnSelectDirective
+} from 'apps/sp-web/src/app/widget/directives/set-on-select/set-on-select.directive';
 import { MatTimepickerModule } from 'mat-timepicker';
 import { ParticipantsDialog } from './components/participants/participants.dialog';
 import { ScaleCreateEditPage } from './pages/scale-create-edit/scale-create-edit.page';
@@ -41,15 +51,18 @@ import { ScaleViewPage } from './pages/scale-view/scale-view.page';
 import { ScaleRoutingModule } from './scale-routing.module';
 
 @NgModule({
-  declarations: [ScaleHostPage, ScaleCreateEditPage, ScaleViewPage, ParticipantsDialog],
+  declarations: [ScaleHostPage, ScaleCreateEditPage, ScaleViewPage, ParticipantsDialog, ScaleSongsDialog],
   imports: [
     SongListItemWidgetModule,
     MatDatepickerModule,
     MatIconModule,
     LogPipeWidgetModule,
     MatNativeDateModule,
+    SetOnSelectDirective,
+    SetOnSelectValueRefDirective,
     CommonModule,
     EmptyListNoMessageWidgetModule,
+    DisableControlDirective,
     MatSelectModule,
     MediaIfDirectiveWidgetModule,
     SpForDirectiveWidgetModule,

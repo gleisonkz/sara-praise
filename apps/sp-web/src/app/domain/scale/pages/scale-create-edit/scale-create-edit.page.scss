@@ -56,7 +56,8 @@ button.save {
 
 .participant {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 40px 1fr;
+  column-gap: 10px;
   grid-template-rows: 1fr 1fr;
   align-items: center;
   text-align: left;
@@ -95,7 +96,7 @@ button.save {
   }
 }
 
-.add-music-btn {
+.cta-button {
   margin-bottom: 10px;
 }
 
@@ -103,4 +104,8 @@ button.save {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
+}
+
+::ng-deep mat-datepicker-toggle .mat-icon-button {
+  width: auto !important;
 }

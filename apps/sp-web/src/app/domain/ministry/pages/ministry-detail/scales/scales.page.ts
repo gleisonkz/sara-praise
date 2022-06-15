@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 import { ScaleListItemResponse } from '@sp/shared-interfaces';
 
 import {
-    MinistryDetailRouteService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry-detail-route.service';
+    ScaleApiService
+} from 'apps/sp-web/src/app/domain/ministry/core/services/scale.api.service';
+import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { FADE_ANIMATION } from 'apps/sp-web/src/app/shared/animations/fade.animation';
 import { Observable } from 'rxjs';
-import { MinistryApiService } from '../../../core/services/ministry.api.service';
 
 @Component({
   templateUrl: './scales.page.html',
@@ -19,14 +18,10 @@ import { MinistryApiService } from '../../../core/services/ministry.api.service'
 })
 export class ScalesPage implements OnInit {
   scaleListItems$: Observable<ScaleListItemResponse[]>;
+  readonly ministryID = injectMinistryID();
 
-  constructor(
-    private readonly ministryDetailRouteService: MinistryDetailRouteService,
-    private readonly ministryService: MinistryApiService,
-    private readonly activatedRoute: ActivatedRoute
-  ) {}
+  constructor(private readonly scaleApiService: ScaleApiService) {}
   ngOnInit(): void {
-    const ministryID = this.ministryDetailRouteService.getMinistryID(this.activatedRoute);
-    this.scaleListItems$ = this.ministryService.getScaleListItems(+ministryID);
+    this.scaleListItems$ = this.scaleApiService.getScaleListItems(+this.ministryID);
   }
 }

@@ -5,24 +5,24 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 
 import {
-    IScaleResponse, ParticipantRequest, ScaleRequest, SongListItemResponse
+    IScaleResponse, ParticipantListItem, ParticipantRequest, ScaleRequest, ScaleSongRequest,
+    ScaleSongResponse
 } from '@sp/shared-interfaces';
 
 import { HotToastService } from '@ngneat/hot-toast';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import {
-    MinistryApiService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
-import {
     ScaleApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/scale.api.service';
-import {
-    injectMinistryID, injectRouteParam
-} from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
+import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import {
     ParticipantsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/participants/participants.dialog';
-import { filter, Observable, of, skip, switchMap, tap } from 'rxjs';
+import {
+    ScaleSongsDialog
+} from 'apps/sp-web/src/app/domain/scale/components/scale-songs/scale-songs.dialog';
+import { injectRouteParam } from 'apps/sp-web/src/app/shared/functions';
+import { filter, Observable, skip, switchMap, tap } from 'rxjs';
 
 @Component({
   templateUrl: './scale-create-edit.page.html',
@@ -38,85 +38,8 @@ export class ScaleCreateEditPage implements OnInit {
     time: new FormControl<Date>(),
   });
 
-  participantListItems$: Observable<any> = of([
-    {
-      name: 'João',
-      imageUrl: 'https://randomuser.me/api/portraits/men/53.jpg',
-      roles: [
-        {
-          id: 1,
-          name: 'Ministro',
-        },
-      ],
-    },
-    {
-      name: 'João',
-      imageUrl: 'https://randomuser.me/api/portraits/men/53.jpg',
-      roles: [
-        {
-          id: 1,
-          name: 'Ministro',
-        },
-      ],
-    },
-    {
-      name: 'João',
-      imageUrl: 'https://randomuser.me/api/portraits/men/53.jpg',
-      roles: [
-        {
-          id: 1,
-          name: 'Ministro',
-        },
-      ],
-    },
-  ]);
-
-  songListItems$: Observable<SongListItemResponse[]> = of([
-    {
-      songID: 1,
-      title: 'Song 1',
-      artistName: 'Artist 1',
-      tags: ['Tag 1', 'Tag 2'],
-      key: 'C',
-      hasAudioLink: true,
-      hasYoutubeLink: false,
-      hasLyricLink: false,
-      hasChordsLink: true,
-    },
-    {
-      songID: 1,
-      title: 'Song 1',
-      artistName: 'Artist 1',
-      tags: ['Tag 1', 'Tag 2'],
-      key: 'C',
-      hasAudioLink: false,
-      hasYoutubeLink: true,
-      hasLyricLink: true,
-      hasChordsLink: false,
-    },
-    {
-      songID: 1,
-      title: 'Song 1',
-      artistName: 'Artist 1',
-      tags: ['Tag 1', 'Tag 2'],
-      key: 'C',
-      hasAudioLink: false,
-      hasYoutubeLink: false,
-      hasLyricLink: true,
-      hasChordsLink: true,
-    },
-    {
-      songID: 1,
-      title: 'Song 1',
-      artistName: 'Artist 1',
-      tags: ['Tag 1', 'Tag 2'],
-      key: 'C',
-      hasAudioLink: true,
-      hasYoutubeLink: true,
-      hasLyricLink: true,
-      hasChordsLink: true,
-    },
-  ]);
+  participantListItems$: Observable<ParticipantListItem[]>;
+  scaleSongs$: Observable<ScaleSongResponse[]>;
 
   scaleFormGroup: FormGroup<{
     scaleID?: FormControl<number>;
@@ -127,7 +50,6 @@ export class ScaleCreateEditPage implements OnInit {
 
   constructor(
     private readonly matDialog: MatDialog,
-    private readonly ministryService: MinistryApiService,
     private readonly activatedRoute: ActivatedRoute,
     private readonly toastService: HotToastService,
     private readonly router: Router,
@@ -161,12 +83,12 @@ export class ScaleCreateEditPage implements OnInit {
       this.scaleFormGroup.controls.date.setValue(fullDate);
     });
 
-    this.participantListItems$ = this.ministryService.getParticipantListItems(this.ministryID, this.scaleID);
-    // this.songListItems$ = this.scaleApiService.findAllSongListItems(this.ministryID, this.scaleID);
+    this.participantListItems$ = this.scaleApiService.findAllParticipantListItems(this.ministryID, this.scaleID);
+    this.scaleSongs$ = this.scaleApiService.findAllSongs(this.ministryID, this.scaleID);
 
     if (!this.scaleID) return;
 
-    this.ministryService.getScaleByID(this.ministryID, this.scaleID).subscribe((scale: IScaleResponse) => {
+    this.scaleApiService.findByID(this.ministryID, this.scaleID).subscribe((scale: IScaleResponse) => {
       this.scaleFormGroup.patchValue(scale);
     });
   }
@@ -174,7 +96,7 @@ export class ScaleCreateEditPage implements OnInit {
   addMember() {
     const dialogRef = this.matDialog.open(ParticipantsDialog, {
       data: {
-        scaleId: this.scaleID,
+        scaleID: this.scaleID,
         ministryID: this.ministryID,
       },
 
@@ -192,7 +114,30 @@ export class ScaleCreateEditPage implements OnInit {
         )
       )
       .subscribe(() => {
-        console.log('participant created');
+        this.toastService.success('Participante adicionado com sucesso');
+      });
+  }
+
+  addSong() {
+    const dialogRef = this.matDialog.open(ScaleSongsDialog, {
+      data: {
+        scaleID: this.scaleID,
+        ministryID: this.ministryID,
+      },
+
+      maxWidth: '800px',
+      width: '100%',
+      panelClass: 'sp-scale-modal',
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(
+        filter((songsRequest: ScaleSongRequest[]) => !!songsRequest?.length),
+        switchMap((songsRequest) => this.scaleApiService.createSong(this.ministryID, this.scaleID, songsRequest))
+      )
+      .subscribe(() => {
+        this.toastService.success('Música adicionada com sucesso');
       });
   }
 
@@ -209,14 +154,14 @@ export class ScaleCreateEditPage implements OnInit {
     };
 
     if (this.scaleID)
-      return this.ministryService.updateScale(this.ministryID, scaleRequest, this.scaleID).subscribe(() => {
+      return this.scaleApiService.update(this.ministryID, scaleRequest, this.scaleID).subscribe(() => {
         this.toastService.success('Escala atualizada com sucesso!');
         this.router.navigate([this.scaleID, 'view'], {
           relativeTo: this.activatedRoute.parent,
         });
       });
 
-    return this.ministryService.createScale(this.ministryID, scaleRequest).subscribe(({ scaleID }) => {
+    return this.scaleApiService.create(this.ministryID, scaleRequest).subscribe(({ scaleID }) => {
       this.toastService.success(`Escala criada com sucesso!`);
       this.scaleFormGroup.reset();
       this.router.navigate([scaleID, 'edit'], {

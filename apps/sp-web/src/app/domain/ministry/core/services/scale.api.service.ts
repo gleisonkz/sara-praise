@@ -1,11 +1,14 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import {
-    IScaleResponse, ParticipantRequest, ScaleRequest, ScaleResponse
+    AvailableScaleSongResponse, eMinistryRole, IScaleResponse, MemberListItemResponse,
+    ParticipantListItem, ParticipantRequest, ParticipantSelectItemResponse, ScaleDetailResponse,
+    ScaleListItemResponse, ScaleRequest, ScaleResponse, ScaleSongRequest, ScaleSongResponse
 } from '@sp/shared-interfaces';
 
 import { BaseApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/base.api.service';
-import { Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,13 +22,24 @@ export class ScaleApiService extends BaseApiService {
 
   findAll(ministryID: number): Observable<IScaleResponse[]> {
     const url = `${this.URL}/${ministryID}/scales`;
-
     return this.getWithRuntimeValidation<ScaleResponse[]>(url, ScaleResponse);
   }
 
-  findAllSongListItems(ministryID: number, scaleID: number): Observable<any> {
-    const url = `${this.URL}/${ministryID}/scales/${scaleID}/songs`;
-    return of([]);
+  findByID(ministryID: number, scaleID: number): Observable<IScaleResponse> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
+    return this.http.get<IScaleResponse>(url).pipe(
+      map((scale) => {
+        return {
+          ...scale,
+          date: new Date(scale.date),
+        };
+      })
+    );
+  }
+
+  update(ministryID: number, scaleRequest: ScaleRequest, scaleID: number): Observable<IScaleResponse> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
+    return this.http.put<IScaleResponse>(url, scaleRequest);
   }
 
   create(ministryID: number, scale: ScaleRequest): Observable<IScaleResponse> {
@@ -33,8 +47,60 @@ export class ScaleApiService extends BaseApiService {
     return this.http.post<IScaleResponse>(url, scale);
   }
 
-  createParticipant(ministryID: number, scaleID: number, participantRequest: ParticipantRequest): any {
+  delete(scaleID: number): Observable<IScaleResponse> {
+    const url = `${this.URL}/scales/${scaleID}`;
+    return this.http.delete<IScaleResponse>(url);
+  }
+
+  getScaleListItems(ministryID: number): Observable<ScaleListItemResponse[]> {
+    const url = `${this.URL}/${ministryID}/scales`;
+    return this.http.get<ScaleListItemResponse[]>(url);
+  }
+
+  getScaleListItemDetails(ministryID: number, scaleID: number): Observable<ScaleDetailResponse> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
+    return this.http.get<ScaleDetailResponse>(url);
+  }
+
+  createParticipant(ministryID: number, scaleID: number, participantRequest: ParticipantRequest): Observable<boolean> {
     const url = `${this.URL}/${ministryID}/scales/${scaleID}/participants`;
-    return this.http.post<any>(url, participantRequest);
+    return this.http.post<boolean>(url, participantRequest);
+  }
+
+  findAllParticipants(ministryID: number, scaleID: number): Observable<MemberListItemResponse[]> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}/participants`;
+    return this.http.get<MemberListItemResponse[]>(url);
+  }
+
+  findAllParticipantsByRoleID(
+    ministryID: number,
+    scaleID: number,
+    roleID: eMinistryRole
+  ): Observable<ParticipantSelectItemResponse[]> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}/participants-by-role`;
+
+    const params = new HttpParams().set('roleID', roleID);
+    return this.http.get<ParticipantSelectItemResponse[]>(url, { params });
+  }
+
+  createSong(ministryID: number, scaleID: number, scaleSongRequest: ScaleSongRequest[]): Observable<boolean> {
+    console.log('scaleSongRequest', scaleSongRequest);
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}/songs`;
+    return this.http.post<boolean>(url, scaleSongRequest);
+  }
+
+  findAllSongs(ministryID: number, scaleID: number): Observable<ScaleSongResponse[]> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}/songs`;
+    return this.http.get<ScaleSongResponse[]>(url);
+  }
+
+  findAvailableSongs(ministryID: number, scaleID: number): Observable<AvailableScaleSongResponse[]> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}/available-songs`;
+    return this.http.get<AvailableScaleSongResponse[]>(url);
+  }
+
+  findAllParticipantListItems(ministryID: number, scaleID: number): Observable<ParticipantListItem[]> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}/participant-list-items`;
+    return this.getWithRuntimeValidation<ParticipantListItem[]>(url, ParticipantListItem);
   }
 }

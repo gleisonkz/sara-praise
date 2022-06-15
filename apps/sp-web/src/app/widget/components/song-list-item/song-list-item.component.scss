@@ -6,25 +6,33 @@
   border-radius: 5px;
 
   position: relative;
-  display: flex;
+
   padding: 15px;
   cursor: pointer;
   align-items: center;
   transition: background-color 0.2s ease-in-out;
 
+  display: grid;
+  display: flex;
+  grid-template-rows: auto auto;
+  grid-template-columns: 40px auto auto auto auto;
+
   @include hover;
 
   .icon {
     margin-right: 15px;
+    grid-row: 1;
   }
 
   .links {
+    grid-row: 1;
     display: grid;
     grid-gap: 5px;
     grid-template-columns: repeat(2, 1fr);
   }
 
   .description {
+    grid-row: 1;
     text-align: start;
     display: grid;
     grid-template-columns: max-content 1fr;
@@ -89,5 +97,14 @@
     border-right: 3px solid #2f323b;
     border-bottom: 3px solid transparent;
     border-top: 3px solid #2f323b;
+  }
+
+  ::ng-deep mat-checkbox {
+    margin-left: 10px;
+    grid-row: 1;
+  }
+
+  ::ng-deep [minister-select] {
+    grid-column: 1/-1;
   }
 }

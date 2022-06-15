@@ -1,0 +1,84 @@
+@import 'custom-theme';
+@import 'mixins';
+
+mat-form-field {
+  width: 100%;
+
+  &[minister-select] {
+    padding-top: 1.34375em;
+    margin-right: 20px;
+  }
+
+  &.disabled {
+    pointer-events: none;
+    cursor: default;
+  }
+}
+
+.songs-container {
+  display: grid;
+  grid-gap: 20px;
+}
+
+.song {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  grid-template-columns: repeat(8, 1fr);
+
+  column-gap: 10px;
+  row-gap: 10px;
+
+  background-color: $dark-bg-lighter-5;
+  border-radius: 5px;
+  padding: 15px;
+  cursor: pointer;
+
+  .icon {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .description {
+    grid-row: 2;
+    grid-column: 1/-1;
+
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    width: 100%;
+
+    .key {
+      max-width: 200px;
+      font-size: 14px;
+    }
+
+    span {
+      grid-column: 1;
+    }
+  }
+
+  .links {
+    grid-row: 1;
+    grid-column: span 6;
+
+    justify-self: center;
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: repeat(4, 24px);
+  }
+
+  mat-checkbox {
+    grid-row: 1;
+    grid-column: 8;
+    justify-self: end;
+  }
+
+  mat-form-field {
+    grid-row: 3;
+    grid-column: 1/-1;
+    padding-top: 0;
+  }
+}
+
+::ng-deep sp-song-list-item .links {
+  grid-template-columns: repeat(2, 25px) !important;
+}

@@ -1,4 +1,4 @@
-import { MemberListItemResponse, SongListItemResponse } from '@sp/shared-interfaces';
+import { MemberListItemResponse, ScaleSongResponse } from '@sp/shared-interfaces';
 
 import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
 
@@ -16,7 +16,7 @@ export interface ScaleDetailResponse {
   title: string;
   date: Date;
   notes: string;
-  songs: SongListItemResponse[];
+  songs: ScaleSongResponse[];
   participants: MemberListItemResponse[];
 }
 

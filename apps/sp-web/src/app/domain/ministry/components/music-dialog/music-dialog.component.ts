@@ -1,4 +1,3 @@
-/* eslint-disable @ngneat/reactive-forms/no-angular-forms-imports */
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 

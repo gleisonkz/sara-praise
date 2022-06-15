@@ -19,6 +19,12 @@ export interface ParticipantResponse {
   participant: ParticipantItem;
 }
 
+export interface ParticipantSelectItemResponse {
+  memberID: number;
+  participantID: number;
+  name: string;
+}
+
 interface ParticipantItem {
   participantID?: number;
   roles: ParticipantRole[];

@@ -54,9 +54,9 @@
               #timerPickerRef="matTimepicker"
               [strict]="false"
             />
-            <mat-icon matSuffix (click)="timerPickerRef.showDialog()"
-              >access_time</mat-icon
-            >
+            <mat-icon matSuffix (click)="timerPickerRef.showDialog()">
+              access_time
+            </mat-icon>
           </mat-form-field>
         </div>
       </ng-container>
@@ -97,20 +97,24 @@
         </div>
       </ng-template>
 
-      <ng-container *ngIf="!participants.length; else withParticipantsTemplate">
-        <button (click)="addMember()" type="button" mat-raised-button color="primary">
+      <button
+        (click)="addMember()"
+        class="cta-button"
+        type="button"
+        mat-raised-button
+        color="primary"
+      >
+        <ng-container *ngIf="!participants.length; else withParticipantsTemplate">
           <mat-icon>add</mat-icon> Adicionar Participantes
-        </button>
-      </ng-container>
-      <ng-template #withParticipantsTemplate>
-        <button (click)="addMember()" type="button" mat-raised-button color="primary">
-          Gerenciar Participantes
-        </button>
-      </ng-template>
+        </ng-container>
+        <ng-template #withParticipantsTemplate>
+          <span>Gerenciar Participantes</span>
+        </ng-template>
+      </button>
 
       <ng-container>
         <ng-container *ngIf="participants.length; else noParticipantsTemplate">
-          <mat-list>
+          <mat-list style="padding-top: 0">
             <ng-container *ngFor="let participant of participants">
               <mat-list-item style="border-bottom: 0.5px solid #292929">
                 <div class="participant">
@@ -140,7 +144,7 @@
   </mat-tab>
 
   <mat-tab label="Músicas" *ngIf="scaleID">
-    <ng-container *ngIf="songListItems$ | async as songListItems">
+    <ng-container *ngIf="scaleSongs$ | async as songListItems">
       <ng-template mat-tab-label>
         <div class="tab-label">
           <div class="icon-container">
@@ -150,9 +154,22 @@
           <span class="tab-label-text">Músicas</span>
         </div>
       </ng-template>
-      <button class="add-music-btn" type="button" mat-raised-button color="primary">
-        <mat-icon>add</mat-icon> Adicionar Música
+
+      <button
+        class="cta-button"
+        (click)="addSong()"
+        type="button"
+        mat-raised-button
+        color="primary"
+      >
+        <ng-container *ngIf="!songListItems.length; else withParticipantsTemplate">
+          <mat-icon>add</mat-icon> Adicionar Músicas
+        </ng-container>
+        <ng-template #withParticipantsTemplate>
+          <span>Gerenciar Músicas</span>
+        </ng-template>
       </button>
+
       <div class="song-list-items">
         <sp-song-list-item
           [song]="song"
@@ -162,22 +179,10 @@
           <img
             style="border-radius: 50%; width: 50px; height: 50px"
             alt="user image"
-            src="https://randomuser.me/api/portraits/women/13.jpg"
+            [src]="song.memberImageUrl"
           />
         </sp-song-list-item>
       </div>
     </ng-container>
   </mat-tab>
 </mat-tab-group>
-
-<!-- <br />
-<br />
-<br />
-<br />
-<br />
-
-{{ scaleFormGroup.value | json }}
-
-<p>Valido {{ scaleFormGroup.valid }}</p>
-<p>Dirty {{ scaleFormGroup.dirty }}</p>
-<p>Scale ID {{ scaleID }}</p> -->

@@ -42,6 +42,7 @@ model Member {
   participants     Participant[]
   roles            Role[]
   ministerSongKeys MinisterSongKey[]
+  scaleSongs       ScaleSong[]
 }
 
 model Permission {
@@ -91,17 +92,18 @@ model Scale {
 }
 
 model ScaleSong {
-  scaleID Int
-  songID  Int
+  scaleSongID Int  @id @default(autoincrement())
+  scaleID     Int
+  songID      Int
+  memberID    Int?
 
   artistName      String
   songTitle       String
   ministerSongKey String
 
-  scale Scale @relation(fields: [scaleID], references: [scaleID])
-  song  Song  @relation(fields: [songID], references: [songID])
-
-  @@id([scaleID, songID])
+  scale  Scale   @relation(fields: [scaleID], references: [scaleID])
+  song   Song    @relation(fields: [songID], references: [songID])
+  member Member? @relation(fields: [memberID], references: [memberID])
 }
 
 model Song {

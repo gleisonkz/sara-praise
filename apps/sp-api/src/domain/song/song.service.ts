@@ -59,7 +59,7 @@ export class SongService {
         hasChordsLink: !!song.chordsUrl,
         hasLyricLink: !!song.lyricUrl,
         hasYoutubeLink: !!song.youtubeUrl,
-        key: song.key.name,
+        key: song.key.notation,
         tags: song.tags,
       };
 
@@ -99,39 +99,5 @@ export class SongService {
     });
 
     return availableSongs;
-
-    // const ministryKeys: MinistryKey[] = ministry.ministryKeys.filter((key) => key.memberID === ministerID);
-
-    // const songs: SongListItemResponse[] = ministry.songs
-    //   .filter((song) => !ministryKeys.some((key) => key.songID === song.songID))
-    //   .map((song) => {
-    //     const songListItem: SongListItemResponse = {
-    //       songID: song.songID,
-    //       title: song.title,
-    //       tags: song.tags,
-    //       artistName: song.artist.name,
-    //       hasAudioLink: !!song.audioLink,
-    //       hasChordsLink: !!song.chordsLink,
-    //       hasLyricLink: !!song.lyricLink,
-    //       hasYoutubeLink: !!song.youtubeLink,
-    //       key: song.key,
-    //     };
-
-    //     return songListItem;
-    //   });
-
-    // return songs;
   }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} song`;
-  // }
-
-  // update(id: number, updateSongDto: UpdateSongDto) {
-  //   return `This action updates a #${id} song`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} song`;
-  // }
 }

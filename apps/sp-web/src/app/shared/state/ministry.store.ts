@@ -42,13 +42,11 @@ export class MinistryStore extends NgSimpleStateBaseStore<MinistryState> {
 
   findByID(ministryID: number): Observable<MinistryListItemResponse> {
     const currentMinistry$ = this.selectState((state) => {
-      console.log(state);
       return state.ministries.find((ministry) => ministry.ministryID === ministryID);
     });
 
     return currentMinistry$.pipe(
       switchMap((currentMinistry) => {
-        console.log('currentMinistry', currentMinistry);
         if (currentMinistry) return of(currentMinistry);
         return this.ministryApiService.getMinistryListItems(ministryID).pipe(map(([ministry]) => ministry));
       }),
@@ -67,14 +65,14 @@ export class MinistryStore extends NgSimpleStateBaseStore<MinistryState> {
   }
 
   create(ministryRequest: MinistryRequest): void {
-    this.ministryApiService.createMinistry(ministryRequest).subscribe((ministry) => {
+    this.ministryApiService.create(ministryRequest).subscribe((ministry) => {
       this.setState((state) => ({ ...state, ministries: [...state.ministries, ministry] }));
       this.toastService.success('Ministério criado com sucesso!');
     });
   }
 
   remove(ministryID: number): void {
-    this.ministryApiService.deleteMinistry(ministryID).subscribe(() => {
+    this.ministryApiService.delete(ministryID).subscribe(() => {
       this.setState((state) => ({
         ...state,
         ministries: state.ministries.filter((item) => item.ministryID !== ministryID),
