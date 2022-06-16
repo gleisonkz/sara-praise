@@ -346,6 +346,15 @@ export class ScaleService {
     const scales = await this.prismaService.scale.findMany({
       where: { ministryID },
       include: {
+        participants: {
+          include: {
+            member: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
         scaleSongs: true,
       },
       orderBy: {
@@ -360,7 +369,7 @@ export class ScaleService {
         notes: scale.notes,
         songsQuantity: scale.scaleSongs.length,
         date: scale.date,
-        imagesUrl: [],
+        participants: scale.participants.map((participant) => ({ imageUrl: participant.member.user.imageURL })),
       };
 
       return scaleListItemResponse;

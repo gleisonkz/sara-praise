@@ -24,19 +24,39 @@
     color: #fff;
     padding-right: 20px;
     text-align: center;
+
+    .month-date {
+      align-self: flex-end;
+    }
   }
 
   .main {
     flex: 1;
+
+    .scale-title {
+      margin: 0 0 9px 0;
+    }
+
+    .no-participants {
+      line-height: 48px;
+    }
   }
 
-  .container-image {
-    min-height: 54px;
-  }
+  .avatars {
+    --margin-off-set: 17px;
+    direction: rtl; /* This is to get the stack with left on top */
+    text-align: left; /* Now need to explitly align left */
+    padding-left: var(--margin-off-set); /* Same value as the negative margin */
 
-  img {
-    border-radius: 50%;
-    width: 50px;
+    .avatar img {
+      border-radius: 50%;
+      position: relative;
+      border: 2px solid #fff;
+      left: -5px;
+      margin-left: calc(-1 * var(--margin-off-set));
+      z-index: 1;
+      width: 40px;
+    }
   }
 
   .songs-quantity {

@@ -8,7 +8,11 @@ export interface ScaleListItemResponse {
   notes: string;
   songsQuantity: number;
   date: Date;
-  imagesUrl: string[];
+  participants: ParticipantPreview[];
+}
+
+interface ParticipantPreview {
+  imageUrl: string;
 }
 
 export interface ScaleDetailResponse {

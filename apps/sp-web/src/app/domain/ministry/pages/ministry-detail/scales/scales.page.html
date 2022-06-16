@@ -7,22 +7,26 @@
       *ngFor="let scale of scales"
     >
       <div class="date">
-        <span>{{scale.date | date : 'EEEE' | titlecase}}</span>
-        <span>{{scale.date | date : 'dd/MMM' }}</span>
-        <span>{{scale.date | date : 'HH:mm'}}</span>
+        <span class="weekday"
+          >{{scale.date | date : 'EEE' | spRemoveDots | titlecase }}</span
+        >
+        <span class="month-date">{{scale.date | date : 'dd/MM' }}</span>
+        <span class="hour">{{scale.date | date : 'HH:mm'}}</span>
       </div>
 
       <div class="main">
-        <span>{{scale.title}}</span>
-        <!-- <p>{{scale.notes}}</p> -->
+        <p class="scale-title">{{scale.title}}</p>
 
-        <div class="container-image">
-          <img
-            [src]="url"
-            alt="user image"
-            *spFor="let url of scale.imagesUrl else 'Ainda não foi cadastrado nenhum participante'"
-          />
-        </div>
+        <ng-container *ngIf="scale.participants.length; else noParticipantsTemplate">
+          <div class="avatars">
+            <span *ngFor="let participant of scale.participants" class="avatar">
+              <img [src]="participant.imageUrl" alt="user image" />
+            </span>
+          </div>
+        </ng-container>
+        <ng-template #noParticipantsTemplate>
+          <span class="no-participants">Nenhum participante</span>
+        </ng-template>
       </div>
 
       <div class="songs-quantity">

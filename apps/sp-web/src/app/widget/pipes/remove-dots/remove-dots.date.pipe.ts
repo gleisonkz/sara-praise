@@ -4,7 +4,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'spRemoveDots',
 })
 export class RemoveDotsPipe implements PipeTransform {
-  transform(value: string): string {
+  transform(value: string | null): string | null {
     if (!value) return value;
 
     const noDots = value.replace(/\./g, '');

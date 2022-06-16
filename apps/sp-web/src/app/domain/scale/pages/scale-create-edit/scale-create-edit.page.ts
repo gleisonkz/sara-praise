@@ -21,8 +21,8 @@ import {
 import {
     ScaleSongsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/scale-songs/scale-songs.dialog';
-import { injectRouteParam } from 'apps/sp-web/src/app/shared/functions';
-import { filter, Observable, skip, switchMap, tap } from 'rxjs';
+import { injectOptionalRouteParam } from 'apps/sp-web/src/app/shared/functions';
+import { EMPTY, filter, Observable, skip, switchMap, tap } from 'rxjs';
 
 @Component({
   templateUrl: './scale-create-edit.page.html',
@@ -30,7 +30,7 @@ import { filter, Observable, skip, switchMap, tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScaleCreateEditPage implements OnInit {
-  scaleID = injectRouteParam('scaleID');
+  scaleID = injectOptionalRouteParam('scaleID');
   ministryID = injectMinistryID();
 
   dateGroup = new FormGroup({
@@ -83,10 +83,10 @@ export class ScaleCreateEditPage implements OnInit {
       this.scaleFormGroup.controls.date.setValue(fullDate);
     });
 
+    if (!this.scaleID) return;
+
     this.participantListItems$ = this.scaleApiService.findAllParticipantListItems(this.ministryID, this.scaleID);
     this.scaleSongs$ = this.scaleApiService.findAllSongs(this.ministryID, this.scaleID);
-
-    if (!this.scaleID) return;
 
     this.scaleApiService.findByID(this.ministryID, this.scaleID).subscribe((scale: IScaleResponse) => {
       this.scaleFormGroup.patchValue(scale);
@@ -110,7 +110,9 @@ export class ScaleCreateEditPage implements OnInit {
       .pipe(
         filter((participantRequest: ParticipantRequest) => !!participantRequest),
         switchMap((participantRequest: ParticipantRequest) =>
-          this.scaleApiService.createParticipant(this.ministryID, this.scaleID, participantRequest)
+          this.scaleID
+            ? this.scaleApiService.createParticipant(this.ministryID, this.scaleID, participantRequest)
+            : EMPTY
         )
       )
       .subscribe(() => {
@@ -134,7 +136,9 @@ export class ScaleCreateEditPage implements OnInit {
       .afterClosed()
       .pipe(
         filter((songsRequest: ScaleSongRequest[]) => !!songsRequest?.length),
-        switchMap((songsRequest) => this.scaleApiService.createSong(this.ministryID, this.scaleID, songsRequest))
+        switchMap((songsRequest) =>
+          this.scaleID ? this.scaleApiService.createSong(this.ministryID, this.scaleID, songsRequest) : EMPTY
+        )
       )
       .subscribe(() => {
         this.toastService.success('Música adicionada com sucesso');
