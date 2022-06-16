@@ -1,3 +1,11 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
+
+export class DuplicatedMinistryNameError extends HttpException {
+  constructor(public readonly ministryName: string) {
+    super(`Já existe um ministério com o nome ${ministryName}`, HttpStatus.BAD_REQUEST);
+  }
+}
+
 export class MinistryNotFoundError extends Error {
   constructor(public ministryID: number) {
     super(`Ministry with ID ${ministryID} not found`);

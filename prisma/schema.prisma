@@ -9,7 +9,7 @@ generator client {
 
 model Ministry {
   ministryID       Int               @id @default(autoincrement())
-  name             String
+  name             String            @unique
   ownerID          Int
   owner            User              @relation(fields: [ownerID], references: [userID])
   songs            Song[]
@@ -119,7 +119,7 @@ model Song {
   ministryID       Int
   artist           Artist            @relation(fields: [artistID], references: [artistID])
   key              SongKey           @relation(fields: [keyID], references: [songKeyID])
-  ministry         Ministry          @relation(fields: [ministryID], references: [ministryID])
+  ministry         Ministry          @relation(fields: [ministryID], references: [ministryID], onDelete: Cascade)
   ministerSongKeys MinisterSongKey[]
   scaleSongs       ScaleSong[]
 }
@@ -140,7 +140,7 @@ model MinisterSongKey {
 
   song     Song     @relation(fields: [songID], references: [songID])
   songKey  SongKey  @relation(fields: [songKeyID], references: [songKeyID])
-  ministry Ministry @relation(fields: [ministryID], references: [ministryID])
+  ministry Ministry @relation(fields: [ministryID], references: [ministryID], onDelete: Cascade)
   member   Member   @relation(fields: [memberID], references: [memberID])
 
 
@@ -152,6 +152,6 @@ model Artist {
   ministryID Int
   name       String
 
-  ministry Ministry @relation(fields: [ministryID], references: [ministryID])
+  ministry Ministry @relation(fields: [ministryID], references: [ministryID], onDelete: Cascade)
   songs    Song[]
 }

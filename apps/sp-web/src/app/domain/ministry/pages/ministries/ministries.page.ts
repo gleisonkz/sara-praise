@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MinistriesPage implements OnInit {
-  ministryNameControl = new FormControl('', Validators.required);
+  ministryNameControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
   ministries$: Observable<MinistryListItemResponse[]>;
 
   constructor(
@@ -36,11 +36,13 @@ export class MinistriesPage implements OnInit {
     if (!this.ministryNameControl.valid) return;
 
     const ministry: MinistryRequest = {
-      name: this.ministryNameControl.value,
+      name: this.ministryNameControl.value.trim(),
       ownerID: this.authService.user.userID,
     };
 
-    this.ministryStore.create(ministry);
+    console.log(ministry);
+
+    this.ministryStore.create(ministry, () => this.ministryNameControl.reset());
   }
 
   goToMinistryDetails(ministryID: number) {

@@ -64,10 +64,11 @@ export class MinistryStore extends NgSimpleStateBaseStore<MinistryState> {
     }));
   }
 
-  create(ministryRequest: MinistryRequest): void {
+  create(ministryRequest: MinistryRequest, callback: () => void): void {
     this.ministryApiService.create(ministryRequest).subscribe((ministry) => {
       this.setState((state) => ({ ...state, ministries: [...state.ministries, ministry] }));
       this.toastService.success('Ministério criado com sucesso!');
+      callback();
     });
   }
 

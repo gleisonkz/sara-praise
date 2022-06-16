@@ -6,9 +6,11 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiResponse, ApiTags } fro
 import { JwtGuard } from '@sp/api/domain/auth';
 import { IMinisterSongKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 
+import { Prisma } from '@prisma/client';
+import { ePrismaErrorCode } from 'apps/sp-api/src/domain/prisma/prisma-error.enum';
 import { Response } from 'express';
 import { MinisterSongKeyListItemResponse, MinistryRequestDto } from './dtos';
-import { MinistryNotFoundError } from './ministry.error';
+import { DuplicatedMinistryNameError, MinistryNotFoundError } from './ministry.error';
 import { MinistryService } from './ministry.service';
 
 @ApiTags('Ministérios')
@@ -24,8 +26,15 @@ export class MinistryController {
     type: MinistryListItemResponse,
   })
   async createMinistry(@Body() ministryRequest: MinistryRequestDto): Promise<MinistryListItemResponse> {
-    const ministryListItem = this.ministryService.createMinistry(ministryRequest);
-    return ministryListItem;
+    try {
+      const ministryListItem = await this.ministryService.createMinistry(ministryRequest);
+      return ministryListItem;
+    } catch (error) {
+      if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        if (error.code === ePrismaErrorCode.DUPLICATED_FIELD)
+          throw new DuplicatedMinistryNameError(ministryRequest.name);
+      }
+    }
   }
 
   @ApiQuery({ name: 'ministryID', required: false })
