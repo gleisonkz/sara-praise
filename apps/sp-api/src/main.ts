@@ -2,12 +2,16 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
+import {
+    DuplicatedKeyInterceptor
+} from 'apps/sp-api/src/shared/interceptors/not-found.interceptor';
 import { AppModule } from './app.module';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule, { cors: true });
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
+  app.useGlobalInterceptors(new DuplicatedKeyInterceptor());
 
   app.useGlobalPipes(
     new ValidationPipe({

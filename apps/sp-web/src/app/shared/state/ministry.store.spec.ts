@@ -1,5 +1,6 @@
 import { Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
 import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 import { MinistryApiService } from '@sp/web/domain/ministry/services';
@@ -13,9 +14,9 @@ import { of } from 'rxjs';
 import { anything, instance, mock, verify, when } from 'ts-mockito';
 import { MinistryState } from './ministry.store';
 
-function setup(ministryApiService: MinistryApiService, toastService: HotToastService) {
+function setup(ministryApiService: MinistryApiService, toastService: HotToastService, router: Router) {
   const injector = TestBed.inject(Injector);
-  const ministryStore = new MinistryStore(injector, ministryApiService, toastService);
+  const ministryStore = new MinistryStore(injector, ministryApiService, toastService, router);
 
   return { store: ministryStore };
 }
@@ -23,6 +24,7 @@ function setup(ministryApiService: MinistryApiService, toastService: HotToastSer
 describe('MinistryStore', () => {
   const mockMinistryApiService = mock(MinistryApiService);
   const mockHotToastService = mock(HotToastService);
+  const mockRouter = mock(Router);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,7 +38,7 @@ describe('MinistryStore', () => {
   });
 
   it('should successfully get initial state', () => {
-    const { store } = setup(mockMinistryApiService, mockHotToastService);
+    const { store } = setup(mockMinistryApiService, mockHotToastService, mockRouter);
 
     expect(store.getCurrentState()).toEqual(MINISTRY_INITIAL_STATE);
     expect(store.getCurrentState()).not.toBeNull();
@@ -58,7 +60,7 @@ describe('MinistryStore', () => {
     when(mockMinistryApiService.getMinistryListItems()).thenReturn(of(ministries));
     const ministryApiServiceInstance = instance(mockMinistryApiService);
 
-    const { store } = setup(ministryApiServiceInstance, mockHotToastService);
+    const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
 
     store.findAll().subscribe((ministriesRetrieved) => {
       expect(ministriesRetrieved).toEqual(ministries);
@@ -88,7 +90,7 @@ describe('MinistryStore', () => {
     when(mockMinistryApiService.getMinistryListItems(anything())).thenReturn(of([ministry]));
     const ministryApiServiceInstance = instance(mockMinistryApiService);
 
-    const { store } = setup(ministryApiServiceInstance, mockHotToastService);
+    const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
 
     store.findByID(someID).subscribe((ministryRetrieved) => {
       expect(ministryRetrieved).toEqual(ministry);
@@ -130,7 +132,7 @@ describe('MinistryStore', () => {
     when(mockMinistryApiService.getMinistryListItems()).thenReturn(of(mockedMinistries));
     const ministryApiServiceInstance = instance(mockMinistryApiService);
 
-    const { store } = setup(ministryApiServiceInstance, mockHotToastService);
+    const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
 
     store.findAll().subscribe((ministriesRetrieved) => {
       expect(ministriesRetrieved).toEqual(mockedMinistries);
@@ -165,7 +167,7 @@ describe('MinistryStore', () => {
     when(mockMinistryApiService.create(ministryRequest)).thenReturn(of(mockedMinistryResponse));
     const ministryApiServiceInstance = instance(mockMinistryApiService);
 
-    const { store } = setup(ministryApiServiceInstance, mockHotToastService);
+    const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
 
     store.create(ministryRequest);
 
@@ -194,7 +196,7 @@ describe('MinistryStore', () => {
     when(mockMinistryApiService.delete(targetMinistry.ministryID)).thenReturn(of(true));
 
     const ministryApiServiceInstance = instance(mockMinistryApiService);
-    const { store } = setup(ministryApiServiceInstance, mockHotToastService);
+    const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
 
     store.findAll().subscribe((ministriesRetrieved) => {
       expect(ministriesRetrieved).toEqual(mockedMinistries);

@@ -1,7 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormGroup, Validators } from '@angular/forms';
 
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { IRoleResponse, MemberListItemResponse } from '@sp/shared-interfaces';
 
@@ -9,10 +19,8 @@ import { FormControl } from '@ngneat/reactive-forms';
 import {
     MinistryApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
-import {
-    ScaleApiService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/scale.api.service';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
+import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
 import { BehaviorSubject, filter, map, Observable } from 'rxjs';
 
 interface ParticipantsDialogData {
@@ -24,6 +32,23 @@ interface ParticipantsDialogData {
   templateUrl: './participants.dialog.html',
   styleUrls: ['./participants.dialog.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatDialogModule,
+    MatFormFieldModule,
+    MatListModule,
+    MatSlideToggleModule,
+    ReactiveFormsModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatCheckboxModule,
+    MatButtonModule,
+    MatSlideToggleModule,
+    MatDividerModule,
+    MatIconModule,
+    CommonModule,
+    MatInputModule,
+  ],
 })
 export class ParticipantsDialog implements OnInit {
   members$: Observable<

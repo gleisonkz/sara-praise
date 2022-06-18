@@ -1,4 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+import { MatIconModule } from '@angular/material/icon';
 
 import { SongListItemResponse } from '@sp/shared-interfaces';
 
@@ -30,6 +33,8 @@ import { SongListItemResponse } from '@sp/shared-interfaces';
   `,
   styleUrls: ['./song-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatIconModule, CommonModule],
 })
 export class SongListItemComponent {
   @Input() songOrder: number;

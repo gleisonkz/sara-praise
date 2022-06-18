@@ -1,10 +1,9 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
 import { ScaleCreateEditPage } from './pages/scale-create-edit/scale-create-edit.page';
 import { ScaleViewPage } from './pages/scale-view/scale-view.page';
 
-const routes: Routes = [
+export const SCALE_ROUTES: Routes = [
   {
     path: 'create',
     component: ScaleCreateEditPage,
@@ -20,10 +19,3 @@ const routes: Routes = [
   { path: ':scaleID', redirectTo: ':scaleID/view', pathMatch: 'full' },
   { path: '', redirectTo: 'create', pathMatch: 'full' },
 ];
-
-@NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
-  providers: [],
-})
-export class ScaleRoutingModule {}

@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { ArtistRequest } from '@sp/shared-interfaces';
 
@@ -15,6 +18,8 @@ import { MinistryApiService } from '../../core/services/ministry.api.service';
   templateUrl: './artist-dialog.component.html',
   styleUrls: ['./artist-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatDialogModule, MatButtonModule],
 })
 export class ArtistDialog {
   constructor(
@@ -29,7 +34,7 @@ export class ArtistDialog {
     if (this.artistControl.invalid) return;
 
     const artistRequest: ArtistRequest = {
-      name: this.artistControl.value,
+      name: this.artistControl.value.trim(),
     };
 
     this.artistApiService.createArtist(this.data.ministryID, artistRequest).subscribe();

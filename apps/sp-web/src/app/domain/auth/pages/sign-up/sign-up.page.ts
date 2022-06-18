@@ -1,6 +1,12 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { AuthService } from 'apps/sp-web/src/app/domain/auth/auth.service';
@@ -9,6 +15,16 @@ import { AuthService } from 'apps/sp-web/src/app/domain/auth/auth.service';
   templateUrl: './sign-up.page.html',
   styleUrls: ['./sign-up.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    MatCardModule,
+    MatFormFieldModule,
+    CommonModule,
+    MatButtonModule,
+    MatInputModule,
+    RouterModule,
+  ],
 })
 export class SignUpPage implements OnInit {
   constructor(private readonly authService: AuthService, private readonly router: Router) {}

@@ -1,19 +1,30 @@
+import { TextFieldModule } from '@angular/cdk/text-field';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
+import { MatButtonModule } from '@angular/material/button';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import {
     IScaleResponse, ParticipantListItem, ParticipantRequest, ScaleRequest, ScaleSongRequest,
     ScaleSongResponse
 } from '@sp/shared-interfaces';
+import { SongListItemComponent } from '@sp/web/widget/components';
+import { SpForDirective } from '@sp/web/widget/directives';
 
 import { HotToastService } from '@ngneat/hot-toast';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
-import {
-    ScaleApiService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/scale.api.service';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import {
     ParticipantsDialog
@@ -21,13 +32,36 @@ import {
 import {
     ScaleSongsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/scale-songs/scale-songs.dialog';
+import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
 import { injectOptionalRouteParam } from 'apps/sp-web/src/app/shared/functions';
+import { MatTimepickerModule } from 'mat-timepicker';
 import { EMPTY, filter, Observable, skip, switchMap, tap } from 'rxjs';
 
 @Component({
   templateUrl: './scale-create-edit.page.html',
   styleUrls: ['./scale-create-edit.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatToolbarModule,
+    MatIconModule,
+    MatDividerModule,
+    MatTabsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatTimepickerModule,
+    MatListModule,
+    SongListItemComponent,
+    TextFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    CommonModule,
+    MatInputModule,
+    MatButtonModule,
+    RouterModule,
+    SpForDirective,
+  ],
 })
 export class ScaleCreateEditPage implements OnInit {
   scaleID = injectOptionalRouteParam('scaleID');

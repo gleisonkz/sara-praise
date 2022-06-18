@@ -3,7 +3,11 @@ import {
 } from '@angular/animations';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
+import { MatIconModule } from '@angular/material/icon';
+
 import { SongListItemResponse } from '@sp/shared-interfaces';
+import { SongListItemComponent } from '@sp/web/widget/components';
+import { SpForDirective } from '@sp/web/widget/directives';
 
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { LIST_ANIMATION } from 'apps/sp-web/src/app/shared/animations/list.animation';
@@ -19,6 +23,8 @@ import { MinistryApiService } from '../../../core/services/ministry.api.service'
     trigger('fade', [transition(':enter', [style({ opacity: 0 }), animate('.6s ease')])]),
     trigger('list', [transition('* => *', [query(':enter', stagger(250, animateChild()))])]),
   ],
+  standalone: true,
+  imports: [MatIconModule, SongListItemComponent, SpForDirective],
 })
 export class SongsPage implements OnInit {
   songListItems$: Observable<SongListItemResponse[]>;

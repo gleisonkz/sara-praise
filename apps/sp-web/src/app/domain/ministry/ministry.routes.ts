@@ -1,15 +1,10 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
-import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
-
-import { MinistryDetailRouteService } from './core/services/ministry-detail-route.service';
 import {
     ArtistsPage, KeysPage, MembersPage, MinistriesPage, MinistryDetailPage, ScalesPage, SongsPage
 } from './pages';
 
-const routes: Routes = [
+export const MINISTRY_ROUTES: Routes = [
   { path: '', component: MinistriesPage },
   {
     path: ':ministryID',
@@ -23,16 +18,15 @@ const routes: Routes = [
       { path: 'tonalidades', component: KeysPage },
     ],
   },
-
   {
     path: ':ministryID/escalas',
-    loadChildren: () => import('@sp/web/domain/scale').then((m) => m.ScaleDomainModule),
+    loadChildren: () => import('../scale/scale.routes').then((m) => m.SCALE_ROUTES),
   },
 ];
 
-@NgModule({
-  imports: [MatMenuModule, MatButtonModule, RouterModule.forChild(routes)],
-  exports: [RouterModule],
-  providers: [MinistryDetailRouteService],
-})
-export class MinistryRoutingModule {}
+// @NgModule({
+//   imports: [MatMenuModule, MatButtonModule, RouterModule.forChild(MINISTRY_ROUTES)],
+//   exports: [RouterModule],
+//   providers: [MinistryDetailRouteService],
+// })
+// export class MinistryRoutingModule {}

@@ -1,4 +1,14 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 
 import { ArtistResponse } from '@sp/shared-interfaces';
 
@@ -7,6 +17,18 @@ import { ArtistResponse } from '@sp/shared-interfaces';
   templateUrl: './artist-list-item.component.html',
   styleUrls: ['./artist-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatIconModule,
+    MatMenuModule,
+    MatListModule,
+    MatButtonModule,
+  ],
 })
 export class ArtistListItemComponent {
   @Input() artist: ArtistResponse;

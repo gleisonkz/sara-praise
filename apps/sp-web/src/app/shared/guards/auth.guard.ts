@@ -4,7 +4,7 @@ import {
     UrlSegment
 } from '@angular/router';
 
-import { AuthService } from '../auth.service';
+import { AuthService } from '../../domain/auth/auth.service';
 
 @Injectable({
   providedIn: 'root',

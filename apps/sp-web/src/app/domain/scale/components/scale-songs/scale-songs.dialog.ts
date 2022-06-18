@@ -1,24 +1,55 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatOptionModule } from '@angular/material/core';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 import {
     AvailableScaleSongResponse, eMinistryRole, ParticipantSelectItemResponse
 } from '@sp/shared-interfaces';
+import { SpForDirective } from '@sp/web/widget/directives';
 
 import { FormArray } from '@ngneat/reactive-forms';
 import {
-    ScaleApiService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/scale.api.service';
-import {
     injectBaseDialogData
 } from 'apps/sp-web/src/app/domain/scale/pages/scale-create-edit/inject.base-dialog-data.function';
+import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
+import { DisableControlDirective } from 'apps/sp-web/src/app/widget/directives/disable-control';
+import {
+    SetOnSelectValueRefDirective
+} from 'apps/sp-web/src/app/widget/directives/set-on-select-value-ref/set-on-select-value-ref.directive';
+import {
+    SetOnSelectDirective
+} from 'apps/sp-web/src/app/widget/directives/set-on-select/set-on-select.directive';
 import { Observable, shareReplay, tap } from 'rxjs';
 
 @Component({
   templateUrl: './scale-songs.dialog.html',
   styleUrls: ['./scale-songs.dialog.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    ReactiveFormsModule,
+    DisableControlDirective,
+    SpForDirective,
+    SetOnSelectDirective,
+    SetOnSelectValueRefDirective,
+  ],
 })
 export class ScaleSongsDialog implements OnInit {
   songListItems$: Observable<AvailableScaleSongResponse[]>;

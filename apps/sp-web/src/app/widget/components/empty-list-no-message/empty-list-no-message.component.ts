@@ -12,6 +12,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class EmptyListNoMessageComponent {
   @Input() message: string;

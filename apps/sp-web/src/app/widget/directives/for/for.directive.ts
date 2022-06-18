@@ -1,5 +1,5 @@
 import {
-    ChangeDetectorRef, Directive, Input, NgModule, OnDestroy, OnInit, TemplateRef, ViewContainerRef
+    ChangeDetectorRef, Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef
 } from '@angular/core';
 
 import {
@@ -9,6 +9,7 @@ import { Observable, Subject, takeUntil } from 'rxjs';
 
 @Directive({
   selector: '[spFor]',
+  standalone: true,
 })
 export class SpForDirective<T> implements OnInit, OnDestroy {
   @Input('spForOf') items$: Observable<T[]> | T[];
@@ -17,7 +18,7 @@ export class SpForDirective<T> implements OnInit, OnDestroy {
 
   constructor(
     private readonly changeDetector: ChangeDetectorRef,
-    private readonly templateRef: TemplateRef<any>,
+    private readonly templateRef: TemplateRef<unknown>,
     private readonly viewContainer: ViewContainerRef
   ) {}
 
@@ -57,9 +58,3 @@ export class SpForDirective<T> implements OnInit, OnDestroy {
     this.changeDetector.detectChanges();
   }
 }
-
-@NgModule({
-  declarations: [SpForDirective],
-  exports: [SpForDirective],
-})
-export class SpForDirectiveWidgetModule {}

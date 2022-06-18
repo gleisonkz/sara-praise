@@ -1,7 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatOptionModule } from '@angular/material/core';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 import {
     AvailableSongResponse, eMinistryRole, IMinisterSongKeyRequest, KeyResponse,
@@ -19,6 +25,17 @@ import { MinistryApiService } from '../../core/services/ministry.api.service';
   templateUrl: './ministry-key-dialog.component.html',
   styleUrls: ['./ministry-key-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatOptionModule,
+    CommonModule,
+    MatSelectModule,
+    MatButtonModule,
+  ],
 })
 export class MinistryKeyDialogComponent implements OnInit {
   constructor(

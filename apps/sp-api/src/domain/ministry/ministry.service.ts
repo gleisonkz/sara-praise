@@ -115,25 +115,16 @@ export class MinistryService {
     });
   }
 
-  async getMinistriesListItems(ministryID?: number): Promise<MinistryListItemResponse[]> {
-    const ministryListItemMapFn = (ministry) => {
-      const ministryListItem: MinistryListItemResponse = {
-        ministryID: ministry.ministryID,
-        name: ministry.name,
-        musicsQuantity: ministry._count.songs,
-        membersQuantity: ministry._count.members,
-        artistQuantity: ministry._count.artists,
-        scalesQuantity: ministry._count.scales,
-        songKeysQuantity: ministry._count.ministerSongKeys,
-      };
-
-      return ministryListItem;
-    };
-
+  async getMinistriesListItems(userID: number, ministryID?: number): Promise<MinistryListItemResponse[]> {
     const ministries = await this.prismaService.ministry.findMany({
       where: {
         ministryID: {
           equals: ministryID,
+        },
+        members: {
+          some: {
+            userID,
+          },
         },
       },
       include: {
@@ -147,7 +138,24 @@ export class MinistryService {
           },
         },
       },
+      orderBy: {
+        ministryID: 'asc',
+      },
     });
+
+    const ministryListItemMapFn = (ministry) => {
+      const ministryListItem: MinistryListItemResponse = {
+        ministryID: ministry.ministryID,
+        name: ministry.name,
+        musicsQuantity: ministry._count.songs,
+        membersQuantity: ministry._count.members,
+        artistQuantity: ministry._count.artists,
+        scalesQuantity: ministry._count.scales,
+        songKeysQuantity: ministry._count.ministerSongKeys,
+      };
+
+      return ministryListItem;
+    };
 
     const ministriesListItems: MinistryListItemResponse[] = ministries.map(ministryListItemMapFn);
     return ministriesListItems;

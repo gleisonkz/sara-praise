@@ -1,9 +1,9 @@
 import {
-    Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Res, UseGuards
+    Body, Controller, Delete, Get, HttpStatus, Param, Post, Query, Request, Res, UseGuards
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-import { JwtGuard } from '@sp/api/domain/auth';
+import { AuthRequest, JwtGuard } from '@sp/api/domain/auth';
 import { IMinisterSongKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 
 import { Prisma } from '@prisma/client';
@@ -43,9 +43,12 @@ export class MinistryController {
     type: MinistryListItemResponse,
   })
   @Get('/list-item/:ministryID?')
-  async getMinistriesListItems(@Param('ministryID') ministryID?: string): Promise<MinistryListItemResponse[]> {
+  async getMinistriesListItems(
+    @Request() request: AuthRequest,
+    @Param('ministryID') ministryID?: string
+  ): Promise<MinistryListItemResponse[]> {
     const parsedID = ministryID ? +ministryID : undefined;
-    const ministries = await this.ministryService.getMinistriesListItems(parsedID);
+    const ministries = await this.ministryService.getMinistriesListItems(request.user.userID, parsedID);
 
     return ministries;
   }
@@ -73,7 +76,7 @@ export class MinistryController {
     @Res({ passthrough: true }) res: Response,
     @Param('ministryID') ministryID: number,
     @Body() ministerSongKeyRequest: IMinisterSongKeyRequest
-  ): Promise<any> {
+  ): Promise<unknown> {
     try {
       const ministerSongKey = await this.ministryService.createMinisterSongKey(+ministryID, ministerSongKeyRequest);
       return ministerSongKey;
@@ -113,7 +116,7 @@ export class MinistryController {
     @Res({ passthrough: true }) res: Response,
     @Param('ministryID') ministryID: number,
     @Query('memberID') memberID?: number
-  ): Promise<any[]> {
+  ): Promise<unknown[]> {
     try {
       const roles = await this.ministryService.getRolesByMinistryID(+ministryID, memberID);
       return roles;
@@ -126,44 +129,4 @@ export class MinistryController {
       throw error;
     }
   }
-
-  // @Post('/:ministryID/keys')
-  // createMinistryKey(
-  //   @Body() ministryKeyRequest: MinistryKeyRequest,
-  //   @Param('ministryID') ministryID: number
-  // ): MinistryKeyListItemResponse {
-  //   const ministryKey = this.ministryService.createMinistryKey(ministryKeyRequest, +ministryID);
-  //   return ministryKey;
-  // }
-
-  // @Get('/:ministryID/keys')
-  // async getKeyListItems(
-  //   @Param('ministryID') ministryID: number,
-  //   @Res({ passthrough: true }) res: Response
-  // ): Promise<MinistryKeyListItemResponse[]> {
-  //   try {
-  //     const keys = this.ministryService.getKeyListItems(+ministryID);
-  //     return keys;
-  //   } catch (error) {
-  //     if (error instanceof MinistryNotFoundError) {
-  //       return res.status(HttpStatus.BAD_REQUEST).send(error.message);
-  //     }
-
-  //     throw error;
-  //   }
-  // }
-
-  // @Get('keys')
-  // async getKeys(@Res({ passthrough: true }) res: Response): Promise<KeyResponse[]> {
-  //   try {
-  //     const keys = this.ministryService.getKeys();
-  //     return keys;
-  //   } catch (error) {
-  //     if (error instanceof MinistryNotFoundError) {
-  //       return res.status(HttpStatus.BAD_REQUEST).send(error.message);
-  //     }
-
-  //     throw error;
-  //   }
-  // }
 }

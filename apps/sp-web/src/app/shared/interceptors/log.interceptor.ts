@@ -18,7 +18,7 @@ export class LogInterceptor implements HttpInterceptor {
     const headers = request.headers;
 
     return next.handle(request).pipe(
-      tap((event: HttpEvent<any>) => {
+      tap((event: HttpEvent<unknown>) => {
         if (event instanceof HttpResponse) {
           const responseData = event.body;
 

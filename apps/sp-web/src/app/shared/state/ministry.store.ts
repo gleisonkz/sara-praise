@@ -1,4 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 import { MinistryApiService } from '@sp/web/domain/ministry/services';
@@ -22,7 +23,8 @@ export class MinistryStore extends NgSimpleStateBaseStore<MinistryState> {
   constructor(
     injector: Injector,
     private readonly ministryApiService: MinistryApiService,
-    private readonly toastService: HotToastService
+    private readonly toastService: HotToastService,
+    private readonly router: Router
   ) {
     super(injector);
   }
@@ -64,11 +66,22 @@ export class MinistryStore extends NgSimpleStateBaseStore<MinistryState> {
     }));
   }
 
-  create(ministryRequest: MinistryRequest, callback: () => void): void {
+  selectCurrentMinistry(): Observable<MinistryListItemResponse> {
+    return this.selectState((state) => state.currentMinistry).pipe(
+      switchMap((activeMinistry) => {
+        const MINISTRY_ID_EXPRESSION = /(?<=ministerios\/)\d/;
+        const [ministryID] = this.router.url.match(MINISTRY_ID_EXPRESSION) || [];
+
+        return !activeMinistry ? this.findByID(+ministryID) : of(activeMinistry);
+      })
+    );
+  }
+
+  create(ministryRequest: MinistryRequest, callback?: () => void): void {
     this.ministryApiService.create(ministryRequest).subscribe((ministry) => {
       this.setState((state) => ({ ...state, ministries: [...state.ministries, ministry] }));
       this.toastService.success('Ministério criado com sucesso!');
-      callback();
+      if (callback) callback();
     });
   }
 

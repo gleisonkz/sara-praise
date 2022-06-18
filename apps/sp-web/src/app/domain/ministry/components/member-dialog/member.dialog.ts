@@ -1,9 +1,18 @@
+import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit
 } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { IRoleResponse, MemberRequest } from '@sp/shared-interfaces';
 
@@ -18,6 +27,20 @@ import { MinistryApiService } from '../../core/services/ministry.api.service';
   templateUrl: './member.dialog.html',
   styleUrls: ['./member.dialog.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatDividerModule,
+    MatListModule,
+    MatExpansionModule,
+    CommonModule,
+    MatButtonModule,
+    MatCheckboxModule,
+    MatSlideToggleModule,
+  ],
 })
 export class MemberDialog implements OnInit {
   constructor(

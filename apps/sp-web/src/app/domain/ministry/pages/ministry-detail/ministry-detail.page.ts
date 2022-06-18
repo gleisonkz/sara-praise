@@ -1,10 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
-import { MatDialog } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { IMinisterSongKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 import { MinistryApiService } from '@sp/web/domain/ministry/services';
+import { MediaIfDirective } from '@sp/web/widget/directives';
 
 import { HotToastService } from '@ngneat/hot-toast';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
@@ -29,6 +36,18 @@ import {
   templateUrl: './ministry-detail.page.html',
   styleUrls: ['./ministry-detail.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    RouterModule,
+    MatIconModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatTabsModule,
+    MatDialogModule,
+    CommonModule,
+    MediaIfDirective,
+    MatButtonModule,
+  ],
 })
 export class MinistryDetailPage implements OnInit {
   ministryListItem$: Observable<MinistryListItemResponse>;
@@ -69,7 +88,7 @@ export class MinistryDetailPage implements OnInit {
     dialogRef
       .afterClosed()
       .pipe(untilDestroyed(this), filter(Boolean))
-      .subscribe((result: any) => {
+      .subscribe((result: unknown) => {
         console.log(result);
       });
   }
@@ -86,7 +105,7 @@ export class MinistryDetailPage implements OnInit {
     dialogRef
       .afterClosed()
       .pipe(untilDestroyed(this), filter(Boolean))
-      .subscribe((result: any) => {
+      .subscribe((result: unknown) => {
         console.log(result);
       });
   }

@@ -6,6 +6,7 @@ import { fromEvent, startWith, Subject, takeUntil } from 'rxjs';
 
 @Directive({
   selector: '[spMediaIf]',
+  standalone: true,
 })
 export class MediaIfDirective<T> implements OnInit, OnDestroy {
   @Input('spMediaIf') size: number;

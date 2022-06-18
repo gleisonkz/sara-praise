@@ -1,7 +1,15 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatOptionModule } from '@angular/material/core';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 import { ArtistResponse, KeyResponse } from '@sp/shared-interfaces';
 import { ArtistApiService, MinistryApiService } from '@sp/web/domain/ministry/services';
@@ -13,6 +21,19 @@ import { Observable } from 'rxjs';
   templateUrl: './music-dialog.component.html',
   styleUrls: ['./music-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatDialogModule,
+    MatOptionModule,
+    MatChipsModule,
+    MatSelectModule,
+    CommonModule,
+    MatButtonModule,
+  ],
 })
 export class MusicDialogComponent implements OnInit {
   songKeys$: Observable<KeyResponse[]>;

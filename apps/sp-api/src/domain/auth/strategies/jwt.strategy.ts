@@ -4,7 +4,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { PrismaService } from '@sp/api/domain/prisma';
 import { UserAuthPayload } from '@sp/shared-interfaces';
 
+import { Request as HttpRequest } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+
+export type AuthRequest = HttpRequest & { user: UserAuthPayload };
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {

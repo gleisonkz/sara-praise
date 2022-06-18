@@ -1,6 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Validators } from '@angular/forms';
+import { ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
 
@@ -13,6 +23,19 @@ import { Observable } from 'rxjs';
   templateUrl: './ministries.page.html',
   styleUrls: ['./ministries.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    MatBadgeModule,
+    MatIconModule,
+    MatCardModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatDividerModule,
+    MatToolbarModule,
+    CommonModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
 })
 export class MinistriesPage implements OnInit {
   ministryNameControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
