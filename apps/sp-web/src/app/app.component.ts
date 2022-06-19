@@ -18,7 +18,8 @@ import {
     HttpErrorInterceptor
 } from 'apps/sp-web/src/app/shared/interceptors/http-error.interceptor';
 import { LogInterceptor } from 'apps/sp-web/src/app/shared/interceptors/log.interceptor';
-import { MinistryStore } from 'apps/sp-web/src/app/shared/state/ministry.store';
+import { MinistryStore } from 'apps/sp-web/src/app/shared/stores/ministry/ministry.store';
+import { ScaleStore } from 'apps/sp-web/src/app/shared/stores/scale/scale.store';
 import { environment } from 'apps/sp-web/src/environments/environment.prod';
 import { NgSimpleStateModule } from 'ng-simple-state';
 
@@ -43,6 +44,7 @@ export class AppComponent {
         { provide: HTTP_INTERCEPTORS, useClass: LogInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
         MinistryStore,
+        ScaleStore,
         importProvidersFrom(
           RouterModule.forRoot(APP_ROUTES),
           HotToastModule.forRoot(),

@@ -69,10 +69,13 @@ export class SongService {
     return songListItemResponses;
   }
 
-  async getAvailableSongs(ministryID: number, ministerID: number): Promise<AvailableSongResponse[]> {
+  async getAvailableSongs(ministryID: number, ministerID: number, songID?: number): Promise<AvailableSongResponse[]> {
+    const songsPredicate = songID ? { songID } : {};
+
     const songs = await this.prismaService.song.findMany({
       where: {
         ministryID,
+        ...songsPredicate,
         AND: {
           ministerSongKeys: {
             none: {

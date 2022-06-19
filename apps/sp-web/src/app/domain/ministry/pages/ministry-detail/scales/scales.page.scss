@@ -45,7 +45,7 @@
   .avatars {
     --margin-off-set: 17px;
     direction: rtl; /* This is to get the stack with left on top */
-    text-align: left; /* Now need to explitly align left */
+    text-align: left; /* Now need to explicitly align left */
     padding-left: var(--margin-off-set); /* Same value as the negative margin */
 
     .avatar img {

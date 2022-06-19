@@ -5,6 +5,8 @@ import { SONG_KEYS } from './seeds/song-keys.seed';
 const prisma = new PrismaClient({});
 
 async function main() {
+  console.log('Seeding roles...');
+
   await prisma.role.createMany({
     data: DEFAULT_ROLES,
   });

@@ -11,8 +11,8 @@ import { ScaleListItemResponse } from '@sp/shared-interfaces';
 import { RemoveDotsPipe } from '@sp/web/widget/pipes';
 
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
-import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
 import { FADE_ANIMATION } from 'apps/sp-web/src/app/shared/animations/fade.animation';
+import { ScaleStore } from 'apps/sp-web/src/app/shared/stores/scale/scale.store';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -27,8 +27,8 @@ export class ScalesPage implements OnInit {
   scaleListItems$: Observable<ScaleListItemResponse[]>;
   readonly ministryID = injectMinistryID();
 
-  constructor(private readonly scaleApiService: ScaleApiService) {}
+  constructor(private readonly scaleStore: ScaleStore) {}
   ngOnInit(): void {
-    this.scaleListItems$ = this.scaleApiService.getScaleListItems(+this.ministryID);
+    this.scaleListItems$ = this.scaleStore.findAll(this.ministryID);
   }
 }

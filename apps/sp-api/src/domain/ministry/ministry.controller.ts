@@ -67,6 +67,35 @@ export class MinistryController {
     return ministerSongKeys;
   }
 
+  @ApiQuery({ name: 'ministryID', required: false })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: Boolean,
+  })
+  @Delete('/:ministryID/minister-song-key')
+  async deleteMinisterSongKey(
+    @Param('ministryID') ministryID: number,
+    @Query('memberID') memberID: number,
+    @Query('songID') songID: number
+  ): Promise<unknown> {
+    const ministerSongKeys = await this.ministryService.deleteMinisterSongKey(ministryID, memberID, songID);
+    return ministerSongKeys;
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: Boolean,
+  })
+  @Get('/:ministryID/has-minister-song-key')
+  async hasMinisterSongKey(
+    @Query('memberID') memberID: number,
+    @Query('songID') songID: number,
+    @Param('ministryID') ministryID: string
+  ): Promise<boolean> {
+    const ministerSongKeys = await this.ministryService.hasMinisterSongKey(+ministryID, +memberID, +songID);
+    return ministerSongKeys;
+  }
+
   @Post('/:ministryID/minister-song-key')
   @ApiCreatedResponse({
     description: 'The minister song key has been successfully created.',

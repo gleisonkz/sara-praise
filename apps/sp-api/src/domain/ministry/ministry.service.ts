@@ -63,6 +63,28 @@ export class MinistryService {
     return ministerSongKey;
   }
 
+  async deleteMinisterSongKey(ministryID: number, memberID: number, songID: number): Promise<void> {
+    await this.prismaService.ministerSongKey.deleteMany({
+      where: {
+        ministryID,
+        memberID,
+        songID,
+      },
+    });
+  }
+
+  async hasMinisterSongKey(ministryID: number, memberID: number, songID: number) {
+    const ministerSongKey = await this.prismaService.ministerSongKey.findFirst({
+      where: {
+        ministryID,
+        memberID,
+        songID,
+      },
+    });
+
+    return !!ministerSongKey;
+  }
+
   async getMinisterSongKeysListItem(ministryID: number): Promise<MinisterSongKeyListItemResponse[]> {
     const ministerSongKeys = await this.prismaService.ministerSongKey.findMany({
       where: {
@@ -99,6 +121,8 @@ export class MinistryService {
         artistName: ministerSongKey.song.artist.name,
         songTitle: ministerSongKey.song.title,
         songKey: ministerSongKey.songKey.notation,
+        memberID: ministerSongKey.member.memberID,
+        songID: ministerSongKey.song.songID,
       };
 
       return ministerSongKeyListItem;

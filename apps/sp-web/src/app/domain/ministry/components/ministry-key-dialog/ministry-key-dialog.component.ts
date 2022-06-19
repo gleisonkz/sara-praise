@@ -4,7 +4,7 @@ import { ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -40,8 +40,9 @@ import { MinistryApiService } from '../../core/services/ministry.api.service';
 export class MinistryKeyDialogComponent implements OnInit {
   constructor(
     private readonly memberService: MemberApiService,
-    public readonly ministryService: MinistryApiService,
-    @Inject(MAT_DIALOG_DATA) private ministryID: number
+    public readonly ministryApiService: MinistryApiService,
+    private readonly dialogRef: MatDialogRef<MinistryKeyDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) private data: { ministryID: number; memberID?: number; songID?: number }
   ) {}
 
   ministryKeyForm: FormGroup<ControlsOf<IMinisterSongKeyRequest>>;
@@ -59,19 +60,25 @@ export class MinistryKeyDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createForm();
+    this.createForm(this.data.memberID, this.data.songID);
     const roles = [eMinistryRole.MINISTER];
 
-    this.sntKeys$ = this.ministryService.getKeys();
-    this.ministerMembers$ = this.memberService.getMemberListItems(this.ministryID, roles);
+    this.sntKeys$ = this.ministryApiService.getKeys();
+    this.ministerMembers$ = this.memberService.getMemberListItems(this.data.ministryID, roles);
 
     this.memberIdControl.valueChanges
       .pipe(
         filter((id) => !!id),
         tap(() => this.songIdControl.reset()),
-        switchMap((memberId) => this.ministryService.getAvailableSongListItems(this.ministryID, memberId))
+        switchMap((memberId) =>
+          this.ministryApiService.getAvailableSongListItems(this.data.ministryID, memberId, this.data.songID)
+        )
       )
-      .subscribe(this.songs$);
+      .subscribe((songs) => {
+        this.songs$.next(songs);
+        if (!this.data.songID) return;
+        this.songIdControl.setValue(this.data.songID);
+      });
   }
 
   createForm(ministerID?: number, songID?: number, keyID?: number) {
@@ -84,6 +91,13 @@ export class MinistryKeyDialogComponent implements OnInit {
 
   submitForm() {
     if (this.ministryKeyForm.invalid) return;
-    return this.ministryKeyForm.value;
+    const ministerSongKeyRequest = this.ministryKeyForm.value;
+
+    this.ministryApiService.createMinisterSongKey(this.data.ministryID, ministerSongKeyRequest).subscribe({
+      next: () => this.dialogRef.close(true),
+      error: () => {
+        this.ministryKeyForm.reset();
+      },
+    });
   }
 }

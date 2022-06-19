@@ -16,7 +16,7 @@ import { SongListItemComponent } from '@sp/web/widget/components';
 import { HotToastService } from '@ngneat/hot-toast';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
-import { MinistryStore } from 'apps/sp-web/src/app/shared/state/ministry.store';
+import { MinistryStore } from 'apps/sp-web/src/app/shared/stores/ministry/ministry.store';
 import { map, Observable, switchMap } from 'rxjs';
 
 @Component({

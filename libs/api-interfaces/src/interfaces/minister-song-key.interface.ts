@@ -4,6 +4,8 @@ export interface IMinisterSongKeyListItemResponse {
   artistName: string;
   songTitle: string;
   songKey: string;
+  memberID: number;
+  songID: number;
 }
 
 export interface IMinisterSongKeyRequest {

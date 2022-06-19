@@ -23,12 +23,9 @@
       "@sp/api/mocks": ["apps/sp-api/src/app/mocks"],
       "@sp/api/models": ["apps/sp-api/src/app/models"],
       "@sp/api/services": ["apps/sp-api/src/app/services"],
+
       "@sp/shared-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@sp/store/ministry": ["apps/sp-web/src/app/store/ministry"],
-      "@sp/store/ministry/actions": ["apps/sp-web/src/app/store/ministry/ministry.actions"],
-      "@sp/store/ministry/effects": ["apps/sp-web/src/app/store/ministry/ministry.effects"],
-      "@sp/store/ministry/reducers": ["apps/sp-web/src/app/store/ministry/ministry.reducers"],
-      "@sp/store/ministry/selectors": ["apps/sp-web/src/app/store/ministry/ministry.selectors"],
+
       "@sp/web/components": ["apps/sp-web/src/app/components"],
       "@sp/web/directives": ["apps/sp-web/src/app/directives"],
       "@sp/web/domain/auth": ["apps/sp-web/src/app/domain/auth"],

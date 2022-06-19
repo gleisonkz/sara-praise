@@ -48,7 +48,10 @@ export interface AvailableScaleSongResponse {
   songID: number;
   title: string;
   artistName: string;
-  memberID?: number;
+  member?: {
+    memberID: number;
+    memberName: string;
+  };
   tags: string[];
   key: string;
   hasAudioLink: boolean;

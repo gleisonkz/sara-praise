@@ -35,7 +35,7 @@
     type="button"
     color="accent"
     mat-raised-button
-    [mat-dialog-close]="submitForm()"
+    (click)="submitForm()"
     [disabled]="this.ministryKeyForm.invalid"
   >
     Confirmar

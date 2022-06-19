@@ -9,7 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { IMinisterSongKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
+import { MinistryListItemResponse } from '@sp/shared-interfaces';
 import { MinistryApiService } from '@sp/web/domain/ministry/services';
 import { MediaIfDirective } from '@sp/web/widget/directives';
 
@@ -25,8 +25,8 @@ import {
     MusicDialogComponent
 } from 'apps/sp-web/src/app/domain/ministry/components/music-dialog/music-dialog.component';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
-import { MinistryStore } from 'apps/sp-web/src/app/shared/state/ministry.store';
-import { filter, Observable, switchMap } from 'rxjs';
+import { MinistryStore } from 'apps/sp-web/src/app/shared/stores/ministry/ministry.store';
+import { filter, Observable } from 'rxjs';
 import {
     MinistryKeyDialogComponent
 } from '../../components/ministry-key-dialog/ministry-key-dialog.component';
@@ -130,20 +130,16 @@ export class MinistryDetailPage implements OnInit {
 
   goToCreateMinistryKey() {
     const dialogRef = this.dialog.open(MinistryKeyDialogComponent, {
-      data: this.ministryID,
+      data: {
+        ministryID: this.ministryID,
+      },
       width: '100%',
       maxWidth: '600px',
     });
 
     dialogRef
       .afterClosed()
-      .pipe(
-        untilDestroyed(this),
-        filter(Boolean),
-        switchMap((ministerSongKeyRequest: IMinisterSongKeyRequest) =>
-          this.ministryApiService.createMinisterSongKey(this.ministryID, ministerSongKeyRequest)
-        )
-      )
+      .pipe(untilDestroyed(this), filter(Boolean))
       .subscribe(() => {
         this.toastService.success('Cadastrado com sucesso');
       });

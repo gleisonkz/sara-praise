@@ -68,43 +68,6 @@
           </mat-select>
         </mat-form-field>
       </div>
-
-      <!-- <sp-song-list-item
-        [song]="song"
-        [style.display]="'grid'"
-        *spFor="let song of songListItems$ else 'Ainda não foi cadastrada nenhuma música' let length=length let index=index"
-        (click)="checkboxRef.toggle()"
-        [formGroup]="scaleSongFormArray.controls[index]"
-      >
-
-        <mat-form-field
-          (click)="$event.stopPropagation()"
-          minister-select
-          appearance="fill"
-        >
-          <mat-label>Ministro</mat-label>
-          <mat-select
-            [formControl]="scaleSongFormArray.controls[index].controls.memberID"
-            [spDisableControl]="!checkboxRef.checked"
-            [spSetOnSelect]="scaleSongFormArray.controls[index].controls.ministerName"
-          >
-            <mat-option
-              *ngFor="let minister of participantMinisters$ | async"
-              [value]="minister.memberID"
-              [spSetOnSelectValueRef]="{ key: minister.memberID, value: minister.name }"
-            >
-              {{ minister.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-checkbox
-          [checked]="song.isChecked"
-          [formControl]="scaleSongFormArray.controls[index].controls.isChecked"
-          (click)="$event.stopPropagation()"
-          #checkboxRef
-        ></mat-checkbox>
-      </sp-song-list-item> -->
     </div>
   </mat-dialog-content>
 

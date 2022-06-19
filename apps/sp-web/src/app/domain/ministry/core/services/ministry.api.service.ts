@@ -33,9 +33,22 @@ export class MinistryApiService extends BaseApiService {
     return this.http.post<boolean>(url, ministerSongKeyRequest);
   }
 
+  removeMinisterSongKey(ministryID: number, songID: number, memberID: number) {
+    const url = `${this.URL}/${ministryID}/minister-song-key`;
+    const params = new HttpParams().set('songID', songID.toString()).set('memberID', memberID.toString());
+    return this.http.delete(url, { params });
+  }
+
   getMinisterSongKeys(ministryID: number): Observable<IMinisterSongKeyListItemResponse[]> {
     const url = `${this.URL}/${ministryID}/minister-song-key`;
     return this.http.get<IMinisterSongKeyListItemResponse[]>(url);
+  }
+
+  hasMinisterSongKey(ministryID: number, memberID: number, songID: number) {
+    const url = `${this.URL}/${ministryID}/has-minister-song-key`;
+    const params = new HttpParams().set('memberID', memberID.toString()).set('songID', songID.toString());
+
+    return this.http.get<boolean>(url, { params });
   }
 
   getRolesByMemberID(ministryID: number, memberID?: number) {
@@ -62,9 +75,14 @@ export class MinistryApiService extends BaseApiService {
     return this.http.get<SongListItemResponse[]>(url);
   }
 
-  getAvailableSongListItems(ministryID: number, ministerID: number): Observable<SongListItemResponse[]> {
+  getAvailableSongListItems(
+    ministryID: number,
+    ministerID: number,
+    songID?: number
+  ): Observable<SongListItemResponse[]> {
     const url = `${this.URL}/${ministryID}/songs/available/${ministerID}`;
-    return this.http.get<SongListItemResponse[]>(url);
+    const params = new HttpParams().set('songID', songID ? songID.toString() : '');
+    return this.http.get<SongListItemResponse[]>(url, { params });
   }
 
   getKeys(): Observable<KeyResponse[]> {

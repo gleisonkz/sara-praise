@@ -273,6 +273,13 @@ export class ScaleService {
         lyricUrl: true,
         chordsUrl: true,
         scaleSongs: {
+          include: {
+            member: {
+              include: {
+                user: true,
+              },
+            },
+          },
           where: {
             scaleID,
           },
@@ -283,7 +290,10 @@ export class ScaleService {
     const songsResponse: AvailableScaleSongResponse[] = songs.map((song) => {
       const songResponse: AvailableScaleSongResponse = {
         scaleSongID: song.scaleSongs[0]?.scaleSongID,
-        memberID: song.scaleSongs[0]?.memberID,
+        member: {
+          memberID: song.scaleSongs[0]?.memberID,
+          memberName: song.scaleSongs[0]?.member.user.name,
+        },
         songID: song.songID,
         title: song.title,
         artistName: song.artist.name,

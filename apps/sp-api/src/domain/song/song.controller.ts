@@ -1,4 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
@@ -34,20 +34,10 @@ export class SongController {
   async getAvailableSongs(
     @Param('ministryID') ministryID: number,
     @Param('ministerID') ministerID: number,
-    @Res({ passthrough: true }) res: Response
+    @Query('songID') songID?: number
   ): Promise<AvailableSongResponse[]> {
-    // try {
-
-    const songs = await this.songService.getAvailableSongs(+ministryID, +ministerID);
+    const songs = await this.songService.getAvailableSongs(ministryID, ministerID, songID);
     return songs;
-    // } catch (error) {
-    //   if (error instanceof MinistryNotFoundError) {
-    //     res.status(HttpStatus.BAD_REQUEST).send(error.message);
-    //     return;
-    //   }
-
-    //   throw error;
-    // }
   }
 
   // @Get(':id')

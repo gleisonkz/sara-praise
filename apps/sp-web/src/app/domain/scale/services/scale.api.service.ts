@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import {
     AvailableScaleSongResponse, eMinistryRole, IScaleResponse, MemberListItemResponse,
     ParticipantListItem, ParticipantRequest, ParticipantSelectItemResponse, ScaleDetailResponse,
-    ScaleListItemResponse, ScaleRequest, ScaleResponse, ScaleSongRequest, ScaleSongResponse
+    ScaleListItemResponse, ScaleRequest, ScaleSongRequest, ScaleSongResponse
 } from '@sp/shared-interfaces';
 
 import { BaseApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/base.api.service';
@@ -20,9 +20,9 @@ export class ScaleApiService extends BaseApiService {
     super('/ministries');
   }
 
-  findAll(ministryID: number): Observable<IScaleResponse[]> {
+  findAll(ministryID: number): Observable<ScaleListItemResponse[]> {
     const url = `${this.URL}/${ministryID}/scales`;
-    return this.getWithRuntimeValidation<ScaleResponse[]>(url, ScaleResponse);
+    return this.http.get<ScaleListItemResponse[]>(url);
   }
 
   findByID(ministryID: number, scaleID: number): Observable<IScaleResponse> {
@@ -50,11 +50,6 @@ export class ScaleApiService extends BaseApiService {
   delete(scaleID: number): Observable<IScaleResponse> {
     const url = `${this.URL}/scales/${scaleID}`;
     return this.http.delete<IScaleResponse>(url);
-  }
-
-  getScaleListItems(ministryID: number): Observable<ScaleListItemResponse[]> {
-    const url = `${this.URL}/${ministryID}/scales`;
-    return this.http.get<ScaleListItemResponse[]>(url);
   }
 
   getScaleListItemDetails(ministryID: number, scaleID: number): Observable<ScaleDetailResponse> {

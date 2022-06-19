@@ -9,6 +9,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { IMinisterSongKeyListItemResponse } from '@sp/shared-interfaces';
 import { SpForDirective } from '@sp/web/widget/directives';
 
+import { HotToastService } from '@ngneat/hot-toast';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { Observable, of } from 'rxjs';
 import { MinistryApiService } from '../../../core/services/ministry.api.service';
@@ -23,9 +24,17 @@ import { MinistryApiService } from '../../../core/services/ministry.api.service'
 export class KeysPage implements OnInit {
   keysListItems$: Observable<IMinisterSongKeyListItemResponse[]> = of([]);
   ministryID = injectMinistryID();
-  constructor(private readonly ministryService: MinistryApiService) {}
+  constructor(private readonly toastService: HotToastService, private readonly ministryService: MinistryApiService) {}
 
   ngOnInit(): void {
     this.keysListItems$ = this.ministryService.getMinisterSongKeys(this.ministryID);
+  }
+
+  remove({ songID, memberID }: IMinisterSongKeyListItemResponse) {
+    this.ministryService.removeMinisterSongKey(this.ministryID, songID, memberID).subscribe({
+      next: () => {
+        this.toastService.success('Removido com sucesso');
+      },
+    });
   }
 }

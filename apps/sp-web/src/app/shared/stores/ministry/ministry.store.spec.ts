@@ -6,13 +6,10 @@ import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces
 import { MinistryApiService } from '@sp/web/domain/ministry/services';
 
 import { HotToastService } from '@ngneat/hot-toast';
-import {
-    MINISTRY_INITIAL_STATE, MinistryStore
-} from 'apps/sp-web/src/app/shared/state/ministry.store';
 import { NgSimpleStateModule } from 'ng-simple-state';
 import { of } from 'rxjs';
 import { anything, instance, mock, verify, when } from 'ts-mockito';
-import { MinistryState } from './ministry.store';
+import { MINISTRY_INITIAL_STATE, MinistryState, MinistryStore } from './ministry.store';
 
 function setup(ministryApiService: MinistryApiService, toastService: HotToastService, router: Router) {
   const injector = TestBed.inject(Injector);
