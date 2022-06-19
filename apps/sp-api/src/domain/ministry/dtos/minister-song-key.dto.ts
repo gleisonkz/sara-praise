@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 import { IMinisterSongKeyListItemResponse } from '@sp/shared-interfaces';
 
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class MinisterSongKeyListItemResponse implements IMinisterSongKeyListItemResponse {
   @ApiProperty()
@@ -12,6 +12,14 @@ export class MinisterSongKeyListItemResponse implements IMinisterSongKeyListItem
   @ApiProperty()
   @IsString()
   memberName: string;
+
+  @ApiProperty()
+  @IsNumber()
+  memberID: number;
+
+  @ApiProperty()
+  @IsNumber()
+  songID: number;
 
   @ApiProperty()
   @IsString()

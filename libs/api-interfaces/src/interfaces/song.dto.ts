@@ -29,6 +29,7 @@ export interface SongListItemResponse {
   hasChordsLink: boolean;
 }
 export interface ScaleSongResponse {
+  scaleSongID: number;
   songID: number;
   title: string;
   artistName: string;

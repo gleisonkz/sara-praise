@@ -163,7 +163,6 @@ export class ScaleSongsDialog implements OnInit {
   }
 
   createForm(songListItem: AvailableScaleSongResponse) {
-    console.log({ songListItem });
     this.hasFormChanged.set(songListItem.songID, false);
     const scaleSongFormGroup = new FormGroup({
       scaleSongID: new FormControl(songListItem.scaleSongID),

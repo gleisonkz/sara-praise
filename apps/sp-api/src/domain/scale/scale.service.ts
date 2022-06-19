@@ -86,6 +86,7 @@ export class ScaleService {
 
     const songs: ScaleSongResponse[] = scale.scaleSongs.map((scaleSong) => {
       const songResponse: ScaleSongResponse = {
+        scaleSongID: scaleSong.scaleSongID,
         artistName: scaleSong.song.artist.name,
         hasAudioLink: !!scaleSong.song.audioUrl,
         hasChordsLink: !!scaleSong.song.chordsUrl,
@@ -222,6 +223,7 @@ export class ScaleService {
         scaleID,
       },
       select: {
+        scaleSongID: true,
         songID: true,
         ministerSongKey: true,
         artistName: true,
@@ -233,10 +235,14 @@ export class ScaleService {
           },
         },
       },
+      orderBy: {
+        scaleSongID: 'asc',
+      },
     });
 
     const songsResponse: ScaleSongResponse[] = songs.map((scaleSong) => {
       const songResponse: ScaleSongResponse = {
+        scaleSongID: scaleSong.scaleSongID,
         artistName: scaleSong.artistName,
         hasAudioLink: !!scaleSong.song.audioUrl,
         hasChordsLink: !!scaleSong.song.chordsUrl,

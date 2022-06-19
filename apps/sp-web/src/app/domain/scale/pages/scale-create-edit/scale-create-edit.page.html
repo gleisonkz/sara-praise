@@ -173,7 +173,7 @@
       <div class="song-list-items">
         <sp-song-list-item
           [song]="song"
-          *spFor="let song of songListItems else 'Ainda não foi cadastrada nenhuma música' let length=length; let index=index"
+          *ngFor="let song of songListItems let index=index"
           [songOrder]="index + 1"
         >
           <img

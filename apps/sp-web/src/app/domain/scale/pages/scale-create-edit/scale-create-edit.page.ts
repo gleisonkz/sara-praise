@@ -25,6 +25,7 @@ import { SpForDirective } from '@sp/web/widget/directives';
 
 import { HotToastService } from '@ngneat/hot-toast';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import {
     ParticipantsDialog
@@ -35,8 +36,9 @@ import {
 import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
 import { injectOptionalRouteParam } from 'apps/sp-web/src/app/shared/functions';
 import { MatTimepickerModule } from 'mat-timepicker';
-import { EMPTY, filter, Observable, skip, switchMap, tap } from 'rxjs';
+import { EMPTY, filter, Observable, ReplaySubject, skip, switchMap, tap } from 'rxjs';
 
+@UntilDestroy()
 @Component({
   templateUrl: './scale-create-edit.page.html',
   styleUrls: ['./scale-create-edit.page.scss'],
@@ -73,7 +75,7 @@ export class ScaleCreateEditPage implements OnInit {
   });
 
   participantListItems$: Observable<ParticipantListItem[]>;
-  scaleSongs$: Observable<ScaleSongResponse[]>;
+  scaleSongs$: ReplaySubject<ScaleSongResponse[]> = new ReplaySubject(1);
 
   scaleFormGroup: FormGroup<{
     scaleID?: FormControl<number>;
@@ -120,7 +122,10 @@ export class ScaleCreateEditPage implements OnInit {
     if (!this.scaleID) return;
 
     this.participantListItems$ = this.scaleApiService.findAllParticipantListItems(this.ministryID, this.scaleID);
-    this.scaleSongs$ = this.scaleApiService.findAllSongs(this.ministryID, this.scaleID);
+
+    this.scaleApiService.findAllSongs(this.ministryID, this.scaleID).subscribe((scaleSongs) => {
+      this.scaleSongs$.next(scaleSongs);
+    });
 
     this.scaleApiService.findByID(this.ministryID, this.scaleID).subscribe((scale: IScaleResponse) => {
       this.scaleFormGroup.patchValue(scale);
@@ -169,12 +174,15 @@ export class ScaleCreateEditPage implements OnInit {
     dialogRef
       .afterClosed()
       .pipe(
+        untilDestroyed(this),
         filter((songsRequest: ScaleSongRequest[]) => !!songsRequest?.length),
         switchMap((songsRequest) =>
           this.scaleID ? this.scaleApiService.createSong(this.ministryID, this.scaleID, songsRequest) : EMPTY
-        )
+        ),
+        switchMap(() => (this.scaleID ? this.scaleApiService.findAllSongs(this.ministryID, this.scaleID) : EMPTY))
       )
-      .subscribe(() => {
+      .subscribe((songs) => {
+        this.scaleSongs$.next(songs);
         this.toastService.success('Música adicionada com sucesso');
       });
   }

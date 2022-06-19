@@ -21,23 +21,23 @@ export class ScaleController {
 
   @Post()
   create(@Param('ministryID') ministryID: number, @Body() scaleRequest: ScaleRequestDto): Promise<ScaleResponse> {
-    return this.scaleService.create(+ministryID, scaleRequest);
+    return this.scaleService.create(ministryID, scaleRequest);
   }
 
   @Get()
   findAll(@Param('ministryID') ministryID: number): Promise<ScaleListItemResponse[]> {
-    const scales = this.scaleService.findAll(+ministryID);
+    const scales = this.scaleService.findAll(ministryID);
     return scales;
   }
 
   @Put(':scaleID')
   update(@Param('scaleID') scaleID: number, @Body() scaleRequest: ScaleRequestDto): Promise<ScaleResponse> {
-    return this.scaleService.update(+scaleID, scaleRequest);
+    return this.scaleService.update(scaleID, scaleRequest);
   }
 
   @Get(':scaleID')
   findOne(@Param('ministryID') ministryID: number, @Param('scaleID') scaleID: number): Promise<ScaleResponse> {
-    return this.scaleService.findOne(+ministryID, +scaleID);
+    return this.scaleService.findOne(ministryID, scaleID);
   }
 
   @Get('/:scaleID/participants')
@@ -45,7 +45,7 @@ export class ScaleController {
     @Param('ministryID') ministryID: number,
     @Param('scaleID') scaleID: number
   ): Promise<MemberListItemResponseDto[]> {
-    return this.scaleService.findParticipants(+ministryID, +scaleID);
+    return this.scaleService.findParticipants(ministryID, scaleID);
   }
 
   @Post('/:scaleID/participants')
@@ -58,12 +58,12 @@ export class ScaleController {
     @Param('scaleID') scaleID: number,
     @Query('roleID') roleID?: eMinistryRole
   ): Promise<ParticipantSelectItemResponse[]> {
-    return this.scaleService.findAllParticipantsByRoleID(+scaleID, +roleID);
+    return this.scaleService.findAllParticipantsByRoleID(scaleID, +roleID);
   }
 
   @Get('/:scaleID/participant-list-items')
   findParticipantListItems(@Param('scaleID') scaleID: number): Promise<ParticipantListItem[]> {
-    return this.scaleService.findParticipantListItems(+scaleID);
+    return this.scaleService.findParticipantListItems(scaleID);
   }
 
   @Post('/:scaleID/songs')
@@ -73,7 +73,7 @@ export class ScaleController {
 
   @Get('/:scaleID/songs')
   findSongs(@Param('scaleID') scaleID: number): Promise<ScaleSongResponse[]> {
-    return this.scaleService.findSongs(+scaleID);
+    return this.scaleService.findSongs(scaleID);
   }
 
   @Get('/:scaleID/available-songs')
@@ -81,6 +81,6 @@ export class ScaleController {
     @Param('ministryID') ministryID: number,
     @Param('scaleID') scaleID: number
   ): Promise<AvailableSongResponse[]> {
-    return this.scaleService.findAvailableSongs(+ministryID, +scaleID);
+    return this.scaleService.findAvailableSongs(ministryID, scaleID);
   }
 }
