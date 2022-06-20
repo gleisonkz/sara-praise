@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -13,11 +14,14 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MinistryListItemResponse, ScaleDetailResponse } from '@sp/shared-interfaces';
 import { SongListItemComponent } from '@sp/web/widget/components';
 
-import { HotToastService } from '@ngneat/hot-toast';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
-import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
+import { injectRouteParam } from 'apps/sp-web/src/app/shared/functions';
 import { MinistryStore } from 'apps/sp-web/src/app/shared/stores/ministry/ministry.store';
-import { map, Observable, switchMap } from 'rxjs';
+import { ScaleStore } from 'apps/sp-web/src/app/shared/stores/scale/scale.store';
+import {
+    ConfirmDialogComponent, ConfirmDialogData
+} from 'apps/sp-web/src/app/widget/components/confirm-dialog/confirm-dialog';
+import { filter, Observable } from 'rxjs';
 
 @Component({
   templateUrl: './scale-view.page.html',
@@ -35,38 +39,38 @@ import { map, Observable, switchMap } from 'rxjs';
     MatListModule,
     SongListItemComponent,
     MatButtonModule,
+    ConfirmDialogComponent,
+    MatDialogModule,
   ],
 })
 export class ScaleViewPage implements OnInit {
   scaleListItem$: Observable<ScaleDetailResponse>;
   ministry$: Observable<MinistryListItemResponse>;
+
   readonly ministryID = injectMinistryID();
-  scaleID: number;
+  readonly scaleID = injectRouteParam('scaleID');
 
   constructor(
-    private readonly router: Router,
-    private readonly toastService: HotToastService,
-    private readonly activatedRoute: ActivatedRoute,
-    private readonly scaleApiService: ScaleApiService,
-    private readonly ministryStore: MinistryStore
+    private readonly ministryStore: MinistryStore,
+    private readonly scaleStore: ScaleStore,
+    private readonly matDialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     this.ministry$ = this.ministryStore.selectCurrentMinistry();
-
-    this.scaleListItem$ = this.activatedRoute.params.pipe(
-      map(({ scaleID }) => {
-        this.scaleID = scaleID;
-        return +scaleID;
-      }),
-      switchMap((scaleID) => this.scaleApiService.getScaleListItemDetails(this.ministryID, scaleID))
-    );
+    this.scaleListItem$ = this.scaleStore.selectScaleDetail(this.ministryID, this.scaleID);
   }
 
   deleteScale() {
-    this.scaleApiService.delete(this.scaleID).subscribe(() => {
-      this.router.navigate(['../../'], { relativeTo: this.activatedRoute });
-      this.toastService.success(`Escala apagada com sucesso!`);
-    });
+    this.matDialog
+      .open<ConfirmDialogComponent, ConfirmDialogData>(ConfirmDialogComponent, {
+        data: {
+          title: 'Você tem certeza que deseja excluir esta escala?',
+          message: 'Esta ação não pode ser desfeita.',
+        },
+      })
+      .afterClosed()
+      .pipe(filter(Boolean))
+      .subscribe(() => this.scaleStore.remove(this.ministryID, this.scaleID));
   }
 }

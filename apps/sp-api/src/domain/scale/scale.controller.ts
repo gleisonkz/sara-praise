@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
@@ -22,6 +22,11 @@ export class ScaleController {
   @Post()
   create(@Param('ministryID') ministryID: number, @Body() scaleRequest: ScaleRequestDto): Promise<ScaleResponse> {
     return this.scaleService.create(ministryID, scaleRequest);
+  }
+
+  @Delete(':scaleID')
+  remove(@Param('scaleID') scaleID: number): Promise<boolean> {
+    return this.scaleService.remove(scaleID);
   }
 
   @Get()
@@ -51,6 +56,11 @@ export class ScaleController {
   @Post('/:scaleID/participants')
   createParticipant(@Body() participants: ParticipantRequest[]): Promise<boolean> {
     return this.scaleService.upsertParticipants(participants);
+  }
+
+  @Delete(':scaleID/participants/:participantID')
+  removeParticipant(@Param('participantID') participantID: number): Promise<boolean> {
+    return this.scaleService.removeParticipant(participantID);
   }
 
   @Get('/:scaleID/participants-by-role')

@@ -1,6 +1,6 @@
 import { IRoleResponse, RoleResponse } from '@sp/shared-interfaces';
 
-import { IsString } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export interface ParticipantRequest {
   selected: boolean;
@@ -37,9 +37,14 @@ export interface ParticipantRole {
 export type ParticipantListItemRole = Omit<RoleResponse, 'isChecked'>;
 
 export class ParticipantListItem {
+  @IsNumber()
+  participantID: number;
+
   @IsString()
   name: string;
+
   @IsString()
   imageUrl: string;
+
   roles: ParticipantListItemRole[];
 }

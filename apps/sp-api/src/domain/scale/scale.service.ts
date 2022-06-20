@@ -35,7 +35,17 @@ export class ScaleService {
     return scaleResponse;
   }
 
-  update(scaleID: number, scaleRequest: ScaleRequestDto): Promise<ScaleResponse> {
+  async remove(scaleID: number): Promise<boolean> {
+    const scale = await this.prismaService.scale.delete({
+      where: {
+        scaleID,
+      },
+    });
+
+    return !!scale;
+  }
+
+  async update(scaleID: number, scaleRequest: ScaleRequestDto): Promise<ScaleResponse> {
     return this.prismaService.scale.update({
       where: { scaleID },
       data: {
@@ -136,6 +146,42 @@ export class ScaleService {
     return scaleDetailResponse;
   }
 
+  async findAll(ministryID: number): Promise<ScaleListItemResponse[]> {
+    const scales = await this.prismaService.scale.findMany({
+      where: { ministryID },
+      include: {
+        participants: {
+          include: {
+            member: {
+              include: {
+                user: true,
+              },
+            },
+          },
+        },
+        scaleSongs: true,
+      },
+      orderBy: {
+        date: 'asc',
+      },
+    });
+
+    const scaleListItemResponses: ScaleListItemResponse[] = scales.map((scale) => {
+      const scaleListItemResponse: ScaleListItemResponse = {
+        scaleID: scale.scaleID,
+        title: scale.title,
+        notes: scale.notes,
+        songsQuantity: scale.scaleSongs.length,
+        date: scale.date,
+        participants: scale.participants.map((participant) => ({ imageUrl: participant.member.user.imageURL })),
+      };
+
+      return scaleListItemResponse;
+    });
+
+    return scaleListItemResponses;
+  }
+
   async findParticipants(ministryID: number, scaleID: number): Promise<MemberListItemResponseDto[]> {
     const members = await this.prismaService.member.findMany({
       where: {
@@ -215,6 +261,126 @@ export class ScaleService {
 
       return participantResponse;
     });
+  }
+
+  async findParticipantListItems(scaleID: number): Promise<ParticipantListItem[]> {
+    const participants = await this.prismaService.participant.findMany({
+      where: {
+        scaleID,
+      },
+      include: {
+        member: {
+          include: {
+            user: true,
+          },
+        },
+        participantRole: {
+          include: {
+            role: true,
+          },
+        },
+      },
+    });
+
+    const participantListItems: ParticipantListItem[] = participants.map((participant) => {
+      const participantListItem: ParticipantListItem = {
+        participantID: participant.participantID,
+        name: participant.member.user.name,
+        imageUrl: participant.member.user.imageURL,
+        roles: participant.participantRole.map((participantRole) => {
+          const roleResponse: ParticipantListItemRole = {
+            iconUrl: participantRole.role.iconUrl,
+            name: participantRole.role.name,
+            roleID: participantRole.roleID,
+          };
+
+          return roleResponse;
+        }),
+      };
+
+      return participantListItem;
+    });
+
+    return participantListItems;
+  }
+
+  async upsertParticipants(participantRequest: ParticipantRequest[]): Promise<any> {
+    const { toUpdate, toDelete, toCreate } = participantRequest.reduce(
+      (acc, participant) => {
+        const shouldDelete = !!participant.participantID && !participant.selected;
+        const shouldUpdate = !!participant.participantID && participant.selected;
+
+        if (shouldDelete) acc.toDelete.push(participant);
+        if (shouldUpdate) acc.toUpdate.push(participant);
+        if (!participant.participantID) acc.toCreate.push(participant);
+
+        return acc;
+      },
+      { toDelete: [], toUpdate: [], toCreate: [] }
+    );
+
+    if (toDelete.length > 0) {
+      await this.prismaService.participant.deleteMany({
+        where: {
+          participantID: {
+            in: toDelete.map((participant) => participant.participantID),
+          },
+        },
+      });
+    }
+
+    if (toCreate.length > 0) {
+      toCreate.forEach(async (participant) => {
+        await this.prismaService.participant.create({
+          data: {
+            memberID: participant.memberID,
+            scaleID: participant.scaleID,
+            participantRole: {
+              createMany: {
+                data: participant.roles.map((role) => ({
+                  roleID: role,
+                })),
+              },
+            },
+          },
+        });
+      });
+    }
+
+    if (toUpdate.length > 0) {
+      toUpdate.forEach(async (participant) => {
+        await this.prismaService.participantRole.deleteMany({
+          where: {
+            participantID: participant.participantID,
+          },
+        });
+
+        await this.prismaService.participant.update({
+          where: {
+            participantID: participant.participantID,
+          },
+          data: {
+            participantRole: {
+              createMany: {
+                data: participant.roles.map((role) => ({
+                  roleID: role,
+                })),
+              },
+            },
+          },
+        });
+      });
+    }
+  }
+
+  async removeParticipant(participantID: number): Promise<boolean> {
+    const participant = await this.prismaService.participant.delete({
+      where: {
+        participantID,
+      },
+    });
+
+    return !!participant;
   }
 
   async findSongs(scaleID: number): Promise<ScaleSongResponse[]> {
@@ -316,151 +482,6 @@ export class ScaleService {
     });
 
     return songsResponse;
-  }
-
-  async findParticipantListItems(scaleID: number): Promise<ParticipantListItem[]> {
-    const participants = await this.prismaService.participant.findMany({
-      where: {
-        scaleID,
-      },
-      include: {
-        member: {
-          include: {
-            user: true,
-          },
-        },
-        participantRole: {
-          include: {
-            role: true,
-          },
-        },
-      },
-    });
-
-    const participantListItems: ParticipantListItem[] = participants.map((participant) => {
-      const participantListItem: ParticipantListItem = {
-        name: participant.member.user.name,
-        imageUrl: participant.member.user.imageURL,
-        roles: participant.participantRole.map((participantRole) => {
-          const roleResponse: ParticipantListItemRole = {
-            iconUrl: participantRole.role.iconUrl,
-            name: participantRole.role.name,
-            roleID: participantRole.roleID,
-          };
-
-          return roleResponse;
-        }),
-      };
-
-      return participantListItem;
-    });
-
-    return participantListItems;
-  }
-
-  async findAll(ministryID: number): Promise<ScaleListItemResponse[]> {
-    const scales = await this.prismaService.scale.findMany({
-      where: { ministryID },
-      include: {
-        participants: {
-          include: {
-            member: {
-              include: {
-                user: true,
-              },
-            },
-          },
-        },
-        scaleSongs: true,
-      },
-      orderBy: {
-        date: 'asc',
-      },
-    });
-
-    const scaleListItemResponses: ScaleListItemResponse[] = scales.map((scale) => {
-      const scaleListItemResponse: ScaleListItemResponse = {
-        scaleID: scale.scaleID,
-        title: scale.title,
-        notes: scale.notes,
-        songsQuantity: scale.scaleSongs.length,
-        date: scale.date,
-        participants: scale.participants.map((participant) => ({ imageUrl: participant.member.user.imageURL })),
-      };
-
-      return scaleListItemResponse;
-    });
-
-    return scaleListItemResponses;
-  }
-
-  async upsertParticipants(participantRequest: ParticipantRequest[]): Promise<any> {
-    const { toUpdate, toDelete, toCreate } = participantRequest.reduce(
-      (acc, participant) => {
-        const shouldDelete = !!participant.participantID && !participant.selected;
-        const shouldUpdate = !!participant.participantID && participant.selected;
-
-        if (shouldDelete) acc.toDelete.push(participant);
-        if (shouldUpdate) acc.toUpdate.push(participant);
-        if (!participant.participantID) acc.toCreate.push(participant);
-
-        return acc;
-      },
-      { toDelete: [], toUpdate: [], toCreate: [] }
-    );
-
-    if (toDelete.length > 0) {
-      await this.prismaService.participant.deleteMany({
-        where: {
-          participantID: {
-            in: toDelete.map((participant) => participant.participantID),
-          },
-        },
-      });
-    }
-
-    if (toCreate.length > 0) {
-      toCreate.forEach(async (participant) => {
-        await this.prismaService.participant.create({
-          data: {
-            memberID: participant.memberID,
-            scaleID: participant.scaleID,
-            participantRole: {
-              createMany: {
-                data: participant.roles.map((role) => ({
-                  roleID: role,
-                })),
-              },
-            },
-          },
-        });
-      });
-    }
-
-    if (toUpdate.length > 0) {
-      toUpdate.forEach(async (participant) => {
-        await this.prismaService.participantRole.deleteMany({
-          where: {
-            participantID: participant.participantID,
-          },
-        });
-
-        await this.prismaService.participant.update({
-          where: {
-            participantID: participant.participantID,
-          },
-          data: {
-            participantRole: {
-              createMany: {
-                data: participant.roles.map((role) => ({
-                  roleID: role,
-                })),
-              },
-            },
-          },
-        });
-      });
-    }
   }
 
   async upsertSongs(scaleSongsRequest: ScaleSongRequest[]): Promise<any> {

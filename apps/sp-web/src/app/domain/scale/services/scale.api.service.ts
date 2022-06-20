@@ -47,9 +47,9 @@ export class ScaleApiService extends BaseApiService {
     return this.http.post<IScaleResponse>(url, scale);
   }
 
-  delete(scaleID: number): Observable<IScaleResponse> {
-    const url = `${this.URL}/scales/${scaleID}`;
-    return this.http.delete<IScaleResponse>(url);
+  delete(ministryID: number, scaleID: number): Observable<boolean> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
+    return this.http.delete<boolean>(url);
   }
 
   getScaleListItemDetails(ministryID: number, scaleID: number): Observable<ScaleDetailResponse> {
@@ -60,6 +60,11 @@ export class ScaleApiService extends BaseApiService {
   createParticipant(ministryID: number, scaleID: number, participantRequest: ParticipantRequest): Observable<boolean> {
     const url = `${this.URL}/${ministryID}/scales/${scaleID}/participants`;
     return this.http.post<boolean>(url, participantRequest);
+  }
+
+  removeParticipant(ministryID: number, scaleID: number | undefined, participantID: number) {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}/participants/${participantID}`;
+    return this.http.delete(url);
   }
 
   findAllParticipants(ministryID: number, scaleID: number): Observable<MemberListItemResponse[]> {

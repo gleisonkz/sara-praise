@@ -132,7 +132,7 @@ export class ScaleCreateEditPage implements OnInit {
     });
   }
 
-  addMember() {
+  addParticipant() {
     const dialogRef = this.matDialog.open(ParticipantsDialog, {
       data: {
         scaleID: this.scaleID,
@@ -157,6 +157,12 @@ export class ScaleCreateEditPage implements OnInit {
       .subscribe(() => {
         this.toastService.success('Participante adicionado com sucesso');
       });
+  }
+
+  removeParticipant(participant: ParticipantListItem) {
+    this.scaleApiService.removeParticipant(this.ministryID, this.scaleID, participant.participantID).subscribe(() => {
+      this.toastService.success('Participante removido com sucesso');
+    });
   }
 
   addSong() {

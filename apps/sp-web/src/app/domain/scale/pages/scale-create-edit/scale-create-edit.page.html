@@ -98,7 +98,7 @@
       </ng-template>
 
       <button
-        (click)="addMember()"
+        (click)="addParticipant()"
         class="cta-button"
         type="button"
         mat-raised-button
@@ -129,7 +129,11 @@
                     <span *ngFor="let role of participant.roles"> {{ role.name }} </span>
                   </div>
                 </div>
-                <button mat-icon-button aria-label="Example icon-button with a menu">
+                <button
+                  (click)="removeParticipant(participant)"
+                  mat-icon-button
+                  aria-label="Example icon-button with a menu"
+                >
                   <mat-icon>delete</mat-icon>
                 </button>
               </mat-list-item>
