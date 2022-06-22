@@ -8,14 +8,15 @@ import { HotToastService } from '@ngneat/hot-toast';
 import {
     ARTIST_INITIAL_STATE, ArtistState
 } from 'apps/sp-web/src/app/shared/stores/artist/artist.store';
+import { MinistryStore } from 'apps/sp-web/src/app/shared/stores/ministry/ministry.store';
 import { NgSimpleStateModule } from 'ng-simple-state';
 import { EMPTY, of } from 'rxjs';
 import { anyNumber, instance, mock, verify, when } from 'ts-mockito';
 import { ArtistStore } from './artist.store';
 
-function setup(artistApiService: ArtistApiService, toastService: HotToastService) {
+function setup(artistApiService: ArtistApiService, toastService: HotToastService, ministryStore: MinistryStore) {
   const injector = TestBed.inject(Injector);
-  const artistStore = new ArtistStore(injector, artistApiService, toastService);
+  const artistStore = new ArtistStore(injector, artistApiService, toastService, ministryStore);
 
   return { store: artistStore };
 }
@@ -23,6 +24,7 @@ function setup(artistApiService: ArtistApiService, toastService: HotToastService
 describe('[Store] => Artist', () => {
   const mockArtistApiService = mock(ArtistApiService);
   const mockHotToastService = mock(HotToastService);
+  const mockMinistryStore = mock(MinistryStore);
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -36,7 +38,7 @@ describe('[Store] => Artist', () => {
   });
 
   it('should successfully get initial state', () => {
-    const { store } = setup(mockArtistApiService, mockHotToastService);
+    const { store } = setup(mockArtistApiService, mockHotToastService, mockMinistryStore);
 
     expect(store.getCurrentState()).toEqual(ARTIST_INITIAL_STATE);
     expect(store.getCurrentState()).not.toBeNull();
@@ -57,7 +59,7 @@ describe('[Store] => Artist', () => {
     when(mockArtistApiService.findAll(anyNumber())).thenReturn(of(artists));
     const artistApiServiceInstance = instance(mockArtistApiService);
 
-    const { store } = setup(artistApiServiceInstance, mockHotToastService);
+    const { store } = setup(artistApiServiceInstance, mockHotToastService, mockMinistryStore);
 
     const SOME_MINISTRY_ID = 1;
 
@@ -84,7 +86,7 @@ describe('[Store] => Artist', () => {
     when(mockArtistApiService.findByID(SOME_ARTIST_ID)).thenReturn(of(artist));
     const artistApiServiceInstance = instance(mockArtistApiService);
 
-    const { store } = setup(artistApiServiceInstance, mockHotToastService);
+    const { store } = setup(artistApiServiceInstance, mockHotToastService, mockMinistryStore);
 
     store.findByID(SOME_ARTIST_ID).subscribe((artistRetrieved) => {
       expect(artistRetrieved).toEqual(artist);
@@ -109,17 +111,19 @@ describe('[Store] => Artist', () => {
     when(mockArtistApiService.create(SOME_MINISTRY_ID, artistRequest)).thenReturn(of(mockedArtistResponse));
     const artistApiServiceInstance = instance(mockArtistApiService);
 
-    const { store } = setup(artistApiServiceInstance, mockHotToastService);
+    const { store } = setup(artistApiServiceInstance, mockHotToastService, mockMinistryStore);
 
     store.create(SOME_MINISTRY_ID, artistRequest).subscribe((artistRetrieved) => {
       expect(artistRetrieved).toEqual(mockedArtistResponse);
+
+      const expectedState: ArtistState = {
+        artists: [mockedArtistResponse],
+      };
+
+      expect(store.getCurrentState()).toEqual(expectedState);
+      verify(mockArtistApiService.create(SOME_MINISTRY_ID, artistRequest)).once();
+      verify(mockMinistryStore.incrementArtistsQuantity).once();
     });
-
-    const expectedState: ArtistState = {
-      artists: [mockedArtistResponse],
-    };
-
-    expect(store.getCurrentState()).toEqual(expectedState);
   });
 
   it('should delete a artist from the store', () => {
@@ -135,7 +139,7 @@ describe('[Store] => Artist', () => {
     when(mockArtistApiService.remove(SOME_MINISTRY_ID, targetArtist.artistID)).thenReturn(EMPTY);
 
     const artistApiServiceInstance = instance(mockArtistApiService);
-    const { store } = setup(artistApiServiceInstance, mockHotToastService);
+    const { store } = setup(artistApiServiceInstance, mockHotToastService, mockMinistryStore);
 
     store.findAll(SOME_MINISTRY_ID).subscribe((artistsRetrieved) => {
       expect(artistsRetrieved).toEqual(mockedArtists);
@@ -147,6 +151,10 @@ describe('[Store] => Artist', () => {
 
     store.remove(SOME_MINISTRY_ID, targetArtist.artistID).subscribe(() => {
       expect(store.getCurrentState().artists).toEqual(expectedState);
+
+      verify(mockArtistApiService.findAll(SOME_MINISTRY_ID)).once();
+      verify(mockArtistApiService.remove(SOME_MINISTRY_ID, targetArtist.artistID)).once();
+      verify(mockMinistryStore.decrementArtistsQuantity()).once();
     });
   });
 });

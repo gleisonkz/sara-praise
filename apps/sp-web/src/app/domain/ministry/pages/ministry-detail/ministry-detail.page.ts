@@ -10,7 +10,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { MinistryListItemResponse } from '@sp/shared-interfaces';
-import { MinistryApiService } from '@sp/web/domain/ministry/services';
 import { MediaIfDirective } from '@sp/web/widget/directives';
 
 import { HotToastService } from '@ngneat/hot-toast';
@@ -57,7 +56,6 @@ export class MinistryDetailPage implements OnInit {
     private readonly activatedRoute: ActivatedRoute,
     private readonly router: Router,
     private readonly dialog: MatDialog,
-    private readonly ministryApiService: MinistryApiService,
     private readonly toastService: HotToastService,
     private readonly ministryStore: MinistryStore
   ) {}

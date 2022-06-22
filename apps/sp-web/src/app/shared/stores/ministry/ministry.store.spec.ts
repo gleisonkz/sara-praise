@@ -208,4 +208,60 @@ describe('MinistryStore', () => {
 
     expect(store.getCurrentState()).toEqual(expectedState);
   });
+
+  it("should increment ministry's artists quantity", () => {
+    const targetMinistry: MinistryListItemResponse = {
+      artistQuantity: 5,
+      membersQuantity: 3,
+      ministryID: 1,
+      musicsQuantity: 4,
+      name: 'Sara Nossa Terra',
+      scalesQuantity: 2,
+      songKeysQuantity: 3,
+    };
+
+    const mockedMinistries: MinistryListItemResponse[] = [targetMinistry];
+
+    when(mockMinistryApiService.getMinistryListItems()).thenReturn(of(mockedMinistries));
+    const ministryApiServiceInstance = instance(mockMinistryApiService);
+    const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
+
+    store.findAll().subscribe((ministriesRetrieved) => {
+      expect(ministriesRetrieved).toEqual(mockedMinistries);
+    });
+
+    store.setActiveMinistry(targetMinistry.ministryID);
+
+    store.incrementArtistsQuantity();
+
+    expect(store.getCurrentState()?.currentMinistry?.artistQuantity).toEqual(6);
+  });
+
+  it("should decrement ministry's artists quantity", () => {
+    const targetMinistry: MinistryListItemResponse = {
+      artistQuantity: 5,
+      membersQuantity: 3,
+      ministryID: 1,
+      musicsQuantity: 4,
+      name: 'Sara Nossa Terra',
+      scalesQuantity: 2,
+      songKeysQuantity: 3,
+    };
+
+    const mockedMinistries: MinistryListItemResponse[] = [targetMinistry];
+
+    when(mockMinistryApiService.getMinistryListItems()).thenReturn(of(mockedMinistries));
+    const ministryApiServiceInstance = instance(mockMinistryApiService);
+    const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
+
+    store.findAll().subscribe((ministriesRetrieved) => {
+      expect(ministriesRetrieved).toEqual(mockedMinistries);
+    });
+
+    store.setActiveMinistry(targetMinistry.ministryID);
+
+    store.decrementArtistsQuantity();
+
+    expect(store.getCurrentState()?.currentMinistry?.artistQuantity).toEqual(4);
+  });
 });

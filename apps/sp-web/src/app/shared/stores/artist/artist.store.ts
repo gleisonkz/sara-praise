@@ -4,6 +4,7 @@ import { ArtistRequest, ArtistResponse } from '@sp/shared-interfaces';
 import { ArtistApiService } from '@sp/web/domain/ministry/services';
 
 import { HotToastService } from '@ngneat/hot-toast';
+import { MinistryStore } from 'apps/sp-web/src/app/shared/stores/ministry/ministry.store';
 import { NgSimpleStateBaseStore } from 'ng-simple-state';
 import { Observable, switchMap, tap } from 'rxjs';
 
@@ -20,7 +21,8 @@ export class ArtistStore extends NgSimpleStateBaseStore<ArtistState> {
   constructor(
     injector: Injector,
     private readonly artistApiService: ArtistApiService,
-    private readonly toastService: HotToastService
+    private readonly toastService: HotToastService,
+    private readonly ministryStore: MinistryStore
   ) {
     super(injector);
   }
@@ -33,6 +35,8 @@ export class ArtistStore extends NgSimpleStateBaseStore<ArtistState> {
     return this.artistApiService.create(ministryID, artistRequest).pipe(
       tap((artist) => {
         this.setState((state) => ({ ...state, artists: [...state.artists, artist] }));
+
+        this.ministryStore.incrementArtistsQuantity();
         this.toastService.success('Artista criado com sucesso!');
       })
     );
@@ -58,6 +62,8 @@ export class ArtistStore extends NgSimpleStateBaseStore<ArtistState> {
         this.setState((state) => ({
           artists: state.artists.filter((artist) => artist.artistID !== artistID),
         }));
+
+        this.ministryStore.decrementArtistsQuantity();
         this.toastService.success('Artista removido com sucesso!');
       })
     );

@@ -94,7 +94,7 @@ export class ScaleService {
       },
     });
 
-    const songs: ScaleSongResponse[] = scale.scaleSongs.map((scaleSong) => {
+    const songs: ScaleSongResponse[] = scale?.scaleSongs.map((scaleSong) => {
       const songResponse: ScaleSongResponse = {
         scaleSongID: scaleSong.scaleSongID,
         artistName: scaleSong.song.artist.name,
@@ -114,7 +114,7 @@ export class ScaleService {
       return songResponse;
     });
 
-    const participants: MemberListItemResponse[] = scale.participants.map((participant) => {
+    const participants: MemberListItemResponse[] = scale?.participants.map((participant) => {
       const participantResponse: MemberListItemResponse = {
         imageUrl: participant.member.user.imageURL,
         name: participant.member.user.name,

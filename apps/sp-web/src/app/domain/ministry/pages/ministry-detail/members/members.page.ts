@@ -33,6 +33,13 @@ export class MembersPage implements OnInit, OnDestroy {
     this.memberFacade.getMembers(this.ministryID);
   }
 
+  removeMember(memberID: number): void {
+    console.log('removeMember', memberID);
+  }
+  editMember(memberID: number): void {
+    console.log('editMember', memberID);
+  }
+
   ngOnDestroy(): void {
     this.memberFacade.clearMembers();
   }

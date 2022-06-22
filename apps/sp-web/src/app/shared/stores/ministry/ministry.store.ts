@@ -55,7 +55,8 @@ export class MinistryStore extends NgSimpleStateBaseStore<MinistryState> {
       switchMap((ministry) => {
         this.setState((state) => ({ ...state, currentMinistry: ministry }));
         return of(ministry);
-      })
+      }),
+      switchMap(() => this.selectState((state) => state.currentMinistry as MinistryListItemResponse))
     );
   }
 
@@ -93,6 +94,30 @@ export class MinistryStore extends NgSimpleStateBaseStore<MinistryState> {
       }));
 
       this.toastService.success('Ministério removido com sucesso!');
+    });
+  }
+
+  incrementArtistsQuantity(): void {
+    this.setState((state) => {
+      const previousCurrentMinistry = state.currentMinistry;
+
+      const newCurrentMinistry = previousCurrentMinistry
+        ? { ...previousCurrentMinistry, artistQuantity: previousCurrentMinistry.artistQuantity + 1 }
+        : undefined;
+
+      return { ...state, currentMinistry: newCurrentMinistry };
+    });
+  }
+
+  decrementArtistsQuantity(): void {
+    this.setState((state) => {
+      const previousCurrentMinistry = state.currentMinistry;
+
+      const newCurrentMinistry = previousCurrentMinistry
+        ? { ...previousCurrentMinistry, artistQuantity: previousCurrentMinistry.artistQuantity - 1 }
+        : undefined;
+
+      return { ...state, currentMinistry: newCurrentMinistry };
     });
   }
 }
