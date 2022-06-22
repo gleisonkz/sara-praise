@@ -9,7 +9,7 @@ import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale
 import { NgSimpleStateModule } from 'ng-simple-state';
 import { of } from 'rxjs';
 import { instance, mock, verify, when } from 'ts-mockito';
-import { SCALE_INITIAL_STATE, ScaleStore } from './scale.store';
+import { SCALE_INITIAL_STATE, ScaleState, ScaleStore } from './scale.store';
 
 function setup(scaleApiService: ScaleApiService, toastService: HotToastService, router: Router) {
   const injector = TestBed.inject(Injector);
@@ -95,15 +95,6 @@ describe('ScaleStore', () => {
   });
 
   it('should retrieve a scale by ID', () => {
-    const scale: ScaleListItemResponse = {
-      date: new Date(),
-      notes: 'Será realizado a gincana final para decidir qual das equipes será a vencedora.',
-      participants: [],
-      scaleID: 2,
-      songsQuantity: 0,
-      title: 'Arena Jovem',
-    };
-
     const scaleDetails: ScaleDetailResponse = {
       date: new Date(),
       notes: 'Será realizado a gincana final para decidir qual das equipes será a vencedora.',
@@ -116,19 +107,22 @@ describe('ScaleStore', () => {
     const SOME_SCALE_ID = 1;
     const SOME_MINISTRY_ID = 1;
 
-    when(mockScaleApiService.findAll(SOME_MINISTRY_ID)).thenReturn(of([scale]));
     when(mockScaleApiService.getScaleListItemDetails(SOME_MINISTRY_ID, SOME_SCALE_ID)).thenReturn(of(scaleDetails));
 
     const scaleApiServiceInstance = instance(mockScaleApiService);
 
     const { store } = setup(scaleApiServiceInstance, mockHotToastService, mockRouter);
+    const expectedState: ScaleState = {
+      scales: [],
+      currentScale: scaleDetails,
+    };
 
     store.selectScaleDetail(SOME_MINISTRY_ID, SOME_SCALE_ID).subscribe((scaleRetrieved) => {
-      expect(scaleRetrieved).toEqual(scale);
-    });
+      expect(scaleRetrieved).toEqual(scaleDetails);
 
-    expect(1).toEqual([]);
-    verify(mockScaleApiService.findAll(SOME_SCALE_ID)).once();
+      expect(store.getCurrentState()).toEqual(expectedState);
+      verify(mockScaleApiService.findAll(SOME_SCALE_ID)).once();
+    });
   });
 
   // it('should set current scale by ID', () => {

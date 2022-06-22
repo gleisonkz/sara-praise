@@ -1,11 +1,16 @@
-import { FormControl } from '@angular/forms';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 export class CustomValidators {
-  static untilChanged(initialValue: string | undefined): any {
-    return (control: FormControl) => {
+  static distinctFrom(initialValue: string | undefined): ValidatorFn {
+    return (control: AbstractControl) => {
       const value = control.value;
       const changed = value !== initialValue;
-      return changed ? null : { untilValueChanged: true };
+
+      const untilChanged: ValidationErrors = {
+        untilChanged: true,
+      };
+
+      return changed ? null : untilChanged;
     };
   }
 }

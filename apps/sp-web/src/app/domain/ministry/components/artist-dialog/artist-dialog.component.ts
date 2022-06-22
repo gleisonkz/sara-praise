@@ -13,9 +13,6 @@ import { FormControl } from '@ngneat/reactive-forms';
 import { ArtistStore } from 'apps/sp-web/src/app/shared/stores/artist/artist.store';
 import { CustomValidators } from 'apps/sp-web/src/app/shared/validators/custom-validators';
 import { DisableControlDirective } from 'apps/sp-web/src/app/widget/directives/disable-control';
-import {
-    DisableUntilChangedDirective
-} from 'apps/sp-web/src/app/widget/directives/disable-until-changed';
 
 @Component({
   templateUrl: './artist-dialog.component.html',
@@ -29,7 +26,6 @@ import {
     MatDialogModule,
     MatButtonModule,
     DisableControlDirective,
-    DisableUntilChangedDirective,
     CommonModule,
   ],
 })
@@ -46,7 +42,7 @@ export class ArtistDialog implements OnInit {
     this.artistControl = new FormControl(this.data.artist?.name, [
       Validators.required,
       Validators.minLength(3),
-      CustomValidators.untilChanged(this.data.artist?.name),
+      CustomValidators.distinctFrom(this.data.artist?.name),
     ]);
   }
 
