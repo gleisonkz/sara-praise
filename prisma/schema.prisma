@@ -150,8 +150,9 @@ model MinisterSongKey {
 model Artist {
   artistID   Int    @id @default(autoincrement())
   ministryID Int
-  name       String @unique
+  name       String
 
   ministry Ministry @relation(fields: [ministryID], references: [ministryID], onDelete: Cascade)
   songs    Song[]
+  @@unique([name, ministryID])
 }

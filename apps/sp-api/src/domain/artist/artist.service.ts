@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
+import { ArtistRequest } from '@sp/shared-interfaces';
 
+import { Artist } from '@prisma/client';
 import { ArtistRequestDto, ArtistResponseDto } from 'apps/sp-api/src/domain/artist/dto/artist.dto';
 
 @Injectable()
@@ -23,10 +25,24 @@ export class ArtistService {
     return artistResponse;
   }
 
+  async update(id: number, updateArtistDto: ArtistRequest): Promise<Artist> {
+    return this.prismaService.artist.update({
+      where: {
+        artistID: id,
+      },
+      data: {
+        name: updateArtistDto.name,
+      },
+    });
+  }
+
   async findAll(ministryID: number): Promise<ArtistResponseDto[]> {
     const artistEntities = await this.prismaService.artist.findMany({
       where: {
         ministryID,
+      },
+      orderBy: {
+        artistID: 'asc',
       },
     });
 
@@ -42,15 +58,19 @@ export class ArtistService {
     return artists;
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} artist`;
-  // }
+  findByID(artistID: number): any {
+    return this.prismaService.artist.findFirst({
+      where: {
+        artistID,
+      },
+    });
+  }
 
-  // update(id: number, updateArtistDto: UpdateArtistDto) {
-  //   return `This action updates a #${id} artist`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} artist`;
-  // }
+  async remove(artistID: number): Promise<Artist> {
+    return this.prismaService.artist.delete({
+      where: {
+        artistID,
+      },
+    });
+  }
 }

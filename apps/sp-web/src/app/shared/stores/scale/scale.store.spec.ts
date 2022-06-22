@@ -1,211 +1,240 @@
-// import { Injector } from '@angular/core';
-// import { TestBed } from '@angular/core/testing';
-// import { Router } from '@angular/router';
+import { Injector } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
+import { Router } from '@angular/router';
 
-// import { MinistryListItemResponse, MinistryRequest } from '@sp/shared-interfaces';
-// import { MinistryApiService } from '@sp/web/domain/ministry/services';
+import { ScaleDetailResponse, ScaleListItemResponse } from '@sp/shared-interfaces';
 
-// import { HotToastService } from '@ngneat/hot-toast';
-// import { NgSimpleStateModule } from 'ng-simple-state';
-// import { of } from 'rxjs';
-// import { anything, instance, mock, verify, when } from 'ts-mockito';
-// import { MINISTRY_INITIAL_STATE, MinistryState, MinistryStore } from './scale.store';
+import { HotToastService } from '@ngneat/hot-toast';
+import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
+import { NgSimpleStateModule } from 'ng-simple-state';
+import { of } from 'rxjs';
+import { instance, mock, verify, when } from 'ts-mockito';
+import { SCALE_INITIAL_STATE, ScaleStore } from './scale.store';
 
-// function setup(ministryApiService: MinistryApiService, toastService: HotToastService, router: Router) {
-//   const injector = TestBed.inject(Injector);
-//   const ministryStore = new MinistryStore(injector, ministryApiService, toastService, router);
+function setup(scaleApiService: ScaleApiService, toastService: HotToastService, router: Router) {
+  const injector = TestBed.inject(Injector);
+  const scaleStore = new ScaleStore(injector, scaleApiService, toastService, router);
 
-//   return { store: ministryStore };
-// }
+  return { store: scaleStore };
+}
 
-// describe('MinistryStore', () => {
-//   const mockMinistryApiService = mock(MinistryApiService);
-//   const mockHotToastService = mock(HotToastService);
-//   const mockRouter = mock(Router);
+describe('ScaleStore', () => {
+  const mockScaleApiService = mock(ScaleApiService);
+  const mockHotToastService = mock(HotToastService);
+  const mockRouter = mock(Router);
 
-//   beforeEach(() => {
-//     TestBed.configureTestingModule({
-//       imports: [
-//         NgSimpleStateModule.forRoot({
-//           enableDevTool: false,
-//           enableLocalStorage: false,
-//         }),
-//       ],
-//     });
-//   });
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [
+        NgSimpleStateModule.forRoot({
+          enableDevTool: false,
+          enableLocalStorage: false,
+        }),
+      ],
+    });
+  });
 
-//   it('should successfully get initial state', () => {
-//     const { store } = setup(mockMinistryApiService, mockHotToastService, mockRouter);
+  it('should successfully get initial state', () => {
+    const { store } = setup(mockScaleApiService, mockHotToastService, mockRouter);
 
-//     expect(store.getCurrentState()).toEqual(MINISTRY_INITIAL_STATE);
-//     expect(store.getCurrentState()).not.toBeNull();
-//   });
+    expect(store.getCurrentState()).toEqual(SCALE_INITIAL_STATE);
+    expect(store.getCurrentState()).not.toBeNull();
+  });
 
-//   it('should retrieve all ministries', () => {
-//     const ministries: MinistryListItemResponse[] = [
-//       {
-//         artistQuantity: 5,
-//         membersQuantity: 3,
-//         ministryID: 1,
-//         musicsQuantity: 4,
-//         name: 'Sara Nossa Terra',
-//         scalesQuantity: 2,
-//         songKeysQuantity: 3,
-//       },
-//     ];
+  it('should retrieve all scales', () => {
+    const scales: ScaleListItemResponse[] = [
+      {
+        date: new Date(),
+        notes: 'Será realizado a gincana final para decidir qual das equipes será a vencedora.',
+        participants: [],
+        scaleID: 2,
+        songsQuantity: 0,
+        title: 'Arena Jovem',
+      },
+      {
+        date: new Date(),
+        notes: 'Santa Ceia, culto onde teremos a palavra ministrada pela.',
+        participants: [
+          {
+            imageUrl:
+              'https://scontent-gru1-1.xx.fbcdn.net/v/t39.30808-1…EjsuSvvBEpy-EPAhuLCoeoTrVXreXZJzWLT2A&oe=62B3D83B',
+          },
+          {
+            imageUrl:
+              'https://scontent-gru1-2.xx.fbcdn.net/v/t1.6435-9/1…SoXEdK4Md1LyBuFNvn6l5E84cBZGsg3qTIJhA&oe=62D3175E',
+          },
+          { imageUrl: 'https://randomuser.me/api/portraits/men/76.jpg' },
+          {
+            imageUrl:
+              'https://scontent-gru1-1.xx.fbcdn.net/v/t39.30808-1…nG1Ffp2DRr1-YetYU-rsqT75qe9geLycQAT1Q&oe=62B4BDAD',
+          },
+        ],
+        scaleID: 1,
+        songsQuantity: 3,
+        title: 'Culto da Familia ',
+      },
+    ];
 
-//     when(mockMinistryApiService.getMinistryListItems()).thenReturn(of(ministries));
-//     const ministryApiServiceInstance = instance(mockMinistryApiService);
+    const SOME_MINISTRY_ID = 1;
 
-//     const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
+    when(mockScaleApiService.findAll(SOME_MINISTRY_ID)).thenReturn(of(scales));
+    const scaleApiServiceInstance = instance(mockScaleApiService);
 
-//     store.findAll().subscribe((ministriesRetrieved) => {
-//       expect(ministriesRetrieved).toEqual(ministries);
-//     });
+    const { store } = setup(scaleApiServiceInstance, mockHotToastService, mockRouter);
 
-//     expect(store.getCurrentState()).toEqual({
-//       ...MINISTRY_INITIAL_STATE,
-//       ministries,
-//     });
+    store.findAll(SOME_MINISTRY_ID).subscribe((scalesRetrieved) => {
+      expect(scalesRetrieved).toEqual(scales);
 
-//     verify(mockMinistryApiService.getMinistryListItems()).once();
-//   });
+      expect(store.getCurrentState()).toEqual({
+        ...SCALE_INITIAL_STATE,
+        scales,
+      });
 
-//   it('should retrieve a ministry by ID', () => {
-//     const ministry: MinistryListItemResponse = {
-//       artistQuantity: 5,
-//       membersQuantity: 2,
-//       ministryID: 1,
-//       musicsQuantity: 4,
-//       name: 'Sara Nossa Terra',
-//       scalesQuantity: 2,
-//       songKeysQuantity: 3,
-//     };
+      verify(mockScaleApiService.findAll(SOME_MINISTRY_ID)).once();
+    });
+  });
 
-//     const someID = 1;
+  it('should retrieve a scale by ID', () => {
+    const scale: ScaleListItemResponse = {
+      date: new Date(),
+      notes: 'Será realizado a gincana final para decidir qual das equipes será a vencedora.',
+      participants: [],
+      scaleID: 2,
+      songsQuantity: 0,
+      title: 'Arena Jovem',
+    };
 
-//     when(mockMinistryApiService.getMinistryListItems(anything())).thenReturn(of([ministry]));
-//     const ministryApiServiceInstance = instance(mockMinistryApiService);
+    const scaleDetails: ScaleDetailResponse = {
+      date: new Date(),
+      notes: 'Será realizado a gincana final para decidir qual das equipes será a vencedora.',
+      participants: [],
+      scaleID: 2,
+      songs: [],
+      title: 'Arena Jovem',
+    };
 
-//     const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
+    const SOME_SCALE_ID = 1;
+    const SOME_MINISTRY_ID = 1;
 
-//     store.findByID(someID).subscribe((ministryRetrieved) => {
-//       expect(ministryRetrieved).toEqual(ministry);
-//     });
+    when(mockScaleApiService.findAll(SOME_MINISTRY_ID)).thenReturn(of([scale]));
+    when(mockScaleApiService.getScaleListItemDetails(SOME_MINISTRY_ID, SOME_SCALE_ID)).thenReturn(of(scaleDetails));
 
-//     const expectedState: MinistryState = {
-//       currentMinistry: undefined,
-//       ministries: [ministry],
-//     };
+    const scaleApiServiceInstance = instance(mockScaleApiService);
 
-//     expect(store.getCurrentState()).toEqual(expectedState);
-//     verify(mockMinistryApiService.getMinistryListItems(someID)).once();
-//   });
+    const { store } = setup(scaleApiServiceInstance, mockHotToastService, mockRouter);
 
-//   it('should set current ministry by ID', () => {
-//     const expectedMinistry: MinistryListItemResponse = {
-//       artistQuantity: 5,
-//       membersQuantity: 3,
-//       ministryID: 1,
-//       musicsQuantity: 4,
-//       name: 'Sara Nossa Terra',
-//       scalesQuantity: 2,
-//       songKeysQuantity: 3,
-//     };
+    store.selectScaleDetail(SOME_MINISTRY_ID, SOME_SCALE_ID).subscribe((scaleRetrieved) => {
+      expect(scaleRetrieved).toEqual(scale);
+    });
 
-//     const mockedMinistries: MinistryListItemResponse[] = [
-//       {
-//         artistQuantity: 5,
-//         membersQuantity: 3,
-//         ministryID: 1,
-//         musicsQuantity: 4,
-//         name: 'Sara Nossa Terra',
-//         scalesQuantity: 2,
-//         songKeysQuantity: 3,
-//       },
-//       expectedMinistry,
-//     ];
+    expect(1).toEqual([]);
+    verify(mockScaleApiService.findAll(SOME_SCALE_ID)).once();
+  });
 
-//     when(mockMinistryApiService.getMinistryListItems()).thenReturn(of(mockedMinistries));
-//     const ministryApiServiceInstance = instance(mockMinistryApiService);
+  // it('should set current scale by ID', () => {
+  //   const expectedScale: ScaleListItemResponse = {
+  //     artistQuantity: 5,
+  //     membersQuantity: 3,
+  //     scaleID: 1,
+  //     musicsQuantity: 4,
+  //     name: 'Sara Nossa Terra',
+  //     scalesQuantity: 2,
+  //     songKeysQuantity: 3,
+  //   };
 
-//     const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
+  //   const mockedScales: ScaleListItemResponse[] = [
+  //     {
+  //       artistQuantity: 5,
+  //       membersQuantity: 3,
+  //       scaleID: 1,
+  //       musicsQuantity: 4,
+  //       name: 'Sara Nossa Terra',
+  //       scalesQuantity: 2,
+  //       songKeysQuantity: 3,
+  //     },
+  //     expectedScale,
+  //   ];
 
-//     store.findAll().subscribe((ministriesRetrieved) => {
-//       expect(ministriesRetrieved).toEqual(mockedMinistries);
-//     });
+  //   when(mockScaleApiService.getScaleListItems()).thenReturn(of(mockedScales));
+  //   const scaleApiServiceInstance = instance(mockScaleApiService);
 
-//     store.setActiveMinistry(expectedMinistry.ministryID);
+  //   const { store } = setup(scaleApiServiceInstance, mockHotToastService, mockRouter);
 
-//     const expectedState: MinistryState = {
-//       ministries: mockedMinistries,
-//       currentMinistry: expectedMinistry,
-//     };
+  //   store.findAll().subscribe((scalesRetrieved) => {
+  //     expect(scalesRetrieved).toEqual(mockedScales);
+  //   });
 
-//     expect(store.getCurrentState()).toEqual(expectedState);
-//   });
+  //   store.setActiveScale(expectedScale.scaleID);
 
-//   it('should create a ministry', () => {
-//     const mockedMinistryResponse: MinistryListItemResponse = {
-//       artistQuantity: 5,
-//       membersQuantity: 3,
-//       ministryID: 1,
-//       musicsQuantity: 4,
-//       name: 'Sara Nossa Terra',
-//       scalesQuantity: 2,
-//       songKeysQuantity: 3,
-//     };
+  //   const expectedState: ScaleState = {
+  //     scales: mockedScales,
+  //     currentScale: expectedScale,
+  //   };
 
-//     const ministryRequest: MinistryRequest = {
-//       name: 'Sara Nossa Terra',
-//       ownerID: 1,
-//     };
+  //   expect(store.getCurrentState()).toEqual(expectedState);
+  // });
 
-//     when(mockMinistryApiService.create(ministryRequest)).thenReturn(of(mockedMinistryResponse));
-//     const ministryApiServiceInstance = instance(mockMinistryApiService);
+  // it('should create a scale', () => {
+  //   const mockedScaleResponse: ScaleListItemResponse = {
+  //     artistQuantity: 5,
+  //     membersQuantity: 3,
+  //     scaleID: 1,
+  //     musicsQuantity: 4,
+  //     name: 'Sara Nossa Terra',
+  //     scalesQuantity: 2,
+  //     songKeysQuantity: 3,
+  //   };
 
-//     const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
+  //   const scaleRequest: ScaleRequest = {
+  //     name: 'Sara Nossa Terra',
+  //     ownerID: 1,
+  //   };
 
-//     store.create(ministryRequest);
+  //   when(mockScaleApiService.create(scaleRequest)).thenReturn(of(mockedScaleResponse));
+  //   const scaleApiServiceInstance = instance(mockScaleApiService);
 
-//     const expectedState: MinistryState = {
-//       currentMinistry: undefined,
-//       ministries: [mockedMinistryResponse],
-//     };
+  //   const { store } = setup(scaleApiServiceInstance, mockHotToastService, mockRouter);
 
-//     expect(store.getCurrentState()).toEqual(expectedState);
-//   });
+  //   store.create(scaleRequest);
 
-//   it('should delete a ministry from the store', () => {
-//     const targetMinistry: MinistryListItemResponse = {
-//       artistQuantity: 5,
-//       membersQuantity: 3,
-//       ministryID: 1,
-//       musicsQuantity: 4,
-//       name: 'Sara Nossa Terra',
-//       scalesQuantity: 2,
-//       songKeysQuantity: 3,
-//     };
+  //   const expectedState: ScaleState = {
+  //     currentScale: undefined,
+  //     scales: [mockedScaleResponse],
+  //   };
 
-//     const mockedMinistries: MinistryListItemResponse[] = [targetMinistry];
+  //   expect(store.getCurrentState()).toEqual(expectedState);
+  // });
 
-//     when(mockMinistryApiService.getMinistryListItems()).thenReturn(of(mockedMinistries));
-//     when(mockMinistryApiService.delete(targetMinistry.ministryID)).thenReturn(of(true));
+  // it('should delete a scale from the store', () => {
+  //   const targetScale: ScaleListItemResponse = {
+  //     artistQuantity: 5,
+  //     membersQuantity: 3,
+  //     scaleID: 1,
+  //     musicsQuantity: 4,
+  //     name: 'Sara Nossa Terra',
+  //     scalesQuantity: 2,
+  //     songKeysQuantity: 3,
+  //   };
 
-//     const ministryApiServiceInstance = instance(mockMinistryApiService);
-//     const { store } = setup(ministryApiServiceInstance, mockHotToastService, mockRouter);
+  //   const mockedScales: ScaleListItemResponse[] = [targetScale];
 
-//     store.findAll().subscribe((ministriesRetrieved) => {
-//       expect(ministriesRetrieved).toEqual(mockedMinistries);
-//     });
+  //   when(mockScaleApiService.getScaleListItems()).thenReturn(of(mockedScales));
+  //   when(mockScaleApiService.delete(targetScale.scaleID)).thenReturn(of(true));
 
-//     store.remove(targetMinistry.ministryID);
+  //   const scaleApiServiceInstance = instance(mockScaleApiService);
+  //   const { store } = setup(scaleApiServiceInstance, mockHotToastService, mockRouter);
 
-//     const expectedState: MinistryState = {
-//       ministries: [],
-//       currentMinistry: undefined,
-//     };
+  //   store.findAll().subscribe((scalesRetrieved) => {
+  //     expect(scalesRetrieved).toEqual(mockedScales);
+  //   });
 
-//     expect(store.getCurrentState()).toEqual(expectedState);
-//   });
-// });
+  //   store.remove(targetScale.scaleID);
+
+  //   const expectedState: ScaleState = {
+  //     scales: [],
+  //     currentScale: undefined,
+  //   };
+
+  //   expect(store.getCurrentState()).toEqual(expectedState);
+  // });
+});

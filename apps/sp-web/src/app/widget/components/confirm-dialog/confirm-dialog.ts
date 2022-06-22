@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
+
+import { injectConfirmDialogData } from './inject-confirm-dialog-data.function';
 
 export interface ConfirmDialogData {
   title: string;
@@ -14,12 +16,6 @@ export class ConfirmDialogDataNotFoundError extends Error {
   constructor() {
     super('MAT_DIALOG_DATA was not provided to the ConfirmDialogComponent.');
   }
-}
-
-export function injectConfirmDialogData(): ConfirmDialogData {
-  const dialogData = inject(MAT_DIALOG_DATA);
-  if (!dialogData) throw new ConfirmDialogDataNotFoundError();
-  return dialogData as ConfirmDialogData;
 }
 
 @Component({

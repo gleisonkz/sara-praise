@@ -1,5 +1,5 @@
 import { Injectable, Injector } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { ScaleDetailResponse, ScaleListItemResponse } from '@sp/shared-interfaces';
 
@@ -23,8 +23,7 @@ export class ScaleStore extends NgSimpleStateBaseStore<ScaleState> {
     injector: Injector,
     private readonly scaleApiService: ScaleApiService,
     private readonly toastService: HotToastService,
-    private readonly router: Router,
-    private readonly activatedRoute: ActivatedRoute
+    private readonly router: Router
   ) {
     super(injector);
   }

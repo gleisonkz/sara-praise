@@ -91,15 +91,15 @@ describe('MinistryStore', () => {
 
     store.findByID(someID).subscribe((ministryRetrieved) => {
       expect(ministryRetrieved).toEqual(ministry);
+
+      const expectedState: MinistryState = {
+        currentMinistry: ministry,
+        ministries: [],
+      };
+
+      expect(store.getCurrentState()).toEqual(expectedState);
+      verify(mockMinistryApiService.getMinistryListItems(someID)).once();
     });
-
-    const expectedState: MinistryState = {
-      currentMinistry: undefined,
-      ministries: [ministry],
-    };
-
-    expect(store.getCurrentState()).toEqual(expectedState);
-    verify(mockMinistryApiService.getMinistryListItems(someID)).once();
   });
 
   it('should set current ministry by ID', () => {

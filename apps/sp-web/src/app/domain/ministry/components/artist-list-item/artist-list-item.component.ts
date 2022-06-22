@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -32,4 +32,6 @@ import { ArtistResponse } from '@sp/shared-interfaces';
 })
 export class ArtistListItemComponent {
   @Input() artist: ArtistResponse;
+  @Output() removeEvent = new EventEmitter<number>();
+  @Output() editEvent = new EventEmitter<ArtistResponse>();
 }

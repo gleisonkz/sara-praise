@@ -7,5 +7,5 @@ export * from './scale.interface';
 export * from './song.dto';
 export * from './user-auth-payload.interface';
 export * from './user.interface';
-export * from './artist.dto';
+export * from './artist.interface';
 export * from './participant.interface';

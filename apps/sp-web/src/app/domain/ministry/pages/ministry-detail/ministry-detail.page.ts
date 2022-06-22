@@ -76,24 +76,24 @@ export class MinistryDetailPage implements OnInit {
   }
 
   goToCreateMusic() {
-    const dialogRef = this.dialog.open(MusicDialogComponent, {
-      data: {
-        ministryID: this.ministryID,
-      },
-      width: '100%',
-      maxWidth: '600px',
-      panelClass: 'member-dialog',
-    });
-
-    dialogRef
+    this.dialog
+      .open(MusicDialogComponent, {
+        data: {
+          ministryID: this.ministryID,
+        },
+        width: '100%',
+        maxWidth: '600px',
+        panelClass: 'member-dialog',
+      })
       .afterClosed()
       .pipe(untilDestroyed(this), filter(Boolean))
       .subscribe((result: unknown) => {
         console.log(result);
       });
   }
+
   goToCreateArtist() {
-    const dialogRef = this.dialog.open(ArtistDialog, {
+    this.dialog.open(ArtistDialog, {
       data: {
         ministryID: this.ministryID,
       },
@@ -101,45 +101,46 @@ export class MinistryDetailPage implements OnInit {
       maxWidth: '600px',
       panelClass: 'member-dialog',
     });
-
-    dialogRef
-      .afterClosed()
-      .pipe(untilDestroyed(this), filter(Boolean))
-      .subscribe((result: unknown) => {
-        console.log(result);
-      });
+    // .afterClosed()
+    // .pipe(filter(Boolean))
+    // .subscribe({
+    //   next: () => {
+    //     this.toastService.success('Cadastrado com sucesso');
+    //   },
+    //   error: (err) => {
+    //     this.toastService.error(err);
+    //   },
+    // });
   }
 
   goToCreateMinistryMember() {
-    const dialogRef = this.dialog.open(MemberDialog, {
-      data: {
-        ministryID: this.ministryID,
-      },
-      width: '100%',
-      maxWidth: '600px',
-      panelClass: 'member-dialog',
-    });
-
-    dialogRef
+    this.dialog
+      .open(MemberDialog, {
+        data: {
+          ministryID: this.ministryID,
+        },
+        width: '100%',
+        maxWidth: '600px',
+        panelClass: 'member-dialog',
+      })
       .afterClosed()
-      .pipe(untilDestroyed(this), filter(Boolean))
+      .pipe(filter(Boolean))
       .subscribe(() => {
         this.toastService.success('Cadastrado com sucesso');
       });
   }
 
   goToCreateMinistryKey() {
-    const dialogRef = this.dialog.open(MinistryKeyDialogComponent, {
-      data: {
-        ministryID: this.ministryID,
-      },
-      width: '100%',
-      maxWidth: '600px',
-    });
-
-    dialogRef
+    this.dialog
+      .open(MinistryKeyDialogComponent, {
+        data: {
+          ministryID: this.ministryID,
+        },
+        width: '100%',
+        maxWidth: '600px',
+      })
       .afterClosed()
-      .pipe(untilDestroyed(this), filter(Boolean))
+      .pipe(filter(Boolean))
       .subscribe(() => {
         this.toastService.success('Cadastrado com sucesso');
       });

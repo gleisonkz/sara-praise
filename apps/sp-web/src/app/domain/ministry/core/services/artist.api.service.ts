@@ -13,13 +13,28 @@ export class ArtistApiService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getArtists(ministryID: number): Observable<ArtistResponse[]> {
+  create(ministryID: number, artist: ArtistRequest): Observable<ArtistResponse> {
+    const url = `${this.URL}/${ministryID}/artists`;
+    return this.http.post<ArtistResponse>(url, artist);
+  }
+
+  remove(ministryID: number, artistID: number): Observable<void> {
+    const url = `${this.URL}/${ministryID}/artists/${artistID}`;
+    return this.http.delete<void>(url);
+  }
+
+  update(ministryID: number, artistID: number, artistRequest: ArtistRequest) {
+    const url = `${this.URL}/${ministryID}/artists/${artistID}`;
+    return this.http.put<ArtistResponse>(url, artistRequest);
+  }
+
+  findAll(ministryID: number): Observable<ArtistResponse[]> {
     const url = `${this.URL}/${ministryID}/artists`;
     return this.http.get<ArtistResponse[]>(url);
   }
 
-  createArtist(ministryID: number, artist: ArtistRequest): Observable<ArtistResponse> {
-    const url = `${this.URL}/${ministryID}/artists`;
-    return this.http.post<ArtistResponse>(url, artist);
+  findByID(artistID: number): Observable<ArtistResponse> {
+    const url = `${this.URL}/artists/${artistID}`;
+    return this.http.get<ArtistResponse>(url);
   }
 }

@@ -14,11 +14,11 @@
   </button>
 
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>
+    <button mat-menu-item (click)="editEvent.emit(artist)">
       <mat-icon>edit</mat-icon>
       <span>Editar</span>
     </button>
-    <button mat-menu-item>
+    <button mat-menu-item (click)="removeEvent.emit(artist.artistID)">
       <mat-icon>delete</mat-icon>
       <span>Remover</span>
     </button>

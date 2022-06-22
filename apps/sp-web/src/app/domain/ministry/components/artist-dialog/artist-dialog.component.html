@@ -10,12 +10,11 @@
 
   <mat-dialog-actions>
     <button
-      type="submit"
+      type="button"
       color="accent"
       mat-raised-button
-      mat-dialog-close
       (click)="submitForm()"
-      [disabled]="artistControl.invalid"
+      [disabled]="!artistControl.valid || artistControl.pristine"
     >
       Confirmar
     </button>

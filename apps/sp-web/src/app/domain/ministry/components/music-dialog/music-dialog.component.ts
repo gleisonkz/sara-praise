@@ -54,7 +54,7 @@ export class MusicDialogComponent implements OnInit {
   ngOnInit() {
     this.buildForm();
     this.songKeys$ = this.ministryService.getKeys();
-    this.artists$ = this.artistApiService.getArtists(this.data.ministryID);
+    this.artists$ = this.artistApiService.findAll(this.data.ministryID);
   }
 
   buildForm() {
