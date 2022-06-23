@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 
 import { AuthService } from 'apps/sp-web/src/app/domain/auth/auth.service';
 
@@ -8,12 +8,13 @@ import { AuthService } from 'apps/sp-web/src/app/domain/auth/auth.service';
 })
 export class IsLoggedInGuard implements CanActivate {
   constructor(private readonly router: Router, private readonly authService: AuthService) {}
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(): boolean {
     const isLoggedIn = this.authService.isLoggedIn;
-    if (isLoggedIn) {
-      this.router.navigate(['/']);
-      return false;
-    }
-    return true;
+    return isLoggedIn ? this.navigateToRoot() : true;
+  }
+
+  private navigateToRoot(): boolean {
+    this.router.navigate(['/']);
+    return false;
   }
 }

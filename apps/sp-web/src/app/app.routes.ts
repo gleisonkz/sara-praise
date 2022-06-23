@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
-import { AuthGuard } from 'apps/sp-web/src/app/shared/guards/auth.guard';
-import { IsLoggedInGuard } from 'apps/sp-web/src/app/shared/guards/logged-in.guard';
+import { AuthGuard } from 'apps/sp-web/src/app/shared/guards/auth/auth.guard';
+import { IsLoggedInGuard } from 'apps/sp-web/src/app/shared/guards/logged-in/logged-in.guard';
 
 export const APP_ROUTES: Routes = [
   { path: '', redirectTo: 'ministerios', pathMatch: 'full' },
