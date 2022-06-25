@@ -1,6 +1,6 @@
 import { Injectable, Injector } from '@angular/core';
 
-import { MemberListItemResponse } from '@sp/shared-interfaces';
+import { MemberListItemResponse, MemberRequest } from '@sp/shared-interfaces';
 import { MemberApiService } from '@sp/web/domain/ministry/services';
 
 import { HotToastService } from '@ngneat/hot-toast';
@@ -30,6 +30,17 @@ export class MemberStore extends NgSimpleStateBaseStore<MemberState> {
 
   initialState(): MemberState {
     return MEMBER_INITIAL_STATE;
+  }
+
+  create(ministryID: number, memberRequest: MemberRequest): Observable<MemberListItemResponse> {
+    return this.memberApiService.create(ministryID, memberRequest).pipe(
+      tap((member) => {
+        this.setState((state) => ({ ...state, members: [...state.members, member] }));
+
+        this.ministryStore.incrementMembersQuantity();
+        this.toastService.success('Membro criado com sucesso!');
+      })
+    );
   }
 
   findAll(ministryID: number): Observable<MemberListItemResponse[]> {

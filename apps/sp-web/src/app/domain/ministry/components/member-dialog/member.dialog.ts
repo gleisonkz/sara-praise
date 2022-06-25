@@ -6,7 +6,7 @@ import { ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,13 +14,13 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
-import { IRoleResponse, MemberRequest } from '@sp/shared-interfaces';
+import { IRoleResponse } from '@sp/shared-interfaces';
 
 import { FormArray, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { MemberFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/member.facade';
 import {
     MemberApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/member.api.service';
+import { MemberStore } from 'apps/sp-web/src/app/shared/stores/member/member.store';
 import { MinistryApiService } from '../../core/services/ministry.api.service';
 
 @Component({
@@ -46,8 +46,8 @@ export class MemberDialog implements OnInit {
   constructor(
     public readonly ministryService: MinistryApiService,
     public readonly memberService: MemberApiService,
-    public readonly memberFacade: MemberFacade,
-
+    public readonly memberStore: MemberStore,
+    private readonly dialogRef: MatDialogRef<MemberDialog>,
     private readonly changeDetectorRef: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA)
     private dialogData: {
@@ -57,10 +57,10 @@ export class MemberDialog implements OnInit {
   ) {}
 
   memberForm: FormGroup<{
-    name: FormControl<string | null>;
-    email: FormControl<string | null>;
-    password: FormControl<string | null>;
-    imageUrl: FormControl<string | null>;
+    name: FormControl<string>;
+    email: FormControl<string>;
+    password: FormControl<string>;
+    imageUrl: FormControl<string>;
     roles: FormArray<number>;
     // permissions: FormGroup<{
     //   permissionID: FormControl<number | null>;
@@ -133,7 +133,7 @@ export class MemberDialog implements OnInit {
   submitForm() {
     if (this.memberForm.invalid) return;
 
-    const member = this.memberForm.value as MemberRequest;
-    this.memberFacade.addMember(this.dialogData.ministryID, member);
+    const member = this.memberForm.value;
+    this.memberStore.create(this.dialogData.ministryID, member).subscribe(() => this.dialogRef.close());
   }
 }
