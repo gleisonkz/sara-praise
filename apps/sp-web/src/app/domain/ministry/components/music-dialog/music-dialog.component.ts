@@ -73,9 +73,7 @@ export class MusicDialogComponent implements OnInit {
 
   submitForm() {
     if (!this.songForm.valid) return;
-    this.songApiService
-      .createSong(this.data.ministryID, this.songForm.value)
-      .subscribe(() => this.matDialogRef.close());
+    this.songApiService.create(this.data.ministryID, this.songForm.value).subscribe(() => this.matDialogRef.close());
   }
 
   onTagRemoved(tag: string) {

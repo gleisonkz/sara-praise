@@ -14,12 +14,12 @@ export class SongApiService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getSongs(ministryID: number): Observable<SongListItemResponse[]> {
+  findAll(ministryID: number): Observable<SongListItemResponse[]> {
     const url = `${this.URL}/${ministryID}/songs`;
     return this.http.get<SongListItemResponse[]>(url);
   }
 
-  createSong(ministryID: number, song: SongRequest): Observable<SongResponse> {
+  create(ministryID: number, song: SongRequest): Observable<SongResponse> {
     const url = `${this.URL}/${ministryID}/songs`;
     return this.http.post<SongResponse>(url, song);
   }

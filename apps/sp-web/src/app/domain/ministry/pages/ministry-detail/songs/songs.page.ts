@@ -1,18 +1,20 @@
 import {
     animate, animateChild, query, stagger, style, transition, trigger
 } from '@angular/animations';
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 
 import { SongListItemResponse } from '@sp/shared-interfaces';
+import { SongStore } from '@sp/web/shared/stores';
 import { SongListItemComponent } from '@sp/web/widget/components';
 import { SpForDirective } from '@sp/web/widget/directives';
 
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { LIST_ANIMATION } from 'apps/sp-web/src/app/shared/animations/list.animation';
 import { Observable } from 'rxjs';
-import { MinistryApiService } from '../../../core/services/ministry.api.service';
 
 @Component({
   templateUrl: './songs.page.html',
@@ -24,15 +26,15 @@ import { MinistryApiService } from '../../../core/services/ministry.api.service'
     trigger('list', [transition('* => *', [query(':enter', stagger(250, animateChild()))])]),
   ],
   standalone: true,
-  imports: [MatIconModule, SongListItemComponent, SpForDirective],
+  imports: [MatIconModule, SongListItemComponent, SpForDirective, MatListModule, CommonModule],
 })
 export class SongsPage implements OnInit {
   songListItems$: Observable<SongListItemResponse[]>;
-  readonly MINISTRY_ID = injectMinistryID();
+  readonly ministryID = injectMinistryID();
 
-  constructor(private readonly ministryService: MinistryApiService) {}
+  constructor(private readonly songStore: SongStore) {}
 
   ngOnInit(): void {
-    this.songListItems$ = this.ministryService.getSongListItems(+this.MINISTRY_ID);
+    this.songListItems$ = this.songStore.findAll(this.ministryID);
   }
 }

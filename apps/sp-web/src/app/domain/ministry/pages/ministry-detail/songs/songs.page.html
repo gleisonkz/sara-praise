@@ -1,6 +1,12 @@
-<sp-song-list-item
-  [song]="song"
-  *spFor="let song of songListItems$ else 'Ainda não foi cadastrada nenhuma música' let length=length"
->
-  <mat-icon class="font-color" mat-list-icon>music_note</mat-icon>
-</sp-song-list-item>
+<mat-list *ngIf="songListItems$ | async as songs">
+  <ng-container *ngIf="songs.length > 0; else noSongsTemplate">
+    <sp-song-list-item *ngFor="let song of songs" [song]="song">
+      <mat-icon class="font-color" mat-list-icon>music_note</mat-icon>
+    </sp-song-list-item>
+  </ng-container>
+  <ng-template #noSongsTemplate>
+    <mat-list-item style="display: flex; justify-content: center">
+      <p>Ainda não há músicas cadastradas.</p>
+    </mat-list-item>
+  </ng-template>
+</mat-list>
