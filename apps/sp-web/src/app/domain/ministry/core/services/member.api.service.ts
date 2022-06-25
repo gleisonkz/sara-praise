@@ -13,15 +13,20 @@ export class MemberApiService {
 
   constructor(private readonly http: HttpClient) {}
 
-  getMemberListItems(ministryID: number, roles?: number[]): Observable<MemberListItemResponse[]> {
+  create(ministryID: number, member: MemberRequest): Observable<MemberListItemResponse> {
+    const url = `${this.URL}/${ministryID}/members`;
+    return this.http.post<MemberListItemResponse>(url, member);
+  }
+
+  remove(ministryID: number, memberID: number): Observable<void> {
+    const url = `${this.URL}/${ministryID}/members/${memberID}`;
+    return this.http.delete<void>(url);
+  }
+
+  findAll(ministryID: number, roles?: number[]): Observable<MemberListItemResponse[]> {
     const url = `${this.URL}/${ministryID}/members`;
     const params = new HttpParams().set('roles', roles ? JSON.stringify(roles) : '');
 
     return this.http.get<MemberListItemResponse[]>(url, { params });
-  }
-
-  createMember(ministryID: number, member: MemberRequest): Observable<MemberListItemResponse> {
-    const url = `${this.URL}/${ministryID}/members`;
-    return this.http.post<MemberListItemResponse>(url, member);
   }
 }

@@ -15,13 +15,13 @@ export class MemberFacade {
   members$: Observable<MemberListItemResponse[]> = this.state.members$;
 
   getMembers(ministryID: number, roles?: number[]) {
-    this.service.getMemberListItems(ministryID, roles).subscribe((members) => {
+    this.service.findAll(ministryID, roles).subscribe((members) => {
       this.state.members = members;
     });
   }
 
   addMember(ministryID: number, memberRequest: MemberRequest): void {
-    this.service.createMember(ministryID, memberRequest).subscribe((newMember) => {
+    this.service.create(ministryID, memberRequest).subscribe((newMember) => {
       this.state.addMember(newMember);
       // this.toastService.success('Membro criado com sucesso!');
     });

@@ -64,7 +64,7 @@ export class MinistryKeyDialogComponent implements OnInit {
     const roles = [eMinistryRole.MINISTER];
 
     this.sntKeys$ = this.ministryApiService.getKeys();
-    this.ministerMembers$ = this.memberService.getMemberListItems(this.data.ministryID, roles);
+    this.ministerMembers$ = this.memberService.findAll(this.data.ministryID, roles);
 
     this.memberIdControl.valueChanges
       .pipe(

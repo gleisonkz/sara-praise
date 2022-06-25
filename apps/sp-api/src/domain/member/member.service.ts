@@ -47,6 +47,14 @@ export class MemberService {
     return memberListItem;
   }
 
+  async remove(memberID: number) {
+    await this.prismaService.member.delete({
+      where: {
+        memberID,
+      },
+    });
+  }
+
   async getMembers(ministryID: number, roles?: eMinistryRole[]) {
     const rolesPredicate = roles
       ? {

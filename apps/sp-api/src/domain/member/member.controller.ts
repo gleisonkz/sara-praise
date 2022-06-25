@@ -65,8 +65,8 @@ export class MemberController {
     // return this.memberService.update(+id, updateMemberDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    // return this.memberService.remove(+id);
+  @Delete(':memberID')
+  remove(@Param('memberID') memberID: number) {
+    return this.memberService.remove(memberID);
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -9,10 +9,11 @@ import { MatMenuModule } from '@angular/material/menu';
 
 import { MemberListItemResponse } from '@sp/shared-interfaces';
 
-import { MemberFacade } from 'apps/sp-web/src/app/domain/ministry/abstraction/member.facade';
+import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import {
-    MINISTRY_ID, MINISTRY_ID_PROVIDER
+    MINISTRY_ID_PROVIDER
 } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.provider';
+import { MemberStore } from 'apps/sp-web/src/app/shared/stores/member/member.store';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -23,24 +24,21 @@ import { Observable } from 'rxjs';
   standalone: true,
   imports: [MatDialogModule, MatIconModule, MatMenuModule, MatListModule, MatButtonModule, CommonModule],
 })
-export class MembersPage implements OnInit, OnDestroy {
+export class MembersPage implements OnInit {
   memberListItems$: Observable<MemberListItemResponse[]>;
+  readonly ministryID = injectMinistryID();
 
-  constructor(private readonly memberFacade: MemberFacade, @Inject(MINISTRY_ID) private readonly ministryID: number) {}
+  constructor(private readonly memberStore: MemberStore) {}
 
   ngOnInit(): void {
-    this.memberListItems$ = this.memberFacade.members$;
-    this.memberFacade.getMembers(this.ministryID);
+    this.memberListItems$ = this.memberStore.findAll(this.ministryID);
   }
 
   removeMember(memberID: number): void {
-    console.log('removeMember', memberID);
-  }
-  editMember(memberID: number): void {
-    console.log('editMember', memberID);
+    this.memberStore.remove(this.ministryID, memberID).subscribe();
   }
 
-  ngOnDestroy(): void {
-    this.memberFacade.clearMembers();
+  editMember(memberID: number): void {
+    console.log('editMember', memberID);
   }
 }
