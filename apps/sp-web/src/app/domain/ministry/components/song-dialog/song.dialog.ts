@@ -12,14 +12,15 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 import { ArtistResponse, KeyResponse } from '@sp/shared-interfaces';
-import { ArtistApiService, MinistryApiService } from '@sp/web/domain/ministry/services';
+import {
+    ArtistApiService, MinistryApiService, SongApiService
+} from '@sp/web/domain/ministry/services';
 
-import { SongApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/song.api.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  templateUrl: './music-dialog.component.html',
-  styleUrls: ['./music-dialog.component.scss'],
+  templateUrl: './song.dialog.html',
+  styleUrls: ['./song.dialog.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -35,7 +36,7 @@ import { Observable } from 'rxjs';
     MatButtonModule,
   ],
 })
-export class MusicDialogComponent implements OnInit {
+export class SongDialog implements OnInit {
   songKeys$: Observable<KeyResponse[]>;
   artists$: Observable<ArtistResponse[]>;
 
@@ -47,7 +48,7 @@ export class MusicDialogComponent implements OnInit {
     public readonly ministryService: MinistryApiService,
     private readonly artistApiService: ArtistApiService,
     private readonly songApiService: SongApiService,
-    private readonly matDialogRef: MatDialogRef<MusicDialogComponent>,
+    private readonly matDialogRef: MatDialogRef<SongDialog>,
     @Inject(MAT_DIALOG_DATA) private data: { ministryID: number }
   ) {}
 

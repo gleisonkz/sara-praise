@@ -20,15 +20,13 @@ import {
 import {
     MemberDialog
 } from 'apps/sp-web/src/app/domain/ministry/components/member-dialog/member.dialog';
-import {
-    MusicDialogComponent
-} from 'apps/sp-web/src/app/domain/ministry/components/music-dialog/music-dialog.component';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { MinistryStore } from 'apps/sp-web/src/app/shared/stores/ministry/ministry.store';
 import { filter, Observable } from 'rxjs';
 import {
     MinistryKeyDialogComponent
 } from '../../components/ministry-key-dialog/ministry-key-dialog.component';
+import { SongDialog } from '../../components/song-dialog/song.dialog';
 
 @UntilDestroy()
 @Component({
@@ -75,7 +73,7 @@ export class MinistryDetailPage implements OnInit {
 
   goToCreateMusic() {
     this.dialog
-      .open(MusicDialogComponent, {
+      .open(SongDialog, {
         data: {
           ministryID: this.ministryID,
         },

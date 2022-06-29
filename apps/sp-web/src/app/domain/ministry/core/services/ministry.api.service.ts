@@ -70,11 +70,6 @@ export class MinistryApiService extends BaseApiService {
     return this.getWithRuntimeValidation<MinistryListItemResponse[]>(url, MinistryListItemResponse);
   }
 
-  getSongListItems(ministryID: number): Observable<SongListItemResponse[]> {
-    const url = `${this.URL}/${ministryID}/songs`;
-    return this.http.get<SongListItemResponse[]>(url);
-  }
-
   getAvailableSongListItems(
     ministryID: number,
     ministerID: number,
