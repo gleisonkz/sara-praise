@@ -1,3 +1,5 @@
+import { LoginPage } from 'apps/sp-web-e2e/src/support/app.po';
+
 describe('[SignUp Page]', () => {
   beforeEach(() => {
     cy.visit('/');
@@ -52,7 +54,7 @@ describe('[SignUp Page]', () => {
 
       it('should have sign up button disabled if just email and confirm password are filled', () => {
         cy.getByTestId('email-input').type('any@any.com');
-        cy.getByTestId('password-input').type('123456');
+        cy.getByTestId('confirm-password-input').type('123456');
         cy.getByTestId('sign-up-button').should('be.disabled');
       });
     });
@@ -79,7 +81,7 @@ describe('[SignUp Page]', () => {
   });
 
   it('should be able to create a new user', () => {
-    const randomEmail = `${Math.random()}@any.com`;
+    const randomEmail = `renato@teste.com`;
 
     cy.getByTestId('name-input').type('any-user');
     cy.getByTestId('email-input').type(randomEmail);
@@ -87,6 +89,25 @@ describe('[SignUp Page]', () => {
     cy.getByTestId('confirm-password-input').type('123456');
     cy.getByTestId('sign-up-button').click();
 
+    cy.url().should('include', '/ministerios');
+  });
+});
+
+describe('[SignIn Page]', () => {
+  beforeEach(() => cy.visit('/'));
+
+  it('should have sign in button disabled by default', () => {
+    LoginPage.getLoginButton().should('be.disabled');
+  });
+
+  it('should have sign in button disabled if password is invalid', () => {
+    LoginPage.typeEmail('any@any.com');
+    LoginPage.typePassword('abc');
+    LoginPage.getLoginButton().should('be.disabled');
+  });
+
+  it('should be able to login and navigate to ministerios page', () => {
+    LoginPage.UILogin('renato@teste.com', '123456');
     cy.url().should('include', '/ministerios');
   });
 });

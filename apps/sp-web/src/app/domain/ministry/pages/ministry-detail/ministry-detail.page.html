@@ -74,6 +74,7 @@
       routerLinkActive
       #artistsLink="routerLinkActive"
       [active]="artistsLink.isActive"
+      data-testid="artist-tab"
     >
       Artistas ({{ ministryListItem.artistQuantity }})
     </a>
@@ -99,6 +100,7 @@
     </a>
 
     <button
+      data-testid="ministry-detail-add-button"
       [class.active]="keyLink.isActive || memberLink.isActive || scaleLink.isActive"
       mat-raised-button
       (click)="

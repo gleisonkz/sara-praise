@@ -2,6 +2,7 @@
   "fileServerFolder": ".",
   "fixturesFolder": "./src/fixtures",
   "integrationFolder": "./src/integration",
+  "headless": true,
   "modifyObstructiveCode": false,
   "supportFile": "./src/support/index.ts",
   "pluginsFile": false,

@@ -3,6 +3,7 @@ version: '3'
 services:
   dev-db:
     image: postgres
+    container_name: dev-db
     ports:
       - '5432:5432'
     environment:
@@ -11,6 +12,16 @@ services:
       POSTGRES_PASSWORD: 123
     volumes:
       - postgres:/var/lib/postgresql/data
+  test-db:
+    image: postgres
+    restart: always
+    container_name: test-db
+    ports:
+      - '5433:5432'
+    environment:
+      POSTGRES_DB: sara
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: 123
 volumes:
   postgres:
     name: dev-db

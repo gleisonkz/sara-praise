@@ -122,6 +122,8 @@ model Song {
   ministry         Ministry          @relation(fields: [ministryID], references: [ministryID], onDelete: Cascade)
   ministerSongKeys MinisterSongKey[]
   scaleSongs       ScaleSong[]
+
+  @@unique([title, artistID])
 }
 
 model SongKey {

@@ -1,4 +1,4 @@
-<mat-list *ngIf="artistListItems$ | async as artists">
+<mat-list data-testid="artist-list" *ngIf="artistListItems$ | async as artists">
   <ng-container *ngIf="artists.length > 0; else noArtistsTemplate">
     <sp-artist-list-item
       [artist]="artist"
@@ -9,7 +9,10 @@
     </sp-artist-list-item>
   </ng-container>
   <ng-template #noArtistsTemplate>
-    <mat-list-item style="display: flex; justify-content: center">
+    <mat-list-item
+      data-testid="no-artists-message"
+      style="display: flex; justify-content: center"
+    >
       <p>Ainda não há artistas cadastrados.</p>
     </mat-list-item>
   </ng-template>

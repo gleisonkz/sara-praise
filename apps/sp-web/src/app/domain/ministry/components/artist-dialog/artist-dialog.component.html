@@ -2,6 +2,7 @@
   <mat-form-field appearance="fill">
     <mat-label>Artista</mat-label>
     <input
+      data-testid="artist-name-input"
       [formControl]="artistControl"
       matInput
       placeholder="Insira o nome do artista"
@@ -13,6 +14,7 @@
       type="button"
       color="accent"
       mat-raised-button
+      data-testid="create-artist-button"
       (click)="submitForm()"
       [disabled]="!artistControl.valid || artistControl.pristine"
     >
