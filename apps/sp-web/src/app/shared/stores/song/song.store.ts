@@ -1,6 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 
 import { SongListItemResponse, SongRequest } from '@sp/shared-interfaces';
+import { MinistryStore } from '@sp/web/shared/stores';
 
 import { HotToastService } from '@ngneat/hot-toast';
 import { SongApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/song.api.service';
@@ -20,7 +21,8 @@ export class SongStore extends NgSimpleStateBaseStore<SongState> {
   constructor(
     injector: Injector,
     private readonly songApiService: SongApiService,
-    private readonly toastService: HotToastService
+    private readonly toastService: HotToastService,
+    private readonly ministryStore: MinistryStore
   ) {
     super(injector);
   }
@@ -42,6 +44,7 @@ export class SongStore extends NgSimpleStateBaseStore<SongState> {
     return this.songApiService.create(+ministryID, song).pipe(
       tap((createdSong) => {
         this.setState((state) => ({ ...state, songs: [...state.songs, createdSong] }));
+        this.ministryStore.incrementSongsQuantity();
         this.toastService.success('Música criada com sucesso!');
       })
     );

@@ -40,7 +40,7 @@ export class MinistryService {
     const ministryListItem: MinistryListItemResponse = {
       ministryID: ministry.ministryID,
       name: ministry.name,
-      musicsQuantity: 0,
+      songsQuantity: 0,
       membersQuantity: 1,
       scalesQuantity: 0,
       songKeysQuantity: 0,
@@ -143,7 +143,7 @@ export class MinistryService {
     const ministries = await this.prismaService.ministry.findMany({
       where: {
         ministryID: {
-          equals: ministryID,
+          equals: ministryID || undefined,
         },
         members: {
           some: {
@@ -171,7 +171,7 @@ export class MinistryService {
       const ministryListItem: MinistryListItemResponse = {
         ministryID: ministry.ministryID,
         name: ministry.name,
-        musicsQuantity: ministry._count.songs,
+        songsQuantity: ministry._count.songs,
         membersQuantity: ministry._count.members,
         artistQuantity: ministry._count.artists,
         scalesQuantity: ministry._count.scales,

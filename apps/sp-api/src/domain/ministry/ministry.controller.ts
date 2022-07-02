@@ -45,10 +45,9 @@ export class MinistryController {
   @Get('/list-item/:ministryID?')
   async getMinistriesListItems(
     @Request() request: AuthRequest,
-    @Param('ministryID') ministryID?: string
+    @Param('ministryID') ministryID?: number
   ): Promise<MinistryListItemResponse[]> {
-    const parsedID = ministryID ? +ministryID : undefined;
-    const ministries = await this.ministryService.getMinistriesListItems(request.user.userID, parsedID);
+    const ministries = await this.ministryService.getMinistriesListItems(request.user.userID, ministryID);
 
     return ministries;
   }
@@ -99,7 +98,6 @@ export class MinistryController {
   @Post('/:ministryID/minister-song-key')
   @ApiCreatedResponse({
     description: 'The minister song key has been successfully created.',
-    type: MinistryListItemResponse,
   })
   async createMinisterSongKey(
     @Res({ passthrough: true }) res: Response,

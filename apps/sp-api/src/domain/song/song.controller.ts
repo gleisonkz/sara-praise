@@ -4,7 +4,7 @@ import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JwtGuard } from '@sp/api/domain/auth';
 import { AvailableSongResponse, SongListItemResponse } from '@sp/shared-interfaces';
 
-import { SongRequestDto, SongResponseDto } from 'apps/sp-api/src/domain/song/dto/song.dto';
+import { SongRequestDto } from 'apps/sp-api/src/domain/song/dto/song.dto';
 import { UnauthenticatedUserResponseDto } from 'apps/sp-api/src/shared';
 import { SongService } from './song.service';
 
@@ -28,9 +28,8 @@ export class SongController {
   }
 
   @Get()
-  findAll(@Param('ministryID') ministryID: number): Promise<SongResponseDto[]> {
-    const songs = this.songService.findAll(+ministryID);
-    return songs as any;
+  findAll(@Param('ministryID') ministryID: number): Promise<SongListItemResponse[]> {
+    return this.songService.findAll(ministryID);
   }
 
   @Get('/available/:ministerID')
@@ -42,21 +41,4 @@ export class SongController {
     const songs = await this.songService.getAvailableSongs(ministryID, ministerID, songID);
     return songs;
   }
-
-  // @Get('/keys')
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.songService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateSongDto: UpdateSongDto) {
-  //   return this.songService.update(+id, updateSongDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.songService.remove(+id);
-  // }
 }

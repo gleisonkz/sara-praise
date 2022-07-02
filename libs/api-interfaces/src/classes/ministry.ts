@@ -8,7 +8,7 @@ export class MinistryListItemResponse {
   name: string;
 
   @IsNumber()
-  musicsQuantity: number;
+  songsQuantity: number;
 
   @IsNumber()
   membersQuantity: number;
