@@ -28,15 +28,18 @@ export class MinistryApiService extends BaseApiService {
     return this.http.delete(url);
   }
 
-  createMinisterSongKey(ministryID: number, ministerSongKeyRequest: IMinisterSongKeyRequest): Observable<boolean> {
+  createMinisterSongKey(
+    ministryID: number,
+    ministerSongKeyRequest: IMinisterSongKeyRequest
+  ): Observable<IMinisterSongKeyListItemResponse> {
     const url = `${this.URL}/${ministryID}/minister-song-key`;
-    return this.http.post<boolean>(url, ministerSongKeyRequest);
+    return this.http.post<IMinisterSongKeyListItemResponse>(url, ministerSongKeyRequest);
   }
 
-  removeMinisterSongKey(ministryID: number, songID: number, memberID: number) {
+  removeMinisterSongKey(ministryID: number, songID: number, memberID: number): Observable<void> {
     const url = `${this.URL}/${ministryID}/minister-song-key`;
     const params = new HttpParams().set('songID', songID.toString()).set('memberID', memberID.toString());
-    return this.http.delete(url, { params });
+    return this.http.delete<void>(url, { params });
   }
 
   getMinisterSongKeys(ministryID: number): Observable<IMinisterSongKeyListItemResponse[]> {

@@ -14,14 +14,12 @@ import { MatSelectModule } from '@angular/material/select';
 import {
     AvailableScaleSongResponse, eMinistryRole, ParticipantSelectItemResponse
 } from '@sp/shared-interfaces';
+import { MinisterKeyDialogComponent } from '@sp/web/domain/ministry/components';
 import { MinistryApiService } from '@sp/web/domain/ministry/services';
 import { SpForDirective } from '@sp/web/widget/directives';
 
 import { FormArray } from '@ngneat/reactive-forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import {
-    MinistryKeyDialogComponent
-} from 'apps/sp-web/src/app/domain/ministry/components/ministry-key-dialog/ministry-key-dialog.component';
 import {
     injectBaseDialogData
 } from 'apps/sp-web/src/app/domain/scale/pages/scale-create-edit/inject.base-dialog-data.function';
@@ -121,15 +119,14 @@ export class ScaleSongsDialog implements OnInit {
               .subscribe((hasMinisterSongKey) => {
                 if (hasMinisterSongKey) return;
 
-                const dialogRef = this.matDialog.open(MinistryKeyDialogComponent, {
-                  data: {
-                    ministryID: this.scaleDialogData.ministryID,
-                    memberID: scaleSongFormGroup.get('memberID')?.value,
-                    songID: scaleSongFormGroup.get('songID')?.value,
-                  },
-                });
-
-                dialogRef
+                this.matDialog
+                  .open(MinisterKeyDialogComponent, {
+                    data: {
+                      ministryID: this.scaleDialogData.ministryID,
+                      memberID: scaleSongFormGroup.get('memberID')?.value,
+                      songID: scaleSongFormGroup.get('songID')?.value,
+                    },
+                  })
                   .afterClosed()
                   .pipe(untilDestroyed(this), filter(Boolean))
                   .subscribe((result) => {

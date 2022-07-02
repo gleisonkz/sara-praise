@@ -50,17 +50,41 @@ export class MinistryService {
     return ministryListItem;
   }
 
-  createMinisterSongKey(ministryID: number, ministerSongKeyRequest: IMinisterSongKeyRequest) {
-    const ministerSongKey = this.prismaService.ministerSongKey.create({
+  async createMinisterSongKey(ministryID: number, ministerSongKeyRequest: IMinisterSongKeyRequest) {
+    const ministerSongKey = await this.prismaService.ministerSongKey.create({
       data: {
         ministryID,
         songID: ministerSongKeyRequest.songID,
         memberID: ministerSongKeyRequest.memberID,
         songKeyID: ministerSongKeyRequest.keyID,
       },
+
+      include: {
+        song: {
+          include: {
+            artist: true,
+          },
+        },
+        songKey: true,
+        member: {
+          include: {
+            user: true,
+          },
+        },
+      },
     });
 
-    return ministerSongKey;
+    const ministerSongKeyListItemResponse: MinisterSongKeyListItemResponse = {
+      artistName: ministerSongKey.song.artist.name,
+      songTitle: ministerSongKey.song.title,
+      songKey: ministerSongKey.songKey.notation,
+      memberImageUrl: ministerSongKey.member.user.imageURL,
+      memberName: ministerSongKey.member.user.name,
+      memberID: ministerSongKey.member.memberID,
+      songID: ministerSongKey.song.songID,
+    };
+
+    return ministerSongKeyListItemResponse;
   }
 
   async deleteMinisterSongKey(ministryID: number, memberID: number, songID: number): Promise<void> {

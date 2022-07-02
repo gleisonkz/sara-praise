@@ -13,17 +13,15 @@ import {
     AvailableSongResponse, eMinistryRole, IMinisterSongKeyRequest, KeyResponse,
     MemberListItemResponse
 } from '@sp/shared-interfaces';
+import { MemberApiService, MinistryApiService } from '@sp/web/domain/ministry/services';
+import { MinisterSongKeyStore } from '@sp/web/shared/stores';
 
 import { ControlsOf, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import {
-    MemberApiService
-} from 'apps/sp-web/src/app/domain/ministry/core/services/member.api.service';
 import { BehaviorSubject, filter, Observable, switchMap, tap } from 'rxjs';
-import { MinistryApiService } from '../../core/services/ministry.api.service';
 
 @Component({
-  templateUrl: './ministry-key-dialog.component.html',
-  styleUrls: ['./ministry-key-dialog.component.scss'],
+  templateUrl: './minister-key-dialog.component.html',
+  styleUrls: ['./minister-key-dialog.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
@@ -37,11 +35,12 @@ import { MinistryApiService } from '../../core/services/ministry.api.service';
     MatButtonModule,
   ],
 })
-export class MinistryKeyDialogComponent implements OnInit {
+export class MinisterKeyDialogComponent implements OnInit {
   constructor(
     private readonly memberService: MemberApiService,
-    public readonly ministryApiService: MinistryApiService,
-    private readonly dialogRef: MatDialogRef<MinistryKeyDialogComponent>,
+    private readonly ministryApiService: MinistryApiService,
+    private readonly ministerSongKeyStore: MinisterSongKeyStore,
+    private readonly dialogRef: MatDialogRef<MinisterKeyDialogComponent>,
     @Inject(MAT_DIALOG_DATA) private data: { ministryID: number; memberID?: number; songID?: number }
   ) {}
 
@@ -52,11 +51,11 @@ export class MinistryKeyDialogComponent implements OnInit {
   sntKeys$: Observable<KeyResponse[]>;
 
   public get memberIdControl(): FormControl<number> {
-    return (this.ministryKeyForm.controls as any).memberID;
+    return this.ministryKeyForm.controls.memberID;
   }
 
   public get songIdControl(): FormControl<number> {
-    return (this.ministryKeyForm.controls as any).songID;
+    return this.ministryKeyForm.controls.songID;
   }
 
   ngOnInit(): void {
@@ -93,7 +92,7 @@ export class MinistryKeyDialogComponent implements OnInit {
     if (this.ministryKeyForm.invalid) return;
     const ministerSongKeyRequest = this.ministryKeyForm.value;
 
-    this.ministryApiService.createMinisterSongKey(this.data.ministryID, ministerSongKeyRequest).subscribe({
+    this.ministerSongKeyStore.create(this.data.ministryID, ministerSongKeyRequest).subscribe({
       next: () => this.dialogRef.close(true),
       error: () => {
         this.ministryKeyForm.reset();

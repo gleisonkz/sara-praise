@@ -55,7 +55,7 @@ export class MinistryController {
   @ApiQuery({ name: 'ministryID', required: false })
   @ApiResponse({
     status: HttpStatus.OK,
-    type: MinisterSongKeyListItemResponse,
+    type: [MinisterSongKeyListItemResponse],
   })
   @Get('/:ministryID/minister-song-key')
   async getMinisterSongKeysListItem(
@@ -103,7 +103,7 @@ export class MinistryController {
     @Res({ passthrough: true }) res: Response,
     @Param('ministryID') ministryID: number,
     @Body() ministerSongKeyRequest: IMinisterSongKeyRequest
-  ): Promise<unknown> {
+  ): Promise<MinisterSongKeyListItemResponse> {
     try {
       const ministerSongKey = await this.ministryService.createMinisterSongKey(+ministryID, ministerSongKeyRequest);
       return ministerSongKey;

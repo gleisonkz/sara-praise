@@ -24,8 +24,8 @@ import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/
 import { MinistryStore } from 'apps/sp-web/src/app/shared/stores/ministry/ministry.store';
 import { filter, Observable } from 'rxjs';
 import {
-    MinistryKeyDialogComponent
-} from '../../components/ministry-key-dialog/ministry-key-dialog.component';
+    MinisterKeyDialogComponent
+} from '../../components/minister-key-dialog/minister-key-dialog.component';
 import { SongDialog } from '../../components/song-dialog/song.dialog';
 
 @UntilDestroy()
@@ -126,19 +126,13 @@ export class MinistryDetailPage implements OnInit {
       });
   }
 
-  goToCreateMinistryKey() {
-    this.dialog
-      .open(MinistryKeyDialogComponent, {
-        data: {
-          ministryID: this.ministryID,
-        },
-        width: '100%',
-        maxWidth: '600px',
-      })
-      .afterClosed()
-      .pipe(filter(Boolean))
-      .subscribe(() => {
-        this.toastService.success('Cadastrado com sucesso');
-      });
+  goToCreateMinisterKey() {
+    this.dialog.open(MinisterKeyDialogComponent, {
+      data: {
+        ministryID: this.ministryID,
+      },
+      width: '100%',
+      maxWidth: '600px',
+    });
   }
 }
