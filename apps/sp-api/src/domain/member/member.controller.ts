@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-    Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Query, Res, UseGuards
+    Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Query, Res, UseGuards
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
 import { eMinistryRole, MemberListItemResponse } from '@sp/shared-interfaces';
 
-import { UpdateMemberDto } from 'apps/sp-api/src/domain/member/dtos/update-member.dto';
 import { MinistryNotFoundError } from 'apps/sp-api/src/domain/ministry/ministry.error';
 import { Response } from 'express';
 import { UnauthenticatedUserResponseDto } from '../../shared';
@@ -27,7 +26,7 @@ export class MemberController {
 
   @Post()
   create(@Param('ministryID') ministryID: number, @Body() memberRequestDto: MemberRequestDto) {
-    return this.memberService.create(+ministryID, memberRequestDto);
+    return this.memberService.create(ministryID, memberRequestDto);
   }
 
   @ApiResponse({
@@ -55,14 +54,14 @@ export class MemberController {
     }
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    // return this.memberService.findOne(+id);
+  @Get(':memberID')
+  findByID(@Param('memberID') memberID: number) {
+    return this.memberService.findByID(memberID);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMemberDto: UpdateMemberDto) {
-    // return this.memberService.update(+id, updateMemberDto);
+  @Put(':memberID')
+  update(@Param('memberID') memberID: number, @Body() updateMemberDto: MemberRequestDto) {
+    return this.memberService.update(memberID, updateMemberDto);
   }
 
   @Delete(':memberID')

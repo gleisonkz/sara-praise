@@ -2,13 +2,16 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 
 import { MemberListItemResponse } from '@sp/shared-interfaces';
 
+import {
+    MemberDialog
+} from 'apps/sp-web/src/app/domain/ministry/components/member-dialog/member.dialog';
 import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import {
     MINISTRY_ID_PROVIDER
@@ -28,7 +31,7 @@ export class MembersPage implements OnInit {
   memberListItems$: Observable<MemberListItemResponse[]>;
   readonly ministryID = injectMinistryID();
 
-  constructor(private readonly memberStore: MemberStore) {}
+  constructor(private readonly matDialog: MatDialog, private readonly memberStore: MemberStore) {}
 
   ngOnInit(): void {
     this.memberListItems$ = this.memberStore.findAll(this.ministryID);
@@ -39,6 +42,14 @@ export class MembersPage implements OnInit {
   }
 
   editMember(memberID: number): void {
-    console.log('editMember', memberID);
+    this.matDialog.open(MemberDialog, {
+      data: {
+        ministryID: this.ministryID,
+        memberID,
+      },
+      width: '100%',
+      maxWidth: '600px',
+      panelClass: 'member-dialog',
+    });
   }
 }

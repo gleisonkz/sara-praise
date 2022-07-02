@@ -101,4 +101,64 @@ export class MemberService {
 
     return Promise.all(memberListItems);
   }
+
+  async update(memberID: number, memberRequestDto: MemberRequestDto) {
+    await this.prismaService.member.update({
+      where: {
+        memberID,
+      },
+      data: {
+        roles: {
+          set: memberRequestDto.roles.map((role) => ({ roleID: role })),
+        },
+      },
+    });
+
+    const member = await this.prismaService.member.update({
+      where: {
+        memberID,
+      },
+      data: {
+        roles: {
+          connect: memberRequestDto.roles.map((role) => ({ roleID: role })),
+        },
+        user: {
+          update: {
+            name: memberRequestDto.name,
+            imageURL: memberRequestDto.imageUrl,
+          },
+        },
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    const memberListItem = {
+      memberID: member.memberID,
+      name: member.user.name,
+      imageUrl: memberRequestDto.imageUrl,
+    };
+
+    return memberListItem;
+  }
+
+  async findByID(memberID: number): Promise<MemberListItemResponse> {
+    const member = await this.prismaService.member.findUnique({
+      where: {
+        memberID,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    const memberListItem: any = {
+      memberID: member.memberID,
+      name: member.user.name,
+      imageUrl: member.user.imageURL,
+    };
+
+    return memberListItem as any;
+  }
 }

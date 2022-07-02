@@ -52,6 +52,18 @@ export class MemberStore extends NgSimpleStateBaseStore<MemberState> {
     );
   }
 
+  update(ministryID: number, memberID: number, memberRequest: MemberRequest): Observable<MemberListItemResponse> {
+    return this.memberApiService.update(ministryID, memberID, memberRequest).pipe(
+      tap((member) => {
+        this.setState((state) => ({
+          ...state,
+          members: [...state.members.filter(({ memberID: targetID }) => targetID !== memberID), member],
+        }));
+        this.toastService.success('Membro atualizado com sucesso!');
+      })
+    );
+  }
+
   remove(ministryID: number, memberID: number) {
     return this.memberApiService.remove(ministryID, memberID).pipe(
       tap(() => {

@@ -3,7 +3,7 @@
     <input matInput placeholder="Nome" formControlName="name" />
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field *ngIf="!dialogData?.memberID">
     <input formControlName="email" matInput placeholder="Email" />
   </mat-form-field>
 
@@ -11,12 +11,12 @@
     <input formControlName="imageUrl" matInput placeholder="Imagem" />
   </mat-form-field>
 
-  <mat-form-field>
+  <mat-form-field *ngIf="!dialogData?.memberID">
     <input formControlName="password" matInput placeholder="Password" type="password" />
   </mat-form-field>
 
   <mat-accordion class="roles">
-    <mat-expansion-panel [expanded]="false">
+    <mat-expansion-panel [expanded]="dialogData?.memberID">
       <mat-expansion-panel-header>
         <mat-panel-description>
           {{memberForm.controls.roles.length}}/{{ ministryRolesFormArray.controls.length
@@ -29,7 +29,7 @@
           *ngFor="let roleGroup of ministryRolesFormArray.controls; let participantIndex=index"
           [formGroup]="roleGroup"
         >
-          <img matListAvatar src="https://randomuser.me/api/portraits/men/92.jpg" />
+          <img matListAvatar [src]="roleGroup.controls.iconUrl.value" />
           <div mat-line class="subtitle">{{ roleGroup.controls.name.value }}</div>
           <div class="flex"></div>
           <mat-slide-toggle formControlName="isChecked" #toggle></mat-slide-toggle>
@@ -44,9 +44,11 @@
     color="accent"
     mat-raised-button
     (click)="submitForm()"
-    [disabled]="!this.memberForm.valid"
+    [disabled]="!this.memberForm.valid || !hasChange"
   >
     Confirmar
   </button>
   <button type="button" mat-dialog-close mat-raised-button>Cancelar</button>
 </div>
+
+<p>{{ hasChange ? 'Alterações realizadas' : 'Nenhuma alteração' }}</p>

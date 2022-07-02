@@ -145,7 +145,7 @@ export class MinistryController {
     @Query('memberID') memberID?: number
   ): Promise<unknown[]> {
     try {
-      const roles = await this.ministryService.getRolesByMinistryID(+ministryID, memberID);
+      const roles = await this.ministryService.getRolesByMinistryID(ministryID, memberID);
       return roles;
     } catch (error) {
       if (error instanceof MinistryNotFoundError) {
