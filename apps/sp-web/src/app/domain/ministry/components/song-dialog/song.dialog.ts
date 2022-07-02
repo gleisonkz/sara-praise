@@ -12,9 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 import { ArtistResponse, KeyResponse } from '@sp/shared-interfaces';
-import {
-    ArtistApiService, MinistryApiService, SongApiService
-} from '@sp/web/domain/ministry/services';
+import { ArtistApiService, MinistryApiService } from '@sp/web/domain/ministry/services';
+import { SongStore } from '@sp/web/shared/stores';
 
 import { Observable } from 'rxjs';
 
@@ -47,8 +46,8 @@ export class SongDialog implements OnInit {
   constructor(
     public readonly ministryService: MinistryApiService,
     private readonly artistApiService: ArtistApiService,
-    private readonly songApiService: SongApiService,
-    private readonly matDialogRef: MatDialogRef<SongDialog>,
+    private readonly dialogRef: MatDialogRef<SongDialog>,
+    private readonly songStore: SongStore,
     @Inject(MAT_DIALOG_DATA) private data: { ministryID: number }
   ) {}
 
@@ -74,7 +73,7 @@ export class SongDialog implements OnInit {
 
   submitForm() {
     if (!this.songForm.valid) return;
-    this.songApiService.create(this.data.ministryID, this.songForm.value).subscribe(() => this.matDialogRef.close());
+    this.songStore.create(this.data.ministryID, this.songForm.value).subscribe(() => this.dialogRef.close());
   }
 
   onTagRemoved(tag: string) {

@@ -3,12 +3,13 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '@sp/api/domain/prisma';
 import { AvailableSongResponse, SongListItemResponse } from '@sp/shared-interfaces';
 
-import { SongRequestDto, SongResponseDto } from 'apps/sp-api/src/domain/song/dto/song.dto';
+import { SongRequestDto } from 'apps/sp-api/src/domain/song/dto/song.dto';
 
 @Injectable()
 export class SongService {
   constructor(private readonly prismaService: PrismaService) {}
-  async create(ministryID: number, songRequestDto: SongRequestDto): Promise<SongResponseDto> {
+
+  async create(ministryID: number, songRequestDto: SongRequestDto): Promise<SongListItemResponse> {
     const song = await this.prismaService.song.create({
       data: {
         title: songRequestDto.title,
@@ -20,21 +21,23 @@ export class SongService {
         youtubeUrl: songRequestDto.youtubeUrl,
         tags: songRequestDto.tags,
         keyID: songRequestDto.keyID,
-
         observations: songRequestDto.observations,
+      },
+      include: {
+        artist: true,
+        key: true,
       },
     });
 
-    const songResponse: SongResponseDto = {
+    const songResponse: SongListItemResponse = {
       songID: song.songID,
       title: song.title,
-      artistID: song.artistID,
-      audioUrl: song.audioUrl,
-      chordsUrl: song.chordsUrl,
-      lyricUrl: song.lyricUrl,
-      youtubeUrl: song.youtubeUrl,
-      keyID: song.keyID,
-      observations: song.observations,
+      artistName: song.artist.name,
+      hasAudioLink: !!song.audioUrl,
+      hasChordsLink: !!song.chordsUrl,
+      hasLyricLink: !!song.lyricUrl,
+      hasYoutubeLink: !!song.youtubeUrl,
+      key: song.key.notation,
       tags: song.tags,
     };
 

@@ -2,7 +2,7 @@ import { Body, Controller, Get, HttpStatus, Param, Post, Query, UseGuards } from
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
-import { AvailableSongResponse } from '@sp/shared-interfaces';
+import { AvailableSongResponse, SongListItemResponse } from '@sp/shared-interfaces';
 
 import { SongRequestDto, SongResponseDto } from 'apps/sp-api/src/domain/song/dto/song.dto';
 import { UnauthenticatedUserResponseDto } from 'apps/sp-api/src/shared';
@@ -20,7 +20,10 @@ export class SongController {
   constructor(private readonly songService: SongService) {}
 
   @Post()
-  create(@Param('ministryID') ministryID: number, @Body() songRequestDto: SongRequestDto): Promise<SongResponseDto> {
+  create(
+    @Param('ministryID') ministryID: number,
+    @Body() songRequestDto: SongRequestDto
+  ): Promise<SongListItemResponse> {
     return this.songService.create(+ministryID, songRequestDto);
   }
 
