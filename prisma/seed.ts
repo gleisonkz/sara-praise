@@ -18,15 +18,27 @@ async function main() {
     data: SONG_KEYS,
   });
 
-  const passwordHash = await argon.hash('123456');
-
-  await prisma.user.create({
-    data: {
-      name: 'Gleison',
-      email: 'gleison@teste.com',
-      imageURL: 'https://randomuser.me/api/portraits/men/52.jpg',
-      password: passwordHash,
-    },
+  await prisma.user.createMany({
+    data: [
+      {
+        name: 'Gleison',
+        email: 'gleison@teste.com',
+        imageURL: 'https://randomuser.me/api/portraits/men/52.jpg',
+        password: await argon.hash('123456'),
+      },
+      {
+        name: 'Amanda',
+        email: 'amanda@teste.com',
+        imageURL: 'https://randomuser.me/api/portraits/women/30.jpg',
+        password: await argon.hash('123456'),
+      },
+      {
+        name: 'Debora',
+        email: 'debora@teste.com',
+        imageURL: 'https://randomuser.me/api/portraits/women/33.jpg',
+        password: await argon.hash('123456'),
+      },
+    ],
   });
 
   const ministries = [
@@ -50,8 +62,18 @@ async function main() {
         name,
         ownerID,
         members: {
-          create: {
-            userID: ownerID,
+          createMany: {
+            data: [
+              {
+                userID: ownerID,
+              },
+              {
+                userID: 2,
+              },
+              {
+                userID: 3,
+              },
+            ],
           },
         },
         roles: {
