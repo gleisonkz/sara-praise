@@ -14,14 +14,14 @@ import { MatListModule } from '@angular/material/list';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { IRoleResponse, MemberListItemResponse } from '@sp/shared-interfaces';
+import { injectMinistryID } from '@sp/web/shared/functions';
 
 import { FormControl } from '@ngneat/reactive-forms';
 import {
     MinistryApiService
 } from 'apps/sp-web/src/app/domain/ministry/core/services/ministry.api.service';
-import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
-import { BehaviorSubject, filter, map, Observable } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 
 interface ParticipantsDialogData {
   scaleID: number;
@@ -122,10 +122,14 @@ export class ParticipantsDialog implements OnInit {
               checkedRoles$.next(nextValue);
             });
 
-            return {
+            const obj = {
               form: rolesForm,
-              item: role,
-            };
+              item: { ...role, iconUrl: role.iconUrl.split('/').pop()?.split('.')[0] },
+            } as any;
+
+            console.log(obj);
+
+            return obj;
           });
 
           return {

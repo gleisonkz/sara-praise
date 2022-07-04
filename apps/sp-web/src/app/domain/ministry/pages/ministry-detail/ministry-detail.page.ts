@@ -10,6 +10,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { MinistryListItemResponse } from '@sp/shared-interfaces';
+import { injectMinistryID, MinisterKeyDialogData } from '@sp/web/shared/functions';
 import { MediaIfDirective } from '@sp/web/widget/directives';
 
 import { HotToastService } from '@ngneat/hot-toast';
@@ -20,7 +21,7 @@ import {
 import {
     MemberDialog
 } from 'apps/sp-web/src/app/domain/ministry/components/member-dialog/member.dialog';
-import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
+import { DEFAULT_MAT_DIALOG_CONFIG } from 'apps/sp-web/src/app/shared/constants/dialog-config';
 import { MinistryStore } from 'apps/sp-web/src/app/shared/stores/ministry/ministry.store';
 import { filter, Observable } from 'rxjs';
 import {
@@ -127,12 +128,13 @@ export class MinistryDetailPage implements OnInit {
   }
 
   goToCreateMinisterKey() {
+    const data: MinisterKeyDialogData = {
+      ministryID: this.ministryID,
+    };
+
     this.dialog.open(MinisterKeyDialogComponent, {
-      data: {
-        ministryID: this.ministryID,
-      },
-      width: '100%',
-      maxWidth: '600px',
+      data,
+      ...DEFAULT_MAT_DIALOG_CONFIG,
     });
   }
 }

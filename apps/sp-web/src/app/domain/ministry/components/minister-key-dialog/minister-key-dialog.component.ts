@@ -1,24 +1,29 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
-import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
 import {
-    AvailableSongResponse, eMinistryRole, IMinisterSongKeyRequest, KeyResponse,
-    MemberListItemResponse
+    AvailableSongResponse, eMinistryRole, IMinisterSongKeyRequest, MemberListItemResponse,
+    SongKeyResponse
 } from '@sp/shared-interfaces';
 import { MemberApiService, MinistryApiService } from '@sp/web/domain/ministry/services';
+import { eDialogMode, injectMinisterKeyDialogData } from '@sp/web/shared/functions';
 import { MinisterSongKeyStore } from '@sp/web/shared/stores';
 
-import { ControlsOf, FormControl, FormGroup } from '@ngneat/reactive-forms';
-import { BehaviorSubject, filter, Observable, switchMap, tap } from 'rxjs';
+import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { Optional } from 'apps/sp-web/src/app/shared/types/nullable.type';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { BehaviorSubject, filter, map, Observable, ReplaySubject, switchMap, tap } from 'rxjs';
 
+@UntilDestroy()
 @Component({
   templateUrl: './minister-key-dialog.component.html',
   styleUrls: ['./minister-key-dialog.component.scss'],
@@ -33,6 +38,7 @@ import { BehaviorSubject, filter, Observable, switchMap, tap } from 'rxjs';
     CommonModule,
     MatSelectModule,
     MatButtonModule,
+    NgxMatSelectSearchModule,
   ],
 })
 export class MinisterKeyDialogComponent implements OnInit {
@@ -40,33 +46,77 @@ export class MinisterKeyDialogComponent implements OnInit {
     private readonly memberService: MemberApiService,
     private readonly ministryApiService: MinistryApiService,
     private readonly ministerSongKeyStore: MinisterSongKeyStore,
-    private readonly dialogRef: MatDialogRef<MinisterKeyDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) private data: { ministryID: number; memberID?: number; songID?: number }
+    private readonly dialogRef: MatDialogRef<MinisterKeyDialogComponent>
   ) {}
 
-  ministryKeyForm: FormGroup<ControlsOf<IMinisterSongKeyRequest>>;
+  readonly TARGET_ROLES = [eMinistryRole.MINISTER];
+
+  data = injectMinisterKeyDialogData();
+  ministryKeyForm: FormGroup<{
+    memberID: FormControl<Optional<number>>;
+    songID: FormControl<Optional<number>>;
+    keyID: FormControl<Optional<number>>;
+  }>;
+
+  searchCtrl: FormControl<string> = new FormControl();
 
   ministerMembers$: Observable<MemberListItemResponse[]>;
+  sntKeys$: Observable<SongKeyResponse[]>;
   songs$ = new BehaviorSubject<AvailableSongResponse[]>([]);
-  sntKeys$: Observable<KeyResponse[]>;
+  filteredSongs$: ReplaySubject<AvailableSongResponse[]> = new ReplaySubject<AvailableSongResponse[]>(1);
 
   public get memberIdControl(): FormControl<number> {
-    return this.ministryKeyForm.controls.memberID;
+    const memberID = this.ministryKeyForm.get('memberID');
+    return memberID as FormControl<number>;
   }
 
   public get songIdControl(): FormControl<number> {
-    return this.ministryKeyForm.controls.songID;
+    const songID = this.ministryKeyForm.get('songID');
+    return songID as FormControl<number>;
   }
 
   ngOnInit(): void {
     this.createForm(this.data.memberID, this.data.songID);
-    const roles = [eMinistryRole.MINISTER];
+    this.ministerMembers$ = this.getMinisterMembers();
 
-    this.sntKeys$ = this.ministryApiService.getKeys();
-    this.ministerMembers$ = this.memberService.findAll(this.data.ministryID, roles);
+    this.sntKeys$ = this.ministryApiService.getKeys(this.data.ministryID);
 
+    this.setMemberIdControlValueChanges();
+    this.setSearchControlValueChanges();
+  }
+
+  createForm(ministerID?: Optional<number>, songID?: Optional<number>, keyID?: Optional<number>) {
+    const shouldDisable = this.data.mode === eDialogMode.EDIT;
+
+    this.ministryKeyForm = new FormGroup({
+      memberID: new FormControl({ value: ministerID, disabled: shouldDisable }, Validators.required),
+      songID: new FormControl({ value: songID, disabled: shouldDisable }, Validators.required),
+      keyID: new FormControl(keyID, Validators.required),
+    });
+  }
+
+  submitForm() {
+    if (this.ministryKeyForm.invalid) return;
+    const ministerSongKeyRequest = this.ministryKeyForm.value as IMinisterSongKeyRequest;
+
+    this.ministerSongKeyStore.create(this.data.ministryID, ministerSongKeyRequest).subscribe({
+      next: () => this.dialogRef.close(true),
+      error: () => {
+        this.ministryKeyForm.reset();
+      },
+    });
+  }
+
+  private getMinisterMembers(): Observable<MemberListItemResponse[]> {
+    if (this.data.memberID)
+      return this.memberService.findByID(this.data.ministryID, this.data.memberID).pipe(map((member) => [member]));
+    return this.memberService.findAll(this.data.ministryID, this.TARGET_ROLES);
+  }
+
+  private setMemberIdControlValueChanges() {
     this.memberIdControl.valueChanges
       .pipe(
+        untilDestroyed(this),
         filter((id) => !!id),
         tap(() => this.songIdControl.reset()),
         switchMap((memberId) =>
@@ -80,23 +130,22 @@ export class MinisterKeyDialogComponent implements OnInit {
       });
   }
 
-  createForm(ministerID?: number, songID?: number, keyID?: number) {
-    this.ministryKeyForm = new FormGroup({
-      memberID: new FormControl(ministerID, Validators.required),
-      songID: new FormControl(songID, Validators.required),
-      keyID: new FormControl(keyID, Validators.required),
-    });
-  }
+  private setSearchControlValueChanges() {
+    this.searchCtrl.valueChanges
+      .pipe(
+        untilDestroyed(this),
+        filter((searchValue) => !!searchValue),
+        map((searchValue) => searchValue.toLowerCase())
+      )
+      .subscribe((searchValue) => {
+        const songs = this.songs$.value;
 
-  submitForm() {
-    if (this.ministryKeyForm.invalid) return;
-    const ministerSongKeyRequest = this.ministryKeyForm.value;
+        const filteredSongs = songs.filter(
+          ({ title, artistName }) =>
+            title.toLowerCase().includes(searchValue) || artistName.toLowerCase().includes(searchValue)
+        );
 
-    this.ministerSongKeyStore.create(this.data.ministryID, ministerSongKeyRequest).subscribe({
-      next: () => this.dialogRef.close(true),
-      error: () => {
-        this.ministryKeyForm.reset();
-      },
-    });
+        this.filteredSongs$.next(filteredSongs);
+      });
   }
 }

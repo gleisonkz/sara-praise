@@ -20,10 +20,12 @@ import { SpForDirective } from '@sp/web/widget/directives';
 
 import { FormArray } from '@ngneat/reactive-forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
+import { DEFAULT_MAT_DIALOG_CONFIG } from 'apps/sp-web/src/app/shared/constants/dialog-config';
+import { MinisterKeyDialogData } from 'apps/sp-web/src/app/shared/functions';
 import {
     injectBaseDialogData
-} from 'apps/sp-web/src/app/domain/scale/pages/scale-create-edit/inject.base-dialog-data.function';
-import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
+} from 'apps/sp-web/src/app/shared/functions/inject-base-dialog-data/inject-base-dialog-data.function';
 import { DisableControlDirective } from 'apps/sp-web/src/app/widget/directives/disable-control';
 import {
     SetOnSelectValueRefDirective
@@ -119,13 +121,16 @@ export class ScaleSongsDialog implements OnInit {
               .subscribe((hasMinisterSongKey) => {
                 if (hasMinisterSongKey) return;
 
+                const data: MinisterKeyDialogData = {
+                  ministryID: this.scaleDialogData.ministryID,
+                  memberID: scaleSongFormGroup.get('memberID')?.value || undefined,
+                  songID: scaleSongFormGroup.get('songID')?.value || undefined,
+                };
+
                 this.matDialog
                   .open(MinisterKeyDialogComponent, {
-                    data: {
-                      ministryID: this.scaleDialogData.ministryID,
-                      memberID: scaleSongFormGroup.get('memberID')?.value,
-                      songID: scaleSongFormGroup.get('songID')?.value,
-                    },
+                    data,
+                    ...DEFAULT_MAT_DIALOG_CONFIG,
                   })
                   .afterClosed()
                   .pipe(untilDestroyed(this), filter(Boolean))

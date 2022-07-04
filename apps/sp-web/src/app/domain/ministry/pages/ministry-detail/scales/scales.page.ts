@@ -8,9 +8,9 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 
 import { ScaleListItemResponse } from '@sp/shared-interfaces';
+import { injectMinistryID } from '@sp/web/shared/functions';
 import { RemoveDotsPipe } from '@sp/web/widget/pipes';
 
-import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { FADE_ANIMATION } from 'apps/sp-web/src/app/shared/animations/fade.animation';
 import { ScaleStore } from 'apps/sp-web/src/app/shared/stores/scale/scale.store';
 import { Observable } from 'rxjs';

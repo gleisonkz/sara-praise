@@ -42,6 +42,7 @@
       "@sp/web/shared/interceptors": ["apps/sp-web/src/app/shared/interceptors/index.ts"],
       "@sp/web/shared/services": ["apps/sp-web/src/app/shared/services/index.ts"],
       "@sp/web/shared/stores": ["apps/sp-web/src/app/shared/stores/index.ts"],
+      "@sp/web/shared/functions": ["apps/sp-web/src/app/shared/functions"],
       "@sp/web/widget/components": ["apps/sp-web/src/app/widget/components"],
       "@sp/web/widget/directives": ["apps/sp-web/src/app/widget/directives"],
       "@sp/web/widget/pipes": ["apps/sp-web/src/app/widget/pipes"]

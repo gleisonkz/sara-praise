@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
-import { ArtistResponse, KeyResponse } from '@sp/shared-interfaces';
+import { ArtistResponse, SongKeyResponse } from '@sp/shared-interfaces';
 import { ArtistApiService, MinistryApiService } from '@sp/web/domain/ministry/services';
 import { SongStore } from '@sp/web/shared/stores';
 
@@ -36,7 +36,7 @@ import { Observable } from 'rxjs';
   ],
 })
 export class SongDialog implements OnInit {
-  songKeys$: Observable<KeyResponse[]>;
+  songKeys$: Observable<SongKeyResponse[]>;
   artists$: Observable<ArtistResponse[]>;
 
   tags: string[] = ['Júbilo', 'Adoração'];
@@ -53,7 +53,7 @@ export class SongDialog implements OnInit {
 
   ngOnInit() {
     this.buildForm();
-    this.songKeys$ = this.ministryService.getKeys();
+    this.songKeys$ = this.ministryService.getKeys(this.data.ministryID);
     this.artists$ = this.artistApiService.findAll(this.data.ministryID);
   }
 

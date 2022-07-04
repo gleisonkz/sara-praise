@@ -20,13 +20,13 @@ import {
     IScaleResponse, ParticipantListItem, ParticipantRequest, ScaleRequest, ScaleSongRequest,
     ScaleSongResponse
 } from '@sp/shared-interfaces';
+import { injectMinistryID, injectOptionalRouteParam } from '@sp/web/shared/functions';
 import { SongListItemComponent } from '@sp/web/widget/components';
 import { SpForDirective } from '@sp/web/widget/directives';
 
 import { HotToastService } from '@ngneat/hot-toast';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import {
     ParticipantsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/participants/participants.dialog';
@@ -34,7 +34,6 @@ import {
     ScaleSongsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/scale-songs/scale-songs.dialog';
 import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
-import { injectOptionalRouteParam } from 'apps/sp-web/src/app/shared/functions';
 import { MatTimepickerModule } from 'mat-timepicker';
 import { EMPTY, filter, Observable, ReplaySubject, skip, switchMap, tap } from 'rxjs';
 

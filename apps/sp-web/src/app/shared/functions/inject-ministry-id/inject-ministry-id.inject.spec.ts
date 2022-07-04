@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 
 import { instance, mock, when } from 'ts-mockito';
-import { injectMinistryID, MinistryIdParamNotFoundError } from './ministry-id.inject';
+import { injectMinistryID, MinistryIdParamNotFoundError } from './inject-ministry-id.inject';
 
 @Component({
   template: '',

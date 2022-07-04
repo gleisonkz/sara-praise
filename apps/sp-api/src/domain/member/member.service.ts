@@ -102,7 +102,7 @@ export class MemberService {
     return Promise.all(memberListItems);
   }
 
-  async update(memberID: number, memberRequestDto: MemberRequestDto) {
+  async update(memberID: number, memberRequestDto: MemberRequestDto): Promise<MemberListItemResponse> {
     await this.prismaService.member.update({
       where: {
         memberID,
@@ -131,13 +131,15 @@ export class MemberService {
       },
       include: {
         user: true,
+        roles: true,
       },
     });
 
-    const memberListItem = {
+    const memberListItem: MemberListItemResponse = {
       memberID: member.memberID,
       name: member.user.name,
       imageUrl: memberRequestDto.imageUrl,
+      roles: member.roles as any,
     };
 
     return memberListItem;

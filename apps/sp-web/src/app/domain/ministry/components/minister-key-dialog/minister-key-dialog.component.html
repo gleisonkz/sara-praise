@@ -15,9 +15,16 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Música</mat-label>
-    <mat-select formControlName="songID">
-      <mat-option *ngFor="let songs of songs$ | async" [value]="songs.songID">
-        {{ songs.title }} - {{ songs.artistName }}
+    <mat-select formControlName="songID" placeholder="Bank" #singleSelect>
+      <mat-option>
+        <ngx-mat-select-search
+          placeholderLabel="Buscar Música"
+          [formControl]="searchCtrl"
+        ></ngx-mat-select-search>
+      </mat-option>
+
+      <mat-option *ngFor="let song of filteredSongs$ | async" [value]="song.songID">
+        {{ song.title }} - {{ song.artistName }}
       </mat-option>
     </mat-select>
   </mat-form-field>
@@ -25,8 +32,8 @@
   <mat-form-field appearance="fill">
     <mat-label>Tom</mat-label>
     <mat-select formControlName="keyID">
-      <mat-option *ngFor="let key of sntKeys$ | async" [value]="key.keyID">
-        {{ key.letter }}
+      <mat-option *ngFor="let key of sntKeys$ | async" [value]="key.songKeyID">
+        {{ key.notation }}
       </mat-option>
     </mat-select>
   </mat-form-field>

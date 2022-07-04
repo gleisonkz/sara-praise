@@ -2,10 +2,8 @@ import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 
-import {
-    injectRouteParam, RouteParamNotFoundError
-} from 'apps/sp-web/src/app/shared/functions/inject-route-param.function';
 import { instance, mock, when } from 'ts-mockito';
+import { injectRouteParam, RouteParamNotFoundError } from './inject-route-param.function';
 
 @Component({
   template: '',

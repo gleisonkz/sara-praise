@@ -33,6 +33,20 @@ registerLocaleData(localePT);
 export class AppComponent {
   public constructor(domSanitizer: DomSanitizer, public matIconRegistry: MatIconRegistry) {
     matIconRegistry.addSvgIcon('bass', domSanitizer.bypassSecurityTrustResourceUrl('assets/images/roles/bass.svg'));
+    matIconRegistry.addSvgIcon('keys', domSanitizer.bypassSecurityTrustResourceUrl('assets/images/roles/keys.svg'));
+    matIconRegistry.addSvgIcon(
+      'voice-recorder-mic',
+      domSanitizer.bypassSecurityTrustResourceUrl('assets/images/roles/voice-recorder-mic.svg')
+    );
+    matIconRegistry.addSvgIcon(
+      'acoustic-guitar',
+      domSanitizer.bypassSecurityTrustResourceUrl('assets/images/roles/acoustic-guitar.svg')
+    );
+    matIconRegistry.addSvgIcon(
+      'electric-guitar',
+      domSanitizer.bypassSecurityTrustResourceUrl('assets/images/roles/electric-guitar.svg')
+    );
+    matIconRegistry.addSvgIcon('drums', domSanitizer.bypassSecurityTrustResourceUrl('assets/images/roles/drums.svg'));
   }
 
   public static bootstrap() {

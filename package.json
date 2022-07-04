@@ -67,6 +67,7 @@
     "mat-timepicker": "^5.1.4",
     "nest-typed-config": "^2.4.0",
     "ng-simple-state": "^13.0.6",
+    "ngx-mat-select-search": "^4.2.0",
     "passport": "^0.5.2",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.0",

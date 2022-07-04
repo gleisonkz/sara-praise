@@ -5,11 +5,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 
 import { SongListItemResponse } from '@sp/shared-interfaces';
+import { injectMinistryID } from '@sp/web/shared/functions';
 import { SongStore } from '@sp/web/shared/stores';
 import { SongListItemComponent } from '@sp/web/widget/components';
 import { SpForDirective } from '@sp/web/widget/directives';
 
-import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { Observable } from 'rxjs';
 
 @Component({

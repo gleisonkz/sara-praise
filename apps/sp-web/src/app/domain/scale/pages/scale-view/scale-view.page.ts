@@ -12,12 +12,10 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { MinistryListItemResponse, ScaleDetailResponse } from '@sp/shared-interfaces';
+import { injectMinistryID, injectRouteParam } from '@sp/web/shared/functions';
+import { MinistryStore, ScaleStore } from '@sp/web/shared/stores';
 import { SongListItemComponent } from '@sp/web/widget/components';
 
-import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
-import { injectRouteParam } from 'apps/sp-web/src/app/shared/functions';
-import { MinistryStore } from 'apps/sp-web/src/app/shared/stores/ministry/ministry.store';
-import { ScaleStore } from 'apps/sp-web/src/app/shared/stores/scale/scale.store';
 import {
     ConfirmDialogComponent, ConfirmDialogData
 } from 'apps/sp-web/src/app/widget/components/confirm-dialog/confirm-dialog';

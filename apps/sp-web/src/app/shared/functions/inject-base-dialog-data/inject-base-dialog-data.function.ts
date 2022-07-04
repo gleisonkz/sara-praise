@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-interface BaseScaleDialogData {
+export interface BaseScaleDialogData {
   scaleID: number;
   ministryID: number;
 }

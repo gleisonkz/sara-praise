@@ -29,17 +29,17 @@
         </mat-chip-list>
       </mat-select-trigger>
 
-      <mat-option *ngFor="let classification of tags" [value]="classification">{{
-        classification
-      }}</mat-option>
+      <mat-option *ngFor="let classification of tags" [value]="classification"
+        >{{ classification }}</mat-option
+      >
     </mat-select>
   </mat-form-field>
 
   <mat-form-field appearance="fill">
     <mat-label>Tom</mat-label>
     <mat-select formControlName="keyID">
-      <mat-option *ngFor="let key of songKeys$ | async" [value]="key.keyID">
-        {{ key.letter }}
+      <mat-option *ngFor="let key of songKeys$ | async" [value]="key.songKeyID">
+        {{ key.notation }}
       </mat-option>
     </mat-select>
   </mat-form-field>

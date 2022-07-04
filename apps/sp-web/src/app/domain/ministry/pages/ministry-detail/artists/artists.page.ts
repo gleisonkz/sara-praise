@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 
 import { ArtistResponse } from '@sp/shared-interfaces';
+import { injectMinistryID } from '@sp/web/shared/functions';
 import { SpForDirective } from '@sp/web/widget/directives';
 
 import {
@@ -14,7 +15,6 @@ import {
 import {
     ArtistListItemComponent
 } from 'apps/sp-web/src/app/domain/ministry/components/artist-list-item/artist-list-item.component';
-import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
 import { ArtistStore } from 'apps/sp-web/src/app/shared/stores/artist/artist.store';
 import { Observable } from 'rxjs';
 

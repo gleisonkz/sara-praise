@@ -156,4 +156,10 @@ export class MinistryController {
       throw error;
     }
   }
+
+  @Get('/:ministryID/keys')
+  async getKeysByMinistryID(@Param('ministryID') ministryID: number) {
+    const keys = await this.ministryService.getKeys(ministryID);
+    return keys;
+  }
 }

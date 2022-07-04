@@ -37,7 +37,7 @@
             >
               <ng-container [formGroup]="tupleRole.form">
                 <div class="icon-container">
-                  <mat-icon svgIcon="bass"></mat-icon>
+                  <mat-icon svgIcon="{{tupleRole.item.iconUrl}}"></mat-icon>
                   <span>{{tupleRole.item.name}}</span>
                 </div>
                 <mat-checkbox

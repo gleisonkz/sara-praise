@@ -8,14 +8,11 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 
 import { MemberListItemResponse } from '@sp/shared-interfaces';
+import { injectMinistryID } from '@sp/web/shared/functions';
 
 import {
     MemberDialog
 } from 'apps/sp-web/src/app/domain/ministry/components/member-dialog/member.dialog';
-import { injectMinistryID } from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.inject';
-import {
-    MINISTRY_ID_PROVIDER
-} from 'apps/sp-web/src/app/domain/ministry/providers/ministry-id.provider';
 import { MemberStore } from 'apps/sp-web/src/app/shared/stores/member/member.store';
 import { Observable } from 'rxjs';
 
@@ -23,7 +20,6 @@ import { Observable } from 'rxjs';
   templateUrl: './members.page.html',
   styleUrls: ['./members.page.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [MINISTRY_ID_PROVIDER],
   standalone: true,
   imports: [MatDialogModule, MatIconModule, MatMenuModule, MatListModule, MatButtonModule, CommonModule],
 })
