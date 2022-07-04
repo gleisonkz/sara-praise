@@ -17,7 +17,7 @@
     "docker:down": "docker-compose down",
     "prisma:dev:migrate": "npx prisma migrate dev",
     "web": "nx serve sp-web -o",
-    "api": "docker-compose up -d --force-recreate && nx serve sp-api",
+    "api": "nx serve sp-api",
     "postinstall": "node ./decorate-angular-cli.js && ngcc --properties es2015 browser module main",
     "start": "npx nx run-many --target=serve --all=true",
     "build": "nx build",
