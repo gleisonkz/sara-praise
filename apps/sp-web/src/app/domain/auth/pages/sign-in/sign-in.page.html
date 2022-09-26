@@ -1,23 +1,31 @@
 <div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
-  <h1>Log in</h1>
+  <div class="title-group">
+    <h1>Seja bem vindo!</h1>
+    <h2>Login</h2>
+    <span> Faça login na sua conta </span>
+  </div>
 
-  <form [formGroup]="userForm" class="example-form">
-    <mat-form-field class="example-full-width">
+  <form [formGroup]="userForm">
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Email</mat-label>
+      <mat-icon matPrefix> mail </mat-icon>
       <input
         data-testid="email-input"
         formControlName="email"
         matInput
-        placeholder="Email"
+        placeholder="Digite seu email"
       />
     </mat-form-field>
 
-    <mat-form-field class="example-full-width">
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Password</mat-label>
+      <mat-icon matPrefix> key </mat-icon>
       <input
         data-testid="password-input"
         type="password"
         formControlName="password"
         matInput
-        placeholder="Password"
+        placeholder="Digite sua senha"
       />
     </mat-form-field>
 
@@ -25,7 +33,7 @@
       <button
         [disabled]="!userForm.valid"
         (click)="submit()"
-        mat-stroked-button
+        mat-raised-button
         color="primary"
         class="btn-block"
         data-testid="login-button"
@@ -46,3 +54,15 @@
     </div>
   </form>
 </div>
+<img
+  background-wave
+  src="./../../../../../assets/images/background-wave.svg"
+  alt="background-wave.svg"
+  top
+/>
+<img
+  background-wave
+  src="./../../../../../assets/images/background-wave.svg"
+  alt="background-wave.svg"
+  bottom
+/>

@@ -13,6 +13,18 @@
 @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 
+img[background-wave] {
+  position: absolute;
+  z-index: -1;
+  &[bottom] {
+    bottom: 0;
+  }
+  &[top] {
+    top: 0;
+    transform: scaleY(-100%);
+  }
+}
+
 $fontConfig: (
   display-4: mat-typography-level(112px, 112px, 300, 'Roboto', -0.0134em),
   display-3: mat-typography-level(56px, 56px, 400, 'Roboto', -0.0089em),

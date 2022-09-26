@@ -12,60 +12,81 @@
 <mat-divider></mat-divider>
 
 <div class="top-container">
-  <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Nome </mat-label>
-    <input
-      matInput
-      data-testid="ministry-name-input"
-      placeholder="O nome do ministério deve ser único"
-      [formControl]="ministryNameControl"
-    />
-  </mat-form-field>
+  <legend>Criar novo ministério</legend>
 
-  <button
-    [disabled]="!ministryNameControl.valid"
-    (click)="createMinistry()"
-    data-testid="create-ministry-button"
-    mat-fab
-    aria-label="Example icon-button with a heart icon"
-  >
-    <mat-icon>add</mat-icon>
-  </button>
+  <div class="form-field-container">
+    <mat-form-field appearance="outline" floatLabel="always">
+      <mat-label>Nome do Ministério</mat-label>
+      <input
+        matInput
+        data-testid="ministry-name-input"
+        placeholder="O nome deve ser único"
+        [formControl]="ministryNameControl"
+      />
+    </mat-form-field>
+
+    <button
+      [disabled]="!ministryNameControl.valid"
+      (click)="createMinistry()"
+      data-testid="create-ministry-button"
+      mat-fab
+    >
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
 </div>
 
-<div data-testid="ministry-list" class="cards">
-  <mat-card
-    data-testid="ministry-card"
-    *ngFor="let ministry of ministries$ | async; let i = index"
-    (click)="goToMinistryDetails(ministry.ministryID)"
+<ng-container *ngIf="ministries$  | async as ministries;">
+  <div
+    *ngIf="ministries.length > 0  else empty "
+    data-testid="ministry-list"
+    class="cards"
   >
-    <mat-card-title-group>
-      <img mat-card-sm-image src="https://picsum.photos/{{i}}00" alt="ministry image" />
-      <mat-card-title>{{ ministry.name }}</mat-card-title>
-    </mat-card-title-group>
+    <mat-card
+      data-testid="ministry-card"
+      *ngFor="let ministry of ministries; let i = index"
+      (click)="goToMinistryDetails(ministry.ministryID)"
+    >
+      <mat-card-title-group>
+        <img mat-card-sm-image src="https://picsum.photos/{{i}}00" alt="ministry image" />
+        <mat-card-title>{{ ministry.name }}</mat-card-title>
+      </mat-card-title-group>
 
-    <mat-card-content>
-      <div class="tab-label">
-        <mat-icon [matBadge]="ministry.songsQuantity">library_music</mat-icon>
-        <span class="tab-label-text">Músicas</span>
-      </div>
+      <mat-card-content>
+        <div class="tab-label">
+          <mat-icon [matBadge]="ministry.songsQuantity">library_music</mat-icon>
+          <span class="tab-label-text">Músicas</span>
+        </div>
 
-      <div class="tab-label">
-        <mat-icon [matBadge]="ministry.artistQuantity">library_music</mat-icon>
-        <span class="tab-label-text">Artistas</span>
-      </div>
+        <div class="tab-label">
+          <mat-icon [matBadge]="ministry.artistQuantity">library_music</mat-icon>
+          <span class="tab-label-text">Artistas</span>
+        </div>
 
-      <div class="tab-label">
-        <mat-icon data-testid="members-badge" [matBadge]="ministry.membersQuantity"
-          >people</mat-icon
-        >
-        <span class="tab-label-text">Membros</span>
-      </div>
+        <div class="tab-label">
+          <mat-icon data-testid="members-badge" [matBadge]="ministry.membersQuantity"
+            >people</mat-icon
+          >
+          <span class="tab-label-text">Membros</span>
+        </div>
 
-      <div class="tab-label">
-        <mat-icon [matBadge]="ministry.scalesQuantity">people</mat-icon>
-        <span class="tab-label-text">Escalas</span>
-      </div>
-    </mat-card-content>
-  </mat-card>
-</div>
+        <div class="tab-label">
+          <mat-icon [matBadge]="ministry.scalesQuantity">people</mat-icon>
+          <span class="tab-label-text">Escalas</span>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</ng-container>
+
+<ng-template #empty>
+  <div class="empty-container">
+    <mat-icon>library_music</mat-icon>
+    <span class="empty-text">Nenhum ministério encontrado</span>
+  </div>
+
+  <span class="empty-text">
+    Adicione um novo ministério clicando no botão de adicionar após digitar o nome do
+    ministério.
+  </span>
+</ng-template>
