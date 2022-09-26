@@ -1,5 +1,6 @@
 @import 'variables';
 @import 'custom-theme';
+@import 'colors';
 
 :host {
   display: block;
@@ -12,6 +13,7 @@
   h1 {
     font-size: 26px;
     text-align: center;
+    color: $color-primary !important;
   }
 }
 
@@ -29,13 +31,13 @@ mat-form-field {
 
 .mat-stroked-button {
   margin: 0;
-  margin-top: 10px;
   border: 1px solid currentColor;
   width: 100%;
   background: #fff7fa;
 }
 
 .actions-container {
+  margin-top: 10px;
   display: grid;
   gap: 20px;
   grid-template-columns: 1fr 1fr;
@@ -43,6 +45,13 @@ mat-form-field {
 
 button:disabled {
   background-color: #e0e0e0;
-  color: #bdbdbd;
+  color: #bdbdbd !important;
   cursor: not-allowed;
+}
+button {
+  max-height: 40px;
+}
+
+.mat-raised-button {
+  color: white !important;
 }

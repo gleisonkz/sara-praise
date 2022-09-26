@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { AppToastService } from 'apps/sp-web/src/app/core/services/app-toast.service';
 import { AuthService } from 'apps/sp-web/src/app/domain/auth/auth.service';
 
 @Component({
@@ -27,7 +28,11 @@ import { AuthService } from 'apps/sp-web/src/app/domain/auth/auth.service';
   ],
 })
 export class SignUpPage implements OnInit {
-  constructor(private readonly authService: AuthService, private readonly router: Router) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly appToast: AppToastService
+  ) {}
 
   signUpForm: FormGroup<{
     name: FormControl<string>;
@@ -48,6 +53,7 @@ export class SignUpPage implements OnInit {
     this.authService.signUp({ name, email, password }).subscribe(() => {
       this.signUpForm.reset();
       this.router.navigate(['/']);
+      this.appToast.success('Cadastro realizado com sucesso!');
     });
   }
 

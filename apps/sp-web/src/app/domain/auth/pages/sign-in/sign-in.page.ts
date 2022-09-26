@@ -8,7 +8,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
+import { MatIconModule } from '@angular/material/icon';
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
+import { AppToastService } from 'apps/sp-web/src/app/core/services/app-toast.service';
 import { AuthService } from '../../auth.service';
 
 @Component({
@@ -23,6 +25,7 @@ import { AuthService } from '../../auth.service';
     CommonModule,
     MatButtonModule,
     MatInputModule,
+    MatIconModule,
     RouterModule,
   ],
 })
@@ -32,7 +35,11 @@ export class SignInPage implements OnInit {
     password: FormControl<string>;
   }>;
 
-  constructor(private readonly authService: AuthService, private readonly router: Router) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly appToast: AppToastService
+  ) {}
 
   ngOnInit(): void {
     this.createForm();
@@ -46,13 +53,14 @@ export class SignInPage implements OnInit {
       if (!isLoggedIn) return this.userForm.reset();
 
       this.router.navigate(['/']);
+      this.appToast.success('Login realizado com sucesso!');
     });
   }
 
   createForm(): void {
     const form = new FormGroup({
-      email: new FormControl('gleison@teste.com', [Validators.required, Validators.email]),
-      password: new FormControl('123456', [Validators.required, Validators.minLength(6)]),
+      email: new FormControl('joaovitorswbr@gmail.com', [Validators.required, Validators.email]),
+      password: new FormControl('Joaovitorsw45', [Validators.required, Validators.minLength(6)]),
     });
 
     this.userForm = form;

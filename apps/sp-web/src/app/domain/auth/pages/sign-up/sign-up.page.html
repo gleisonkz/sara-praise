@@ -3,46 +3,50 @@
 
   <form [formGroup]="signUpForm" (ngSubmit)="signUp()" class="form">
     <mat-card-content>
-      <mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Nome</mat-label>
         <input
           type="text"
           formControlName="name"
           autocomplete="off"
           matInput
-          placeholder="Name"
+          placeholder="Escreva seu nome"
           data-testid="name-input"
         />
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Email</mat-label>
         <input
           type="text"
           formControlName="email"
           autocomplete="off"
           matInput
-          placeholder="Email"
+          placeholder="Escreva seu email"
           data-testid="email-input"
         />
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Senha</mat-label>
         <input
           type="password"
           formControlName="password"
           autocomplete="off"
           matInput
-          placeholder="Password"
+          placeholder="Escreva sua senha"
           data-testid="password-input"
         />
       </mat-form-field>
 
-      <mat-form-field>
+      <mat-form-field appearance="outline" floatLabel="always">
+        <mat-label>Confirme a senha</mat-label>
         <input
           type="password"
           formControlName="confirmPassword"
           autocomplete="off"
           matInput
-          placeholder="Confirm password"
+          placeholder="Confirme sua senha"
           data-testid="confirm-password-input"
         />
       </mat-form-field>
@@ -53,7 +57,7 @@
         data-testid="go-to-sign-in"
         type="button"
         routerLink="/auth/sign-in"
-        mat-stroked-button
+        mat-raised-button
         color="accent"
       >
         Ir para Login
@@ -69,3 +73,15 @@
     </div>
   </form>
 </div>
+<img
+  background-wave
+  src="./../../../../../assets/images/background-wave.svg"
+  alt="background-wave.svg"
+  top
+/>
+<img
+  background-wave
+  src="./../../../../../assets/images/background-wave.svg"
+  alt="background-wave.svg"
+  bottom
+/>

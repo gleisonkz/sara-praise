@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'colors';
 @import 'custom-theme';
 
 :host {
@@ -9,9 +10,35 @@
   justify-content: center;
   margin-top: 20px;
 
-  h1 {
-    font-size: 26px;
-    text-align: center;
+  mat-icon {
+    font-size: 16px;
+    position: relative;
+    top: -2px;
+    color: $color-primary !important;
+  }
+
+  .title-group {
+    & > * {
+      margin: 0;
+      padding: 0;
+      font-weight: 400;
+    }
+
+    h1 {
+      font-size: 26px;
+      text-align: center;
+    }
+    h2 {
+      font-weight: 500;
+      font-size: 18px;
+      margin-top: 5px;
+    }
+    span {
+      font-weight: 500;
+      font-size: 12px;
+    }
+    color: $color-primary !important;
+    margin-bottom: 25px;
   }
 }
 
@@ -27,9 +54,16 @@ mat-form-field {
   width: 100%;
 }
 
+button {
+  max-height: 40px;
+}
+
+.mat-raised-button {
+  color: white !important;
+}
+
 .mat-stroked-button {
   margin: 0;
-  margin-top: 10px;
   border: 1px solid currentColor;
   width: 100%;
   background: #fff7fa;
