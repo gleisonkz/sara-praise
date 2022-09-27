@@ -243,7 +243,11 @@ export class MinistryService {
     return rolesResponse;
   }
 
-  async getKeys(ministryID: number) {
-    return this.prismaService.songKey.findMany();
+  async getKeys() {
+    return this.prismaService.songKey.findMany({
+      orderBy: {
+        songKeyID: 'asc',
+      },
+    });
   }
 }
