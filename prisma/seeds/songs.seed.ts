@@ -1,4 +1,6 @@
-export const SONGS_SEEDS = [
+import { Song } from '@prisma/client';
+
+export const SONGS_SEEDS: Omit<Song, 'songID' | 'tags'>[] = [
   {
     ministryID: 1,
     title: 'Grande é o Senhor',

@@ -1,6 +1,6 @@
+import { Artist } from '@prisma/client';
 
-
-export const ARTIST_SEEDS = [
+export const ARTIST_SEEDS: Omit<Artist, 'artistID'>[] = [
   {
     ministryID: 1,
     name: 'Adhemar de Campos',

@@ -1,4 +1,6 @@
-export const SONG_KEYS = [
+import { SongKey } from '@prisma/client';
+
+export const SONG_KEYS: SongKey[] = [
   { songKeyID: 1, notation: 'C', name: 'Do Maior' },
   { songKeyID: 2, notation: 'Cm', name: 'Do Menor' },
   { songKeyID: 3, notation: 'C#', name: 'Do Sustenido Maior' },

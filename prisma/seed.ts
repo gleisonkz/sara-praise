@@ -1,92 +1,90 @@
 import { PrismaClient } from '@prisma/client';
 import * as argon from 'argon2';
 import { ARTIST_SEEDS } from './seeds/artists.seed';
+import { MINISTRIES } from './seeds/ministries.seed';
 import { DEFAULT_ROLES } from './seeds/roles.seed';
 import { SONG_KEYS } from './seeds/song-keys.seed';
 import { SONGS_SEEDS } from './seeds/songs.seed';
+import { USERS } from './seeds/users.seed';
 
 const prisma = new PrismaClient({});
 
 async function main() {
   console.log('Seeding...');
 
-  await prisma.role.createMany({
-    data: DEFAULT_ROLES,
+  console.log('Seeding song keys...');
+  SONG_KEYS.forEach(async (songKey) => {
+    await prisma.songKey.create({
+      data: songKey,
+    });
   });
 
-  await prisma.songKey.createMany({
-    data: SONG_KEYS,
-  });
-
+  console.log('Seeding users...');
   await prisma.user.createMany({
-    data: [
-      {
-        name: 'Gleison',
-        email: 'gleison@teste.com',
-        imageURL: 'https://randomuser.me/api/portraits/men/52.jpg',
+    data: await Promise.all(
+      USERS.map(async (user) => ({
+        ...user,
         password: await argon.hash('123456'),
-      },
-      {
-        name: 'Amanda',
-        email: 'amanda@teste.com',
-        imageURL: 'https://randomuser.me/api/portraits/women/30.jpg',
-        password: await argon.hash('123456'),
-      },
-      {
-        name: 'Debora',
-        email: 'debora@teste.com',
-        imageURL: 'https://randomuser.me/api/portraits/women/33.jpg',
-        password: await argon.hash('123456'),
-      },
-    ],
+      }))
+    ),
   });
 
-  const ministries = [
-    {
-      name: 'Sara Nossa Terra',
-      ownerID: 1,
-    },
-    {
-      name: 'Lagoinha',
-      ownerID: 1,
-    },
-    {
-      name: 'Getsemani',
-      ownerID: 1,
-    },
-  ];
-
-  for await (const { name, ownerID } of ministries) {
+  console.log('Seeding ministries...');
+  for await (const { name, ownerID } of MINISTRIES) {
     await prisma.ministry.create({
       data: {
         name,
         ownerID,
-        members: {
-          createMany: {
-            data: [
-              {
-                userID: ownerID,
-              },
-              {
-                userID: 2,
-              },
-              {
-                userID: 3,
-              },
-            ],
+      },
+    });
+  }
+
+  console.log('Seeding roles...');
+  for await (const { roleID, name, iconUrl } of DEFAULT_ROLES) {
+    await prisma.role.create({
+      data: {
+        roleID,
+        name,
+        iconUrl,
+        ministries: {
+          connect: {
+            ministryID: 1,
           },
-        },
-        roles: {
-          connect: DEFAULT_ROLES.map(({ roleID }) => ({ roleID })),
         },
       },
     });
   }
 
+  console.log('Seeding members...');
+
+  USERS.forEach(async (user) => {
+    await prisma.member.create({
+      data: {
+        user: {
+          connect: {
+            userID: user.userID,
+          },
+        },
+        ministry: {
+          connect: {
+            ministryID: 1,
+          },
+        },
+        roles: {
+          connect: {
+            roleID: 1,
+          },
+        },
+      },
+    });
+  });
+
+  console.log('Seeding artists...');
   await prisma.artist.createMany({
     data: ARTIST_SEEDS,
   });
 
+  console.log('Seeding songs...');
   await prisma.song.createMany({
     data: SONGS_SEEDS,
   });

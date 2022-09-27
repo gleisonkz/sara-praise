@@ -1,4 +1,6 @@
-export const DEFAULT_ROLES = [
+import { Role } from '@prisma/client';
+
+export const DEFAULT_ROLES: Role[] = [
   {
     roleID: 1,
     name: 'Ministro',

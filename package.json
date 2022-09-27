@@ -23,7 +23,8 @@
     "build": "nx build",
     "test": "nx test",
     "ts-node": "ts-node --compiler-options {\\\"module\\\":\\\"commonjs\\\"}",
-    "clean": "rimraf node_modules"
+    "clean": "rimraf node_modules",
+    "seed": "npx prisma migrate reset"
   },
   "private": true,
   "dependencies": {
