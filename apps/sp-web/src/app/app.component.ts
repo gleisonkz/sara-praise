@@ -33,6 +33,10 @@ registerLocaleData(localePT);
 export class AppComponent {
   public constructor(domSanitizer: DomSanitizer, public matIconRegistry: MatIconRegistry) {
     matIconRegistry.addSvgIcon('bass', domSanitizer.bypassSecurityTrustResourceUrl('assets/images/roles/bass.svg'));
+    matIconRegistry.addSvgIcon(
+      'microphone',
+      domSanitizer.bypassSecurityTrustResourceUrl('assets/images/roles/microphone.svg')
+    );
     matIconRegistry.addSvgIcon('keys', domSanitizer.bypassSecurityTrustResourceUrl('assets/images/roles/keys.svg'));
     matIconRegistry.addSvgIcon(
       'voice-recorder-mic',
