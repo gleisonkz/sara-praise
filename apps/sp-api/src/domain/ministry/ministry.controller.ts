@@ -6,7 +6,7 @@ import { ApiBearerAuth, ApiCreatedResponse, ApiQuery, ApiResponse, ApiTags } fro
 import { AuthRequest, JwtGuard } from '@sp/api/domain/auth';
 import { IMinisterSongKeyRequest, MinistryListItemResponse } from '@sp/shared-interfaces';
 
-import { Prisma } from '@prisma/client';
+import { Prisma, SongKey } from '@prisma/client';
 import { ePrismaErrorCode } from 'apps/sp-api/src/domain/prisma/prisma-error.enum';
 import { Response } from 'express';
 import { MinisterSongKeyListItemResponse, MinistryRequestDto } from './dtos';
@@ -158,8 +158,8 @@ export class MinistryController {
   }
 
   @Get('/:ministryID/keys')
-  async getKeysByMinistryID(@Param('ministryID') ministryID: number) {
-    const keys = await this.ministryService.getKeys(ministryID);
+  async getKeysByMinistryID(): Promise<SongKey[]> {
+    const keys = await this.ministryService.getKeys();
     return keys;
   }
 }
