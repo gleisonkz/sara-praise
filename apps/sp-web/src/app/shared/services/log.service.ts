@@ -1,7 +1,5 @@
 import { HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-
-import { ENVIRONMENT } from 'apps/sp-web/src/environments/environment';
+import { Injectable, isDevMode } from '@angular/core';
 
 export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
@@ -9,8 +7,6 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   providedIn: 'root',
 })
 export class LogService {
-  private readonly IS_PROD = ENVIRONMENT.production;
-
   private readonly METHOD_COLORS = {
     GET: '#61affe',
     POST: '#49cc90',
@@ -31,7 +27,6 @@ export class LogService {
 
   private buildHttpLogStyle(method: HttpMethod) {
     const fontColor = '#fff';
-
     const bgColor = this.METHOD_COLORS[method];
     const styles = `
     font-size: 9px;
@@ -52,7 +47,7 @@ export class LogService {
     httpMethod: HttpMethod,
     headers: HttpHeaders
   ) {
-    if (this.IS_PROD) return;
+    if (!isDevMode()) return;
 
     const methodStyle = this.buildHttpLogStyle(httpMethod);
     const method = `%c${httpMethod.toUpperCase()}`;
