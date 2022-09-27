@@ -127,8 +127,6 @@ export class ParticipantsDialog implements OnInit {
               item: { ...role, iconUrl: role.iconUrl.split('/').pop()?.split('.')[0] },
             } as any;
 
-            console.log(obj);
-
             return obj;
           });
 
