@@ -19,6 +19,9 @@ import { MinisterSongKeyStore } from '@sp/web/shared/stores';
 
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
+import {
+    toLowerCaseWithoutAccents
+} from 'apps/sp-web/src/app/shared/functions/utilities/utilities.function';
 import { Optional } from 'apps/sp-web/src/app/shared/types/nullable.type';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { BehaviorSubject, filter, map, Observable, ReplaySubject, switchMap, tap } from 'rxjs';
@@ -135,14 +138,15 @@ export class MinisterKeyDialogComponent implements OnInit {
       .pipe(
         untilDestroyed(this),
         filter((searchValue) => !!searchValue),
-        map((searchValue) => searchValue.toLowerCase())
+        map((searchValue) => toLowerCaseWithoutAccents(searchValue))
       )
       .subscribe((searchValue) => {
         const songs = this.songs$.value;
 
         const filteredSongs = songs.filter(
           ({ title, artistName }) =>
-            title.toLowerCase().includes(searchValue) || artistName.toLowerCase().includes(searchValue)
+            toLowerCaseWithoutAccents(title).includes(searchValue) ||
+            toLowerCaseWithoutAccents(artistName).includes(searchValue)
         );
 
         this.filteredSongs$.next(filteredSongs);
