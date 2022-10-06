@@ -1,6 +1,12 @@
 @import 'custom-theme';
 @import 'mixins';
 
+mat-toolbar {
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+}
+
 mat-form-field {
   width: 100%;
 
@@ -17,6 +23,7 @@ mat-form-field {
 
 .songs-container {
   display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   grid-gap: 20px;
 }
 

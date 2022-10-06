@@ -1,0 +1,27 @@
+@import 'medias';
+@import 'variables';
+@import 'mixins';
+@import 'functions';
+
+button {
+  @include medias($tiny-mobile, $mobile) {
+    &.desktop {
+      display: none;
+    }
+  }
+
+  @include greater-than($mobile) {
+    &.mobile {
+      display: none;
+    }
+  }
+}
+
+.mobile {
+  @include medias($tiny-mobile, $mobile) {
+    .small {
+      @include flex-center;
+      @include size(35);
+    }
+  }
+}

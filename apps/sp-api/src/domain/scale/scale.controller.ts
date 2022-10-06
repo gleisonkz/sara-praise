@@ -3,11 +3,12 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
 import {
-    AvailableSongResponse, eMinistryRole, ParticipantListItem, ParticipantRequest,
-    ParticipantSelectItemResponse, ScaleListItemResponse, ScaleResponse, ScaleSongRequest,
-    ScaleSongResponse
+    AvailableSongResponse, eMinistryRole, MinisterSongRequest, ParticipantListItem,
+    ParticipantRequest, ParticipantSelectItemResponse, ScaleListItemResponse, ScaleResponse,
+    ScaleSongRequest, ScaleSongResponse
 } from '@sp/shared-interfaces';
 
+import { Prisma } from '@prisma/client';
 import { MemberListItemResponseDto } from 'apps/sp-api/src/domain/member/dtos';
 import { ScaleRequestDto } from 'apps/sp-api/src/domain/scale/dto/scale.dto';
 import { ScaleService } from './scale.service';
@@ -54,7 +55,7 @@ export class ScaleController {
   }
 
   @Post('/:scaleID/participants')
-  createParticipant(@Body() participants: ParticipantRequest[]): Promise<boolean> {
+  createParticipant(@Body() participants: ParticipantRequest[]): Promise<void> {
     return this.scaleService.upsertParticipants(participants);
   }
 
@@ -77,7 +78,7 @@ export class ScaleController {
   }
 
   @Post('/:scaleID/songs')
-  upsertSongs(@Body() scaleSongsRequest: ScaleSongRequest[]): Promise<boolean> {
+  upsertSongs(@Body() scaleSongsRequest: ScaleSongRequest[]): Promise<void> {
     return this.scaleService.upsertSongs(scaleSongsRequest);
   }
 
@@ -92,5 +93,14 @@ export class ScaleController {
     @Param('scaleID') scaleID: number
   ): Promise<AvailableSongResponse[]> {
     return this.scaleService.findAvailableSongs(ministryID, scaleID);
+  }
+
+  @Put('/:scaleID/songs/:songID')
+  updateMinisterSong(
+    @Param('songID') songID: number,
+    @Param('scaleID') scaleID: number,
+    @Body() ministerSongRequest: MinisterSongRequest
+  ): Promise<Prisma.BatchPayload> {
+    return this.scaleService.updateMinisterSong(scaleID, songID, ministerSongRequest);
   }
 }

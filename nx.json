@@ -16,9 +16,10 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "accessToken": "OGRkZDRmOGEtYmE1ZC00MzU3LWE3NjEtMjAwYTM2MGUwMzRjfHJlYWQtd3JpdGU="
       }
     }
   },
@@ -51,5 +52,16 @@
       "changeDetection": "OnPush"
     }
   },
-  "defaultProject": "sp-web"
+  "defaultProject": "sp-web",
+  "targetDefaults": {
+    "e2e": {
+      "inputs": ["default", "^default"]
+    },
+    "test": {
+      "inputs": ["default", "^default", "{workspaceRoot}/jest.preset.js"]
+    },
+    "lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
+    }
+  }
 }

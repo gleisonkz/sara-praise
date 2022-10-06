@@ -1,16 +1,17 @@
 {
-  "root": "apps/sp-api",
   "sourceRoot": "apps/sp-api/src",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:build",
+      "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/sp-api",
         "main": "apps/sp-api/src/main.ts",
         "tsConfig": "apps/sp-api/tsconfig.app.json",
-        "assets": ["apps/sp-api/src/assets"]
+        "assets": ["apps/sp-api/src/assets"],
+        "target": "node",
+        "compiler": "tsc"
       },
       "configurations": {
         "production": {
@@ -27,7 +28,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:execute",
+      "executor": "@nrwl/node:node",
       "options": {
         "buildTarget": "sp-api:build"
       }
@@ -43,7 +44,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/sp-api"],
       "options": {
-        "jestConfig": "apps/sp-api/jest.config.js",
+        "jestConfig": "apps/sp-api/jest.config.ts",
         "passWithNoTests": true
       }
     }

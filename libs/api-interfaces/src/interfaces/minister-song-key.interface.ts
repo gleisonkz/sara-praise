@@ -4,6 +4,7 @@ export interface IMinisterSongKeyListItemResponse {
   artistName: string;
   songTitle: string;
   songKey: string;
+  songKeyID: number;
   memberID: number;
   songID: number;
 }

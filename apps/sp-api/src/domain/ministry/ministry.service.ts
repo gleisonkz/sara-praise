@@ -9,10 +9,30 @@ import {
 
 import { Role } from '@prisma/client';
 import { MinisterSongKeyListItemResponse } from 'apps/sp-api/src/domain/ministry/dtos';
+import * as fs from 'fs';
 
 @Injectable()
 export class MinistryService {
   constructor(private readonly prismaService: PrismaService) {}
+
+  async updateSeed() {
+    const artists = await this.prismaService.artist.findMany();
+    const ministries = await this.prismaService.ministry.findMany();
+    const roles = await this.prismaService.role.findMany();
+    const songKeys = await this.prismaService.songKey.findMany();
+    const songs = await this.prismaService.song.findMany();
+    const ministerSongKeys = await this.prismaService.ministerSongKey.findMany();
+
+    fs.writeFileSync('prisma/seeds/ministries.seed.ts', `export const MINISTRIES = ${JSON.stringify(ministries, null, 2)}`);
+    fs.writeFileSync('prisma/seeds/artists.seed.ts', `export const ARTISTS = ${JSON.stringify(artists, null, 2)}`);
+    fs.writeFileSync('prisma/seeds/roles.seed.ts', `export const DEFAULT_ROLES = ${JSON.stringify(roles, null, 2)}`);
+    fs.writeFileSync('prisma/seeds/song-keys.seed.ts', `export const SONG_KEYS = ${JSON.stringify(songKeys, null, 2)}`);
+    fs.writeFileSync('prisma/seeds/songs.seed.ts', `export const SONGS = ${JSON.stringify(songs, null, 2)}`);
+    fs.writeFileSync(
+      'prisma/seeds/minister-song-keys.seed.ts',
+      `export const MINISTER_SONG_KEYS = ${JSON.stringify(ministerSongKeys, null, 2)}`
+    );
+  }
 
   async createMinistry(ministryRequest: MinistryRequest): Promise<MinistryListItemResponse> {
     const defaultRolesIDs = await this.prismaService.role.findMany({
@@ -77,6 +97,7 @@ export class MinistryService {
       artistName: ministerSongKey.song.artist.name,
       songTitle: ministerSongKey.song.title,
       songKey: ministerSongKey.songKey.notation,
+      songKeyID: ministerSongKey.songKey.songKeyID,
       memberImageUrl: ministerSongKey.member.user.imageURL,
       memberName: ministerSongKey.member.user.name,
       memberID: ministerSongKey.member.memberID,
@@ -132,6 +153,7 @@ export class MinistryService {
         songKey: {
           select: {
             notation: true,
+            songKeyID: true,
           },
         },
       },
@@ -144,6 +166,7 @@ export class MinistryService {
         artistName: ministerSongKey.song.artist.name,
         songTitle: ministerSongKey.song.title,
         songKey: ministerSongKey.songKey.notation,
+        songKeyID: ministerSongKey.songKey.songKeyID,
         memberID: ministerSongKey.member.memberID,
         songID: ministerSongKey.song.songID,
       };
@@ -152,6 +175,54 @@ export class MinistryService {
     });
 
     return ministerSongKeysListItem;
+  }
+
+  async getMinisterSongKeyBySongID(ministryID: number, memberID: number, songID: number) {
+    const ministerSongKey = await this.prismaService.ministerSongKey.findFirst({
+      where: {
+        ministryID,
+        memberID,
+        songID,
+      },
+      include: {
+        song: {
+          include: {
+            artist: true,
+          },
+        },
+        member: {
+          include: {
+            user: {
+              select: {
+                imageURL: true,
+                name: true,
+              },
+            },
+          },
+        },
+        songKey: {
+          select: {
+            notation: true,
+            songKeyID: true,
+          },
+        },
+      },
+    });
+
+    console.log({ ministerSongKey });
+
+    const ministerSongKeyListItemResponse: MinisterSongKeyListItemResponse = {
+      artistName: ministerSongKey.song.artist.name,
+      songTitle: ministerSongKey.song.title,
+      songKey: ministerSongKey.songKey.notation,
+      songKeyID: ministerSongKey.songKey.songKeyID,
+      memberImageUrl: ministerSongKey.member.user.imageURL,
+      memberName: ministerSongKey.member.user.name,
+      memberID: ministerSongKey.member.memberID,
+      songID: ministerSongKey.song.songID,
+    };
+
+    return ministerSongKeyListItemResponse;
   }
 
   async deleteMinistry(ministryID: number): Promise<void> {

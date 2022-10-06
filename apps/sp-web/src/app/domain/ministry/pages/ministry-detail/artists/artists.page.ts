@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { ArtistResponse } from '@sp/shared-interfaces';
 import { injectMinistryID } from '@sp/web/shared/functions';
@@ -31,6 +34,9 @@ import { Observable } from 'rxjs';
     ArtistListItemComponent,
     SpForDirective,
     MatDialogModule,
+    MatIconModule,
+    MatButtonModule,
+    MatToolbarModule,
   ],
 })
 export class ArtistsPage implements OnInit {
@@ -47,7 +53,7 @@ export class ArtistsPage implements OnInit {
     this.artistStore.remove(this.ministryID, artistID).subscribe();
   }
 
-  edit(artist: ArtistResponse) {
+  showDialog(artist?: ArtistResponse) {
     this.matDialog.open(ArtistDialog, {
       data: {
         ministryID: this.ministryID,

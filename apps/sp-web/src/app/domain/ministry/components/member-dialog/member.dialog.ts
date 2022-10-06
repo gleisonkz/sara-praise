@@ -129,7 +129,7 @@ export class MemberDialog implements OnInit {
       name: new FormControl(member?.name, [Validators.required]),
       email: new FormControl('', ...(member ? [] : [Validators.required])),
       password: new FormControl('', ...(member ? [] : [Validators.required])),
-      imageUrl: new FormControl(member?.imageUrl, Validators.required),
+      imageUrl: new FormControl(member?.imageUrl),
       roles: new FormArray([]),
     });
 

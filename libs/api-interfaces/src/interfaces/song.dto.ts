@@ -72,3 +72,8 @@ export interface ScaleSongRequest {
   artistName: string;
   songTitle: string;
 }
+
+export interface MinisterSongRequest {
+  memberID: number;
+  notation: string;
+}

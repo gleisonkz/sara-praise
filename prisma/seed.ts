@@ -1,10 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import * as argon from 'argon2';
-import { ARTIST_SEEDS } from './seeds/artists.seed';
+import { ARTISTS } from './seeds/artists.seed';
+import { MINISTER_SONG_KEYS } from './seeds/minister-song-keys.seed';
 import { MINISTRIES } from './seeds/ministries.seed';
 import { DEFAULT_ROLES } from './seeds/roles.seed';
 import { SONG_KEYS } from './seeds/song-keys.seed';
-import { SONGS_SEEDS } from './seeds/songs.seed';
+import { SONGS } from './seeds/songs.seed';
 import { USERS } from './seeds/users.seed';
 
 const prisma = new PrismaClient({});
@@ -22,8 +23,11 @@ async function main() {
   console.log('Seeding users...');
   await prisma.user.createMany({
     data: await Promise.all(
-      USERS.map(async (user) => ({
-        ...user,
+      USERS.map(async ({ userID, email, imageURL, name }) => ({
+        userID,
+        name,
+        email,
+        imageURL,
         password: await argon.hash('123456'),
       }))
     ),
@@ -56,7 +60,6 @@ async function main() {
   }
 
   console.log('Seeding members...');
-
   USERS.forEach(async (user) => {
     await prisma.member.create({
       data: {
@@ -71,9 +74,7 @@ async function main() {
           },
         },
         roles: {
-          connect: {
-            roleID: 1,
-          },
+          connect: user.roles.map((roleID) => ({ roleID })),
         },
       },
     });
@@ -81,12 +82,17 @@ async function main() {
 
   console.log('Seeding artists...');
   await prisma.artist.createMany({
-    data: ARTIST_SEEDS,
+    data: ARTISTS,
   });
 
   console.log('Seeding songs...');
   await prisma.song.createMany({
-    data: SONGS_SEEDS,
+    data: SONGS,
+  });
+
+  console.log('Seeding minister song keys...');
+  await prisma.ministerSongKey.createMany({
+    data: MINISTER_SONG_KEYS,
   });
 }
 

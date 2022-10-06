@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatOptionModule } from '@angular/material/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,14 +15,13 @@ import {
     SongKeyResponse
 } from '@sp/shared-interfaces';
 import { MemberApiService, MinistryApiService } from '@sp/web/domain/ministry/services';
-import { eDialogMode, injectMinisterKeyDialogData } from '@sp/web/shared/functions';
+import {
+    eDialogMode, injectMinisterKeyDialogData, toLowerCaseWithoutAccents
+} from '@sp/web/shared/functions';
 import { MinisterSongKeyStore } from '@sp/web/shared/stores';
 
 import { FormControl, FormGroup } from '@ngneat/reactive-forms';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
-import {
-    toLowerCaseWithoutAccents
-} from 'apps/sp-web/src/app/shared/functions/utilities/utilities.function';
 import { Optional } from 'apps/sp-web/src/app/shared/types/nullable.type';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { BehaviorSubject, filter, map, Observable, ReplaySubject, switchMap, tap } from 'rxjs';
@@ -42,6 +42,7 @@ import { BehaviorSubject, filter, map, Observable, ReplaySubject, switchMap, tap
     MatSelectModule,
     MatButtonModule,
     NgxMatSelectSearchModule,
+    MatChipsModule,
   ],
 })
 export class MinisterKeyDialogComponent implements OnInit {
@@ -89,6 +90,7 @@ export class MinisterKeyDialogComponent implements OnInit {
   }
 
   createForm(ministerID?: Optional<number>, songID?: Optional<number>, keyID?: Optional<number>) {
+    console.log('createForm', ministerID, songID, keyID);
     const shouldDisable = this.data.mode === eDialogMode.EDIT;
 
     this.ministryKeyForm = new FormGroup({
@@ -103,7 +105,7 @@ export class MinisterKeyDialogComponent implements OnInit {
     const ministerSongKeyRequest = this.ministryKeyForm.value as IMinisterSongKeyRequest;
 
     this.ministerSongKeyStore.create(this.data.ministryID, ministerSongKeyRequest).subscribe({
-      next: () => this.dialogRef.close(true),
+      next: (ministerSongKey) => this.dialogRef.close(ministerSongKey),
       error: () => {
         this.ministryKeyForm.reset();
       },
@@ -129,6 +131,8 @@ export class MinisterKeyDialogComponent implements OnInit {
       .subscribe((songs) => {
         this.songs$.next(songs);
         if (!this.data.songID) return;
+
+        this.filteredSongs$.next(songs.filter((song) => song.songID === this.data.songID));
         this.songIdControl.setValue(this.data.songID);
       });
   }

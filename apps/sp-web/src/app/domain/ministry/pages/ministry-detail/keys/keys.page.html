@@ -1,3 +1,15 @@
+<mat-toolbar>
+  <button routerLink="../" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <h1>Tonalidades</h1>
+
+  <button (click)="showDialog()" data-testid="create-ministry-button" mat-mini-fab>
+    <mat-icon>add</mat-icon>
+  </button>
+</mat-toolbar>
+
 <mat-list *ngIf="keysListItems$ | async as keys">
   <ng-container *ngIf="keys.length; else noKeysTemplate">
     <mat-list-item *ngFor="let key of keys">
@@ -16,7 +28,7 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
-        <button mat-menu-item (click)="edit(key)">
+        <button mat-menu-item (click)="showDialog(key)">
           <mat-icon>edit</mat-icon>
           <span>Editar</span>
         </button>

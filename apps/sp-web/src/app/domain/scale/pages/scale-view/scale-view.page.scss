@@ -5,7 +5,6 @@ h1 {
 }
 
 .scale-info {
-  padding-top: 84px;
   display: flex;
   justify-content: center;
 
@@ -41,4 +40,10 @@ mat-list {
 
 mat-list-item.member {
   text-align: start;
+}
+
+.role-avatar {
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
 }

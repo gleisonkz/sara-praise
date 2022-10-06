@@ -2,12 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '@sp/api/domain/prisma';
 import {
-    AvailableScaleSongResponse, eMinistryRole, MemberListItemResponse, ParticipantListItem,
-    ParticipantListItemRole, ParticipantRequest, ParticipantSelectItemResponse, RoleResponse,
-    ScaleDetailResponse, ScaleListItemResponse, ScaleRequest, ScaleResponse, ScaleSongRequest,
-    ScaleSongResponse
+    AvailableScaleSongResponse, eMinistryRole, MemberListItemResponse, MinisterSongRequest,
+    ParticipantListItem, ParticipantListItemRole, ParticipantRequest, ParticipantSelectItemResponse,
+    RoleResponse, ScaleDetailResponse, ScaleListItemResponse, ScaleRequest, ScaleResponse,
+    ScaleSongRequest, ScaleSongResponse
 } from '@sp/shared-interfaces';
 
+import { Prisma } from '@prisma/client';
 import { MemberListItemResponseDto } from 'apps/sp-api/src/domain/member/dtos';
 import { ScaleRequestDto } from 'apps/sp-api/src/domain/scale/dto/scale.dto';
 
@@ -304,7 +305,7 @@ export class ScaleService {
     return participantListItems;
   }
 
-  async upsertParticipants(participantRequest: ParticipantRequest[]): Promise<any> {
+  async upsertParticipants(participantRequest: ParticipantRequest[]): Promise<void> {
     const { toUpdate, toDelete, toCreate } = participantRequest.reduce(
       (acc, participant) => {
         const shouldDelete = !!participant.participantID && !participant.selected;
@@ -484,7 +485,26 @@ export class ScaleService {
     return songsResponse;
   }
 
-  async upsertSongs(scaleSongsRequest: ScaleSongRequest[]): Promise<any> {
+  async updateMinisterSong(
+    scaleID: number,
+    songID: number,
+    ministerSongRequest: MinisterSongRequest
+  ): Promise<Prisma.BatchPayload> {
+    const result = await this.prismaService.scaleSong.updateMany({
+      where: {
+        scaleID,
+        songID,
+      },
+      data: {
+        ministerSongKey: ministerSongRequest.notation,
+        memberID: ministerSongRequest.memberID,
+      },
+    });
+
+    return result;
+  }
+
+  async upsertSongs(scaleSongsRequest: ScaleSongRequest[]): Promise<void> {
     const {
       toUpdate,
       toDelete,

@@ -9,3 +9,4 @@ export * from './user-auth-payload.interface';
 export * from './user.interface';
 export * from './artist.interface';
 export * from './participant.interface';
+export * from './pagination.interface';

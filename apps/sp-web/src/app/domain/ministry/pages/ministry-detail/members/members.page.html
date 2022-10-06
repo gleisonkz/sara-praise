@@ -1,8 +1,20 @@
+<mat-toolbar>
+  <button routerLink="../" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <h1>Membros</h1>
+
+  <button (click)="showDialog()" data-testid="create-ministry-button" mat-mini-fab>
+    <mat-icon>add</mat-icon>
+  </button>
+</mat-toolbar>
+
 <ng-container *ngIf="memberListItems$ | async as members">
   <ng-container *ngIf="members.length; else noMembersTemplate">
     <mat-list>
       <mat-list-item *ngFor="let member of members">
-        <img matListAvatar [src]="member.imageUrl" alt="member avatar" />
+        <img spImgFallback matListAvatar [src]="member.imageUrl" alt="member avatar" />
         <div mat-line>{{member.name}}</div>
         <div mat-line>
           <span *ngFor="let role of member.roles"> {{ role.name }} </span>
@@ -15,8 +27,9 @@
         >
           <mat-icon>more_vert</mat-icon>
         </button>
+
         <mat-menu #menu="matMenu">
-          <button (click)="editMember(member.memberID)" mat-menu-item>
+          <button (click)="showDialog(member.memberID)" mat-menu-item>
             <mat-icon>edit</mat-icon>
             <span>Editar</span>
           </button>
@@ -25,7 +38,6 @@
             <span>Remover</span>
           </button>
         </mat-menu>
-        <mat-divider></mat-divider>
       </mat-list-item>
     </mat-list>
   </ng-container>

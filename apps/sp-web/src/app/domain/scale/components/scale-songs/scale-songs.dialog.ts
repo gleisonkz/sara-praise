@@ -10,6 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import {
     AvailableScaleSongResponse, eMinistryRole, ParticipantSelectItemResponse
@@ -33,7 +34,23 @@ import {
 import {
     SetOnSelectDirective
 } from 'apps/sp-web/src/app/widget/directives/set-on-select/set-on-select.directive';
-import { filter, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
+import { PropertyFilterPipe } from 'apps/sp-web/src/app/widget/pipes/property-filter';
+import {
+    combineLatestWith, filter, map, Observable, of, shareReplay, Subject, switchMap, tap
+} from 'rxjs';
+
+export type ScaleSongFormGroup = FormGroup<{
+  scaleSongID: FormControl<number | null>;
+  isChecked: FormControl<boolean | null>;
+  memberID: FormControl<number | null | undefined>;
+  songID: FormControl<number | null>;
+  scaleID: FormControl<number | null>;
+  ministerName: FormControl<string | null | undefined>;
+  artistName: FormControl<string | null>;
+  songTitle: FormControl<string | null>;
+}>;
+
+export type ScaleSongFormArray = FormArray<unknown, ScaleSongFormGroup>;
 
 @UntilDestroy()
 @Component({
@@ -55,25 +72,24 @@ import { filter, Observable, of, shareReplay, switchMap, tap } from 'rxjs';
     SpForDirective,
     SetOnSelectDirective,
     SetOnSelectValueRefDirective,
+    PropertyFilterPipe,
+    MatToolbarModule,
   ],
 })
 export class ScaleSongsDialog implements OnInit {
-  songListItems$: Observable<AvailableScaleSongResponse[]>;
+  searchControl = new FormControl();
+
+  songListItems$$ = new Subject<AvailableScaleSongResponse[]>();
+  songListItems$: Observable<
+    {
+      song: AvailableScaleSongResponse;
+      formGroup: FormGroup<any>;
+    }[]
+  >;
+
   participantMinisters$: Observable<ParticipantSelectItemResponse[]>;
   scaleDialogData = injectBaseDialogData();
-  scaleSongFormArray: FormArray<
-    unknown,
-    FormGroup<{
-      scaleSongID: FormControl<number | null>;
-      isChecked: FormControl<boolean | null>;
-      memberID: FormControl<number | null | undefined>;
-      songID: FormControl<number | null>;
-      scaleID: FormControl<number | null>;
-      ministerName: FormControl<string | null | undefined>;
-      artistName: FormControl<string | null>;
-      songTitle: FormControl<string | null>;
-    }>
-  > = new FormArray([]);
+  scaleSongFormArray: ScaleSongFormArray = new FormArray([]);
 
   hasFormChanged = new Map<number, boolean>();
   canSubmit: boolean;
@@ -106,6 +122,7 @@ export class ScaleSongsDialog implements OnInit {
             const ministerControl = scaleSongFormGroup.get('memberID');
             ministerControl?.valueChanges
               .pipe(
+                untilDestroyed(this),
                 switchMap((memberID) => {
                   const songID = scaleSongFormGroup.get('songID')?.value;
                   if (!songID || !memberID) return of(null);
@@ -133,11 +150,32 @@ export class ScaleSongsDialog implements OnInit {
                     ...DEFAULT_MAT_DIALOG_CONFIG,
                   })
                   .afterClosed()
-                  .pipe(untilDestroyed(this), filter(Boolean))
-                  .subscribe((result) => {
-                    console.log({ result });
-                  });
+                  .pipe(untilDestroyed(this))
+                  .subscribe();
               });
+
+            const isCheckedControl = scaleSongFormGroup.get('isChecked');
+            if (!isCheckedControl) return;
+
+            isCheckedControl.valueChanges
+              .pipe(
+                untilDestroyed(this),
+                combineLatestWith(this.participantMinisters$),
+                filter(([, participantMinisters]) => participantMinisters.length === 1)
+              )
+              .subscribe(([isChecked, [minister]]) => {
+                if (!isChecked) return ministerControl?.setValue(null);
+                const ministerID = minister.memberID;
+                ministerControl?.setValue(ministerID);
+              });
+          });
+        }),
+        map((songListItems: AvailableScaleSongResponse[]) => {
+          return songListItems.map((songListItem: AvailableScaleSongResponse) => {
+            return {
+              song: songListItem,
+              formGroup: this.getScaleSongFormGroupBySongID(songListItem.songID),
+            };
           });
         })
       );
@@ -177,6 +215,11 @@ export class ScaleSongsDialog implements OnInit {
       songTitle: new FormControl(songListItem.title, Validators.required),
     });
 
+    this.setHasFormChangedListener(scaleSongFormGroup, songListItem);
+    return scaleSongFormGroup;
+  }
+
+  private setHasFormChangedListener(scaleSongFormGroup: ScaleSongFormGroup, songListItem: AvailableScaleSongResponse) {
     const initialValue = scaleSongFormGroup.value;
 
     scaleSongFormGroup.valueChanges.subscribe((value) => {
@@ -192,7 +235,13 @@ export class ScaleSongsDialog implements OnInit {
       this.hasFormChanged.set(songListItem.songID, hasChanged);
       this.canSubmit = this.hasChanged() && this.scaleSongFormArray.valid;
     });
+  }
 
-    return scaleSongFormGroup;
+  private getScaleSongFormGroupBySongID(songID: number): FormGroup {
+    const formGroup = this.scaleSongFormArray.controls.find(
+      (scaleSongFormGroup) => scaleSongFormGroup.get('songID')?.value === songID
+    ) as FormGroup;
+
+    return formGroup;
   }
 }

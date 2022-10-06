@@ -10,6 +10,7 @@ export interface IRoleResponse {
 export class RoleResponse implements IRoleResponse {
   @IsNumber()
   roleID: number;
+
   @IsString()
   name: string;
 

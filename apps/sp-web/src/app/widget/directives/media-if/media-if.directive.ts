@@ -26,6 +26,7 @@ export class MediaIfDirective<T> implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$), startWith(initialInnerWidth))
       .subscribe(() => {
         const innerWidth = window.innerWidth;
+        console.log({ mode: this.mode });
         const shouldHide = this.mode === 'gt' ? innerWidth <= this.size : innerWidth >= this.size;
         if (shouldHide) return this.viewContainer.clear();
 

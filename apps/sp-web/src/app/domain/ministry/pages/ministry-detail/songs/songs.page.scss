@@ -1,9 +1,56 @@
+@import 'functions';
+@import 'mixins';
+
+h1 {
+  @include flex-center;
+  mat-icon {
+    margin-right: 10px;
+  }
+}
+
+mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  background-color: var(--primary-color);
+}
+
 mat-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   grid-gap: 20px;
+
+  mat-paginator {
+    grid-column: 1 / -1;
+  }
 }
 
 .font-color {
   color: #fff !important;
+}
+
+mat-paginator {
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 8px;
+}
+
+.filter {
+  display: flex;
+  align-items: center;
+  margin-top: rem(10);
+  font-size: rem(15);
+  font-weight: normal;
+
+  &__bottom-divider {
+    margin-bottom: rem(20);
+  }
+}
+
+.filter-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-gap: 20px;
 }

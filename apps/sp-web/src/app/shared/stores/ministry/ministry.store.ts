@@ -157,6 +157,18 @@ export class MinistryStore extends NgSimpleStateBaseStore<MinistryState> {
     });
   }
 
+  decrementSongsQuantity() {
+    this.setState((state) => {
+      const previousCurrentMinistry = state.currentMinistry;
+
+      const newCurrentMinistry = previousCurrentMinistry
+        ? { ...previousCurrentMinistry, songsQuantity: previousCurrentMinistry.songsQuantity - 1 }
+        : undefined;
+
+      return { ...state, currentMinistry: newCurrentMinistry };
+    });
+  }
+
   incrementMinisterSongKeysQuantity() {
     this.setState((state) => {
       const previousCurrentMinistry = state.currentMinistry;

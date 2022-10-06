@@ -1,6 +1,20 @@
+@import 'custom-theme';
+
+mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  height: 50px !important;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
 
 mat-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   grid-gap: 20px;
+}
+
+mat-list-item {
+  background-color: $dark-bg-lighter-10;
+  border-radius: 8px;
 }

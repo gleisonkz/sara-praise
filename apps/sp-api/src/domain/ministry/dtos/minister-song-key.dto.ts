@@ -32,4 +32,8 @@ export class MinisterSongKeyListItemResponse implements IMinisterSongKeyListItem
   @ApiProperty()
   @IsString()
   songKey: string;
+
+  @ApiProperty()
+  @IsNumber()
+  songKeyID: number;
 }

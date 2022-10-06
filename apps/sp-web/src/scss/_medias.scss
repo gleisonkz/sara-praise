@@ -12,6 +12,62 @@ $media-small-tablet: 720;
 $media-mobile: 479;
 $media-tiny-mobile: 445;
 
+@mixin greater-than($size) {
+  @if $size == $desktop {
+    @media (min-width: #{$media-desktop + 1}px) {
+      @content;
+    }
+  } @else if $size == $large-tablet {
+    @media (min-width: #{$media-large-tablet + 1}px) {
+      @content;
+    }
+  } @else if $size == $tablet {
+    @media (min-width: #{$media-tablet + 1}px) {
+      @content;
+    }
+  } @else if $size == $small-tablet {
+    @media (min-width: #{$media-small-tablet + 1}px) {
+      @content;
+    }
+  } @else if $size == $mobile {
+    @media (min-width: #{$media-mobile + 1}px) {
+      @content;
+    }
+  } @else if $size == $tiny-mobile {
+    @media (min-width: #{$media-tiny-mobile + 1}px) {
+      @content;
+    }
+  }
+}
+
+@mixin less-than($size) {
+  @if $size == $desktop {
+    @media (max-width: #{$media-desktop}px) {
+      @content;
+    }
+  } @else if $size == $large-tablet {
+    @media (max-width: #{$media-large-tablet}px) {
+      @content;
+    }
+  } @else if $size == $tablet {
+    @media (max-width: #{$media-tablet}px) {
+      @content;
+    }
+  } @else if $size == $small-tablet {
+    @media (max-width: #{$media-small-tablet}px) {
+      @content;
+    }
+  } @else if $size == $mobile {
+    @media (max-width: #{$media-mobile}px) {
+      @content;
+    }
+  } @else if $size == $tiny-mobile {
+    @media (max-width: #{$media-tiny-mobile}px) {
+      @content;
+    }
+  }
+}
+
 @mixin tiny-mobile {
   @media screen and (max-width: ($media-tiny-mobile * 1px)) {
     @content;

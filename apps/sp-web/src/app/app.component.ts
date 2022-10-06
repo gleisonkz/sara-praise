@@ -1,4 +1,4 @@
-import { registerLocaleData } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import localePT from '@angular/common/locales/pt';
 import { Component, importProvidersFrom, LOCALE_ID } from '@angular/core';
@@ -7,11 +7,16 @@ import { bootstrapApplication, DomSanitizer } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
+import { MatButtonModule } from '@angular/material/button';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatIconRegistry } from '@angular/material/icon';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { JwtModule } from '@auth0/angular-jwt';
 import { HotToastModule } from '@ngneat/hot-toast';
+import { UntilDestroy } from '@ngneat/until-destroy';
 import { APP_ROUTES } from 'apps/sp-web/src/app/app.routes';
 import { tokenGetter } from 'apps/sp-web/src/app/domain/auth/auth.service';
 import {
@@ -26,12 +31,22 @@ registerLocaleData(localePT);
 
 @Component({
   selector: 'sp-root',
-  template: ` <router-outlet></router-outlet> `,
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [RouterModule],
+  imports: [
+    RouterModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatDividerModule,
+    CommonModule,
+    MatButtonModule,
+  ],
 })
+@UntilDestroy()
 export class AppComponent {
-  public constructor(domSanitizer: DomSanitizer, public matIconRegistry: MatIconRegistry) {
+  public constructor(domSanitizer: DomSanitizer, matIconRegistry: MatIconRegistry) {
     matIconRegistry.addSvgIcon('bass', domSanitizer.bypassSecurityTrustResourceUrl('assets/images/roles/bass.svg'));
     matIconRegistry.addSvgIcon(
       'microphone',

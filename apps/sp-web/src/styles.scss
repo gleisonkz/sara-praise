@@ -2,11 +2,26 @@
 @import 'mixins';
 @import 'colors';
 @import 'material-overrides';
+@import 'medias';
 
 body {
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
   padding: 0 20px 10px;
   background-color: $dark-background;
   color: #fff;
+
+  @include medias($tiny-mobile, $mobile) {
+    padding: 0 10px 10px;
+  }
+}
+
+.mat-button,
+body {
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
 }

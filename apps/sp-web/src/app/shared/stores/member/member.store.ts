@@ -57,7 +57,7 @@ export class MemberStore extends NgSimpleStateBaseStore<MemberState> {
       tap((member) => {
         this.setState((state) => ({
           ...state,
-          members: [...state.members.filter(({ memberID: targetID }) => targetID !== memberID), member],
+          members: state.members.map((m) => (m.memberID === memberID ? member : m)),
         }));
         this.toastService.success('Membro atualizado com sucesso!');
       })

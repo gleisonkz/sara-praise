@@ -1,16 +1,17 @@
-import { Ministry } from '@prisma/client';
-
-export const MINISTRIES: Omit<Ministry, 'ministryID'>[] = [
+export const MINISTRIES = [
   {
-    name: 'Sara Nossa Terra',
-    ownerID: 1,
+    "ministryID": 1,
+    "name": "Sara Nossa Terra",
+    "ownerID": 1
   },
   {
-    name: 'Lagoinha',
-    ownerID: 1,
+    "ministryID": 2,
+    "name": "Lagoinha",
+    "ownerID": 1
   },
   {
-    name: 'Getsemani',
-    ownerID: 1,
-  },
-];
+    "ministryID": 3,
+    "name": "Getsemani",
+    "ownerID": 1
+  }
+]

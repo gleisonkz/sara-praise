@@ -59,11 +59,26 @@ export class MinistryController {
   })
   @Get('/:ministryID/minister-song-key')
   async getMinisterSongKeysListItem(
-    @Param('ministryID') ministryID?: string
+    @Param('ministryID') ministryID: string
   ): Promise<MinisterSongKeyListItemResponse[]> {
     const ministerSongKeys = await this.ministryService.getMinisterSongKeysListItem(+ministryID);
 
     return ministerSongKeys;
+  }
+
+  @ApiQuery({ name: 'ministryID', required: false })
+  @ApiResponse({
+    status: HttpStatus.OK,
+    type: [MinisterSongKeyListItemResponse],
+  })
+  @Get('/:ministryID/minister-song-key/:songID')
+  async getMinisterSongKeyBySongID(
+    @Param('ministryID') ministryID: number,
+    @Param('songID') songID: number,
+    @Query('memberID') memberID: number
+  ): Promise<MinisterSongKeyListItemResponse> {
+    const ministerSongKey = await this.ministryService.getMinisterSongKeyBySongID(ministryID, memberID, songID);
+    return ministerSongKey;
   }
 
   @ApiQuery({ name: 'ministryID', required: false })
@@ -161,5 +176,10 @@ export class MinistryController {
   async getKeysByMinistryID(): Promise<SongKey[]> {
     const keys = await this.ministryService.getKeys();
     return keys;
+  }
+
+  @Get('/:ministryID/update-seed')
+  async updateSeed(): Promise<any> {
+    return this.ministryService.updateSeed();
   }
 }

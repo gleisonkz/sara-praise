@@ -1,7 +1,63 @@
-<mat-list *ngIf="songListItems$ | async as songs">
-  <ng-container *ngIf="songs.length > 0; else noSongsTemplate">
-    <sp-song-list-item *ngFor="let song of songs" [song]="song">
+<mat-toolbar>
+  <h1><mat-icon>label_important</mat-icon> Músicas</h1>
+
+  <sp-add-button (clickEvent)="showDialog()" buttonText="Nova Música"></sp-add-button>
+</mat-toolbar>
+
+<h2 class="filter">
+  <mat-icon>filter_alt</mat-icon>
+  Filtros
+</h2>
+<mat-divider class="filter__bottom-divider"></mat-divider>
+
+<div class="filter-container">
+  <mat-form-field>
+    <input type="text" matInput placeholder="Nome" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <input type="text" matInput placeholder="Artista" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Tom</mat-label>
+    <mat-select>
+      <mat-option *ngFor="let key of keys$ | async" [value]="key.songKeyID">
+        {{ key.notation }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<button class="search-button" mat-raised-button color="primary">Pesquisar</button>
+
+<mat-list
+  [@listStagger]="pagination.data.length"
+  *ngIf="songListItems$ | async as pagination"
+>
+  <ng-container *ngIf="pagination.data.length > 0; else noSongsTemplate">
+    <sp-song-list-item *ngFor="let song of pagination.data" [song]="song">
       <mat-icon class="font-color" mat-list-icon>music_note</mat-icon>
+
+      <button
+        mat-checkbox
+        mat-icon-button
+        [matMenuTriggerFor]="menu"
+        aria-label="Example icon-button with a menu"
+      >
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button (click)="showDialog(song.songID)" mat-menu-item>
+          <mat-icon>edit</mat-icon>
+          <span>Editar</span>
+        </button>
+        <button (click)="deleteSong(song.songID)" mat-menu-item>
+          <mat-icon>delete</mat-icon>
+          <span>Remover</span>
+        </button>
+      </mat-menu>
     </sp-song-list-item>
   </ng-container>
   <ng-template #noSongsTemplate>
@@ -9,4 +65,14 @@
       <p>Ainda não há músicas cadastradas.</p>
     </mat-list-item>
   </ng-template>
+
+  <mat-paginator
+    [length]="pagination.totalItems"
+    [pageSize]="pagination.pageSize"
+    [pageIndex]="pagination.currentPage -1"
+    [pageSizeOptions]="pageSizeOptions"
+    (page)="changePage($event)"
+    aria-label="Select page"
+  >
+  </mat-paginator>
 </mat-list>

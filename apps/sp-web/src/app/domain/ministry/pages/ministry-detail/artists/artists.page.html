@@ -1,8 +1,20 @@
+<mat-toolbar>
+  <button routerLink="../" mat-icon-button>
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <h1>Artistas</h1>
+
+  <button (click)="showDialog()" data-testid="create-ministry-button" mat-mini-fab>
+    <mat-icon>add</mat-icon>
+  </button>
+</mat-toolbar>
+
 <mat-list data-testid="artist-list" *ngIf="artistListItems$ | async as artists">
   <ng-container *ngIf="artists.length > 0; else noArtistsTemplate">
     <sp-artist-list-item
       [artist]="artist"
-      (editEvent)="edit($event)"
+      (editEvent)="showDialog($event)"
       (removeEvent)="remove($event)"
       *ngFor="let artist of artists"
     >

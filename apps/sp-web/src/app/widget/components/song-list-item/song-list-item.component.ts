@@ -4,6 +4,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 import { SongListItemResponse } from '@sp/shared-interfaces';
+import { MediaIfDirective } from '@sp/web/widget/directives';
 
 @Component({
   selector: 'sp-song-list-item',
@@ -11,9 +12,11 @@ import { SongListItemResponse } from '@sp/shared-interfaces';
     <div *ngIf="songOrder" class="ribbon">
       <span>{{ songOrder }}º</span>
     </div>
+
     <div class="icon">
       <ng-content> </ng-content>
     </div>
+
     <div class="description">
       <span> {{ song.artistName }}</span>
       <span> {{ song.title }}</span>
@@ -29,12 +32,12 @@ import { SongListItemResponse } from '@sp/shared-interfaces';
       <mat-icon [ngStyle]="{ color: song.hasAudioLink ? 'rgb(78 165 255)' : '' }">music_note</mat-icon>
     </div>
 
-    <ng-content select="mat-checkbox"></ng-content>
+    <ng-content select="[mat-checkbox]"></ng-content>
   `,
   styleUrls: ['./song-list-item.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule, MediaIfDirective],
 })
 export class SongListItemComponent {
   @Input() songOrder: number;

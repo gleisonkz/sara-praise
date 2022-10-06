@@ -1,12 +1,10 @@
-<mat-toolbar class="absolute">
+<mat-toolbar>
   <button routerLink="../" mat-icon-button>
     <mat-icon>arrow_back</mat-icon>
   </button>
 
   <h1>{{ scaleID ? 'Editar Escala' : 'Criar Escala' }}</h1>
 </mat-toolbar>
-
-<mat-divider></mat-divider>
 
 <mat-tab-group mat-stretch-tabs>
   <form [formGroup]="scaleFormGroup">
@@ -23,7 +21,7 @@
         <mat-icon matPrefix>mode_edit</mat-icon>
         <input
           matInput
-          placeholder="Ex. Escala de Aula"
+          placeholder="Ex. Culto da Familia"
           formControlName="title"
           type="text"
           matInput
@@ -37,7 +35,7 @@
             <input
               readonly
               (click)="picker.open()"
-              placeholder="Choose a date"
+              placeholder="Escolha uma data"
               formControlName="date"
               matInput
               [matDatepicker]="picker"
@@ -84,6 +82,50 @@
       </button>
     </mat-tab>
   </form>
+
+  <mat-tab label="Músicas" *ngIf="scaleID">
+    <ng-container *ngIf="scaleSongs$ | async as songListItems">
+      <ng-template mat-tab-label>
+        <div class="tab-label">
+          <div class="icon-container">
+            <mat-icon>library_music</mat-icon>
+            <span class="icon-container__text">{{songListItems.length}}</span>
+          </div>
+          <span class="tab-label-text">Músicas</span>
+        </div>
+      </ng-template>
+
+      <button
+        class="cta-button"
+        (click)="addSong()"
+        type="button"
+        mat-raised-button
+        color="primary"
+      >
+        <ng-container *ngIf="!songListItems.length; else withParticipantsTemplate">
+          <mat-icon>add</mat-icon> Adicionar Músicas
+        </ng-container>
+        <ng-template #withParticipantsTemplate>
+          <span>Gerenciar Músicas</span>
+        </ng-template>
+      </button>
+
+      <div class="song-list-items">
+        <sp-song-list-item
+          [song]="song"
+          *ngFor="let song of songListItems let index=index"
+          [songOrder]="index + 1"
+          (click)="openMinisterSongDialog(song)"
+        >
+          <img
+            style="border-radius: 50%; width: 50px; height: 50px"
+            alt="user image"
+            [src]="song.memberImageUrl"
+          />
+        </sp-song-list-item>
+      </div>
+    </ng-container>
+  </mat-tab>
 
   <mat-tab label="Participantes" *ngIf="scaleID">
     <ng-container *ngIf="participantListItems$ | async as participants">
@@ -144,49 +186,6 @@
           <p style="text-align: center">A escala ainda não possui nenhum participante</p>
         </ng-template>
       </ng-container>
-    </ng-container>
-  </mat-tab>
-
-  <mat-tab label="Músicas" *ngIf="scaleID">
-    <ng-container *ngIf="scaleSongs$ | async as songListItems">
-      <ng-template mat-tab-label>
-        <div class="tab-label">
-          <div class="icon-container">
-            <mat-icon>library_music</mat-icon>
-            <span class="icon-container__text">{{songListItems.length}}</span>
-          </div>
-          <span class="tab-label-text">Músicas</span>
-        </div>
-      </ng-template>
-
-      <button
-        class="cta-button"
-        (click)="addSong()"
-        type="button"
-        mat-raised-button
-        color="primary"
-      >
-        <ng-container *ngIf="!songListItems.length; else withParticipantsTemplate">
-          <mat-icon>add</mat-icon> Adicionar Músicas
-        </ng-container>
-        <ng-template #withParticipantsTemplate>
-          <span>Gerenciar Músicas</span>
-        </ng-template>
-      </button>
-
-      <div class="song-list-items">
-        <sp-song-list-item
-          [song]="song"
-          *ngFor="let song of songListItems let index=index"
-          [songOrder]="index + 1"
-        >
-          <img
-            style="border-radius: 50%; width: 50px; height: 50px"
-            alt="user image"
-            [src]="song.memberImageUrl"
-          />
-        </sp-song-list-item>
-      </div>
     </ng-container>
   </mat-tab>
 </mat-tab-group>

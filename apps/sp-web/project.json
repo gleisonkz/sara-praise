@@ -1,6 +1,5 @@
 {
   "projectType": "application",
-  "root": "apps/sp-web",
   "sourceRoot": "apps/sp-web/src",
   "prefix": "sp",
   "targets": {
@@ -85,7 +84,7 @@
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/apps/sp-web"],
       "options": {
-        "jestConfig": "apps/sp-web/jest.config.js",
+        "jestConfig": "apps/sp-web/jest.config.ts",
         "passWithNoTests": true
       }
     }

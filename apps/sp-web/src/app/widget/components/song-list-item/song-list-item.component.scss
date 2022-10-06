@@ -2,7 +2,7 @@
 @import 'mixins';
 
 :host {
-  background-color: $dark-bg-lighter-5;
+  background-color: $dark-bg-lighter-10;
   border-radius: 5px;
 
   position: relative;
@@ -12,11 +12,7 @@
   align-items: center;
   transition: background-color 0.2s ease-in-out;
 
-  display: grid;
   display: flex;
-  grid-template-rows: auto auto;
-  grid-template-columns: 40px auto auto auto auto;
-
   @include hover;
 
   .icon {

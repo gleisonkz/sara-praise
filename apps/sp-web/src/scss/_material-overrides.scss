@@ -1,10 +1,8 @@
+@import 'medias';
+
 .cdk-global-overlay-wrapper {
   overflow: auto;
   pointer-events: auto; // needed for chrome but prevents backdrop click close
-}
-
-mat-toolbar {
-  background-color: $color-primary-darker !important;
 }
 
 mat-toolbar.absolute {
@@ -23,13 +21,13 @@ mat-toolbar.absolute {
   }
 }
 
-.mat-menu-panel {
-  background: $dark-bg-lighter-10 !important;
-}
+// .mat-menu-panel {
+//   background: $dark-bg-lighter-10 !important;
+// }
 
-.mat-dialog-container {
-  background: $dark-bg-lighter-10 !important;
-}
+// .mat-dialog-container {
+//   background: $dark-bg-lighter-10 !important;
+// }
 
 mat-dialog-content {
   scrollbar-color: #d4aa70 #e4e4e4;
@@ -90,4 +88,15 @@ mat-card.mat-card {
   transition: filter 0.2s ease-in-out;
 
   @include hover;
+}
+
+.mat-paginator-container {
+  @include medias($tiny-mobile, $mobile) {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+
+    .mat-paginator-range-label {
+      margin: 0;
+    }
+  }
 }

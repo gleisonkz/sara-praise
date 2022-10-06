@@ -8,6 +8,11 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
 
+    <button mat-icon-button *ngIf="sidenav.mode === 'over'" (click)="sidenav.toggle()">
+      <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
+      <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
+    </button>
+
     <h1>{{ ministryListItem.name }}</h1>
 
     <button
@@ -23,10 +28,7 @@
         <mat-icon>share</mat-icon>
         <span>Compartilhar</span>
       </button>
-      <button
-        routerLink="/ministerios/1/escalas/{{ministryListItem.ministryID}}/edit"
-        mat-menu-item
-      >
+      <button mat-menu-item>
         <mat-icon>edit</mat-icon>
         <span>Editar</span>
       </button>
@@ -47,137 +49,50 @@
 
   <div class="toolbar-spacer"></div>
 
-  <nav class="desktop-nav" mat-tab-nav-bar mat-stretch-tabs *spMediaIf="510; mode 'gt'">
-    <a
-      mat-tab-link
-      [routerLink]="['escalas']"
-      routerLinkActive
-      #scaleLink="routerLinkActive"
-      [active]="scaleLink.isActive"
-    >
-      Escalas ({{ ministryListItem.scalesQuantity }})
-    </a>
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
+      <mat-icon class="avatar mat-elevation-z8">church</mat-icon>
 
-    <a
-      mat-tab-link
-      [routerLink]="['musicas']"
-      routerLinkActive
-      #musicLink="routerLinkActive"
-      [active]="musicLink.isActive"
-    >
-      Músicas ({{ ministryListItem.songsQuantity }})
-    </a>
+      <h4 class="name">{{ ministryListItem.name }}</h4>
 
-    <a
-      mat-tab-link
-      [routerLink]="['artistas']"
-      routerLinkActive
-      #artistsLink="routerLinkActive"
-      [active]="artistsLink.isActive"
-      data-testid="artist-tab"
-    >
-      Artistas ({{ ministryListItem.artistQuantity }})
-    </a>
+      <mat-divider></mat-divider>
 
-    <a
-      mat-tab-link
-      [routerLink]="['membros']"
-      routerLinkActive
-      #memberLink="routerLinkActive"
-      [active]="memberLink.isActive"
-    >
-      Membros ({{ ministryListItem.membersQuantity }})
-    </a>
+      <button mat-button class="menu-button" routerLink="escalas">
+        <mat-icon>today</mat-icon>
+        <span>Escalas ({{ministryListItem.scalesQuantity}})</span>
+      </button>
 
-    <a
-      mat-tab-link
-      [routerLink]="['tonalidades']"
-      routerLinkActive
-      #keyLink="routerLinkActive"
-      [active]="keyLink.isActive"
-    >
-      Tonalidades ({{ ministryListItem.songKeysQuantity }})
-    </a>
+      <button mat-button class="menu-button" routerLink="artistas">
+        <mat-icon>group</mat-icon>
+        <span>Artistas ({{ministryListItem.artistQuantity}})</span>
+      </button>
 
-    <button
-      data-testid="ministry-detail-add-button"
-      [class.active]="keyLink.isActive || memberLink.isActive || scaleLink.isActive"
-      mat-raised-button
-      (click)="
-      scaleLink.isActive && goToCreateScale() ||
-      musicLink.isActive && goToCreateMusic() ||
-      artistsLink.isActive && goToCreateArtist() ||
-      memberLink.isActive && goToCreateMinistryMember() ||
-          keyLink.isActive && goToCreateMinisterKey()
-        "
-    >
-      <mat-icon>add</mat-icon>
-    </button>
-  </nav>
+      <button mat-button class="menu-button" routerLink="musicas">
+        <mat-icon>library_music</mat-icon>
+        <span>Músicas ({{ministryListItem.songsQuantity}})</span>
+      </button>
+
+      <button mat-button class="menu-button" routerLink="membros">
+        <mat-icon>church</mat-icon>
+        <span>Membros ({{ministryListItem.membersQuantity}})</span>
+      </button>
+
+      <button mat-button class="menu-button" routerLink="tonalidades">
+        <mat-icon>music_note</mat-icon>
+        <span>Tonalidades ({{ministryListItem.songKeysQuantity}})</span>
+      </button>
+
+      <mat-divider></mat-divider>
+
+      <button mat-button class="menu-button" routerLink="/help">
+        <mat-icon>help</mat-icon>
+        <span>Help</span>
+      </button>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div class="content mat-elevation-z8">
+        <router-outlet></router-outlet>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </ng-container>
-
-<router-outlet></router-outlet>
-
-<footer *spMediaIf="510; mode 'lt'">
-  <mat-toolbar class="toolbarNav">
-    <button
-      class="floating-button"
-      *spMediaIf="510; mode 'lt'"
-      (click)="
-      scalesLink.isActive && goToCreateScale() ||
-      musicsLink.isActive && goToCreateMusic() ||
-      artistsLink.isActive && goToCreateArtist() ||
-      membersLink.isActive && goToCreateMinistryMember() ||
-      keysLink.isActive && goToCreateMinisterKey()"
-      mat-fab
-      aria-label="Example icon button with a delete icon"
-    >
-      <mat-icon>add</mat-icon>
-    </button>
-
-    <button
-      #scalesLink="routerLinkActive"
-      mat-flat-button
-      routerLink="escalas"
-      routerLinkActive="active-link"
-    >
-      <mat-icon>today</mat-icon>
-    </button>
-
-    <button
-      #artistsLink="routerLinkActive"
-      mat-flat-button
-      routerLink="artistas"
-      routerLinkActive="active-link"
-    >
-      <mat-icon>group</mat-icon>
-    </button>
-
-    <button
-      #musicsLink="routerLinkActive"
-      mat-flat-button
-      routerLink="musicas"
-      routerLinkActive="active-link"
-    >
-      <mat-icon>library_music </mat-icon>
-    </button>
-
-    <button
-      #membersLink="routerLinkActive"
-      mat-flat-button
-      routerLink="membros"
-      routerLinkActive="active-link"
-    >
-      <mat-icon>church</mat-icon>
-    </button>
-
-    <button
-      #keysLink="routerLinkActive"
-      mat-flat-button
-      routerLink="tonalidades"
-      routerLinkActive="active-link"
-    >
-      <mat-icon>music_note</mat-icon>
-    </button>
-  </mat-toolbar>
-</footer>

@@ -1,3 +1,11 @@
+mat-toolbar {
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
 .font-color {
   color: #fff !important;
 }
@@ -6,4 +14,11 @@ mat-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-gap: 20px;
+}
+
+button[mat-fab] {
+  position: fixed;
+  bottom: 56px;
+  right: 65px;
+  z-index: 100;
 }

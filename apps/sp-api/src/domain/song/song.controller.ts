@@ -1,8 +1,12 @@
-import { Body, Controller, Get, HttpStatus, Param, Post, Query, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+    Body, Controller, Get, HttpStatus, Param, Post, Put, Query, UseGuards
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { JwtGuard } from '@sp/api/domain/auth';
-import { AvailableSongResponse, SongListItemResponse } from '@sp/shared-interfaces';
+import {
+    AvailableSongResponse, Pagination, SongListItemResponse, SongResponse
+} from '@sp/shared-interfaces';
 
 import { SongRequestDto } from 'apps/sp-api/src/domain/song/dto/song.dto';
 import { UnauthenticatedUserResponseDto } from 'apps/sp-api/src/shared';
@@ -24,12 +28,33 @@ export class SongController {
     @Param('ministryID') ministryID: number,
     @Body() songRequestDto: SongRequestDto
   ): Promise<SongListItemResponse> {
+    console.log('songRequestDto', songRequestDto);
     return this.songService.create(+ministryID, songRequestDto);
   }
 
+  @ApiQuery({ name: 'pageSize', required: false })
+  @ApiQuery({ name: 'pageNumber', required: false })
   @Get()
-  findAll(@Param('ministryID') ministryID: number): Promise<SongListItemResponse[]> {
-    return this.songService.findAll(ministryID);
+  findAll(
+    @Param('ministryID') ministryID: number,
+    @Query('pageSize') pageSize: number,
+    @Query('pageNumber') pageNumber: number
+  ): Promise<Pagination<SongListItemResponse>> {
+    return this.songService.findAll(ministryID, pageSize, pageNumber);
+  }
+
+  @Get(':songID')
+  findByID(@Param('ministryID') ministryID: number, @Param('songID') songID: number): Promise<SongResponse> {
+    return this.songService.findOne(ministryID, songID);
+  }
+
+  @Put(':songID')
+  update(
+    @Param('ministryID') ministryID: number,
+    @Param('songID') songID: number,
+    @Body() songRequestDto: SongRequestDto
+  ): Promise<SongListItemResponse> {
+    return this.songService.update(ministryID, songID, songRequestDto);
   }
 
   @Get('/available/:ministerID')

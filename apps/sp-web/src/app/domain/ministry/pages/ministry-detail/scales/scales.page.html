@@ -1,3 +1,7 @@
+<button (click)="goToCreateScale()" data-testid="create-ministry-button" mat-fab>
+  <mat-icon>add</mat-icon>
+</button>
+
 <ng-container *ngIf="scaleListItems$ | async as scales">
   <ng-container *ngIf="scales.length; else noScalesTemplate">
     <mat-card

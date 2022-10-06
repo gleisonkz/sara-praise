@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 
 import {
     AvailableScaleSongResponse, eMinistryRole, IScaleResponse, MemberListItemResponse,
-    ParticipantListItem, ParticipantRequest, ParticipantSelectItemResponse, ScaleDetailResponse,
-    ScaleListItemResponse, ScaleRequest, ScaleSongRequest, ScaleSongResponse
+    MinisterSongRequest, ParticipantListItem, ParticipantRequest, ParticipantSelectItemResponse,
+    ScaleDetailResponse, ScaleListItemResponse, ScaleRequest, ScaleSongRequest, ScaleSongResponse
 } from '@sp/shared-interfaces';
 
 import { BaseApiService } from 'apps/sp-web/src/app/domain/ministry/core/services/base.api.service';
@@ -25,9 +25,9 @@ export class ScaleApiService extends BaseApiService {
     return this.http.get<ScaleListItemResponse[]>(url);
   }
 
-  findByID(ministryID: number, scaleID: number): Observable<IScaleResponse> {
+  findByID(ministryID: number, scaleID: number): Observable<ScaleDetailResponse> {
     const url = `${this.URL}/${ministryID}/scales/${scaleID}`;
-    return this.http.get<IScaleResponse>(url).pipe(
+    return this.http.get<ScaleDetailResponse>(url).pipe(
       map((scale) => {
         return {
           ...scale,
@@ -83,7 +83,7 @@ export class ScaleApiService extends BaseApiService {
     return this.http.get<ParticipantSelectItemResponse[]>(url, { params });
   }
 
-  createSong(ministryID: number, scaleID: number, scaleSongRequest: ScaleSongRequest[]): Observable<boolean> {
+  upsertSongs(ministryID: number, scaleID: number, scaleSongRequest: ScaleSongRequest[]): Observable<boolean> {
     console.log('scaleSongRequest', scaleSongRequest);
     const url = `${this.URL}/${ministryID}/scales/${scaleID}/songs`;
     return this.http.post<boolean>(url, scaleSongRequest);
@@ -102,5 +102,15 @@ export class ScaleApiService extends BaseApiService {
   findAllParticipantListItems(ministryID: number, scaleID: number): Observable<ParticipantListItem[]> {
     const url = `${this.URL}/${ministryID}/scales/${scaleID}/participant-list-items`;
     return this.getWithRuntimeValidation<ParticipantListItem[]>(url, ParticipantListItem);
+  }
+
+  updateMinisterSong(
+    ministryID: number,
+    scaleID: number,
+    songID: number,
+    ministerSongRequest: MinisterSongRequest
+  ): Observable<boolean> {
+    const url = `${this.URL}/${ministryID}/scales/${scaleID}/songs/${songID}`;
+    return this.http.put<boolean>(url, ministerSongRequest);
   }
 }

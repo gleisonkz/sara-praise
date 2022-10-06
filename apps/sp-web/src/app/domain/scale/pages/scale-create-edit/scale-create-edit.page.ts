@@ -17,8 +17,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import {
-    IScaleResponse, ParticipantListItem, ParticipantRequest, ScaleRequest, ScaleSongRequest,
-    ScaleSongResponse
+    ParticipantListItem, ParticipantRequest, ScaleRequest, ScaleSongRequest, ScaleSongResponse
 } from '@sp/shared-interfaces';
 import { injectMinistryID, injectOptionalRouteParam } from '@sp/web/shared/functions';
 import { SongListItemComponent } from '@sp/web/widget/components';
@@ -33,9 +32,10 @@ import {
 import {
     ScaleSongsDialog
 } from 'apps/sp-web/src/app/domain/scale/components/scale-songs/scale-songs.dialog';
+import { MinisterSongDialog } from 'apps/sp-web/src/app/domain/scale/dialogs/minister-song';
 import { ScaleApiService } from 'apps/sp-web/src/app/domain/scale/services/scale.api.service';
 import { MatTimepickerModule } from 'mat-timepicker';
-import { EMPTY, filter, Observable, ReplaySubject, skip, switchMap, tap } from 'rxjs';
+import { EMPTY, filter, Observable, of, ReplaySubject, skip, switchMap, tap } from 'rxjs';
 
 @UntilDestroy()
 @Component({
@@ -120,15 +120,38 @@ export class ScaleCreateEditPage implements OnInit {
 
     if (!this.scaleID) return;
 
-    this.participantListItems$ = this.scaleApiService.findAllParticipantListItems(this.ministryID, this.scaleID);
+    // this.participantListItems$ = this.scaleApiService.findAllParticipantListItems(this.ministryID, this.scaleID);
 
-    this.scaleApiService.findAllSongs(this.ministryID, this.scaleID).subscribe((scaleSongs) => {
-      this.scaleSongs$.next(scaleSongs);
-    });
+    // this.scaleApiService.findAllSongs(this.ministryID, this.scaleID).subscribe((scaleSongs) => {
+    //   this.scaleSongs$.next(scaleSongs);
+    // });
 
-    this.scaleApiService.findByID(this.ministryID, this.scaleID).subscribe((scale: IScaleResponse) => {
+    this.scaleApiService.findByID(this.ministryID, this.scaleID).subscribe((scale) => {
+      this.participantListItems$ = of(scale.participants) as Observable<ParticipantListItem[]>;
+      this.scaleSongs$.next(scale.songs);
       this.scaleFormGroup.patchValue(scale);
     });
+  }
+
+  openMinisterSongDialog(song: ScaleSongResponse): void {
+    const dialogRef = this.matDialog.open(MinisterSongDialog, {
+      data: {
+        scaleID: this.scaleID,
+        ministryID: this.ministryID,
+        song,
+      },
+
+      maxWidth: '800px',
+      width: '100%',
+      panelClass: 'sp-scale-modal',
+    });
+
+    dialogRef
+      .afterClosed()
+      .pipe(filter(Boolean))
+      .subscribe(() => {
+        this.toastService.success('MInistro atualizado com sucesso');
+      });
   }
 
   addParticipant() {
@@ -171,7 +194,7 @@ export class ScaleCreateEditPage implements OnInit {
         ministryID: this.ministryID,
       },
 
-      maxWidth: '800px',
+      maxWidth: '900px',
       width: '100%',
       panelClass: 'sp-scale-modal',
     });
@@ -181,14 +204,16 @@ export class ScaleCreateEditPage implements OnInit {
       .pipe(
         untilDestroyed(this),
         filter((songsRequest: ScaleSongRequest[]) => !!songsRequest?.length),
-        switchMap((songsRequest) =>
-          this.scaleID ? this.scaleApiService.createSong(this.ministryID, this.scaleID, songsRequest) : EMPTY
-        ),
-        switchMap(() => (this.scaleID ? this.scaleApiService.findAllSongs(this.ministryID, this.scaleID) : EMPTY))
+        switchMap((songsRequest) => {
+          return this.scaleID ? this.scaleApiService.upsertSongs(this.ministryID, this.scaleID, songsRequest) : EMPTY;
+        }),
+        switchMap(() => {
+          return this.scaleID ? this.scaleApiService.findAllSongs(this.ministryID, this.scaleID) : EMPTY;
+        })
       )
       .subscribe((songs) => {
         this.scaleSongs$.next(songs);
-        this.toastService.success('Música adicionada com sucesso');
+        this.toastService.success('Músicas atualizadas com sucesso');
       });
   }
 

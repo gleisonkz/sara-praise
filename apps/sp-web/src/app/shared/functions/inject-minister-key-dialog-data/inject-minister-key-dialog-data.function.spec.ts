@@ -31,8 +31,8 @@ describe('[DI Function] - injectMinisterKeyDialogData', () => {
     const dialog = TestBed.inject(MatDialog);
     const dialogData: MinisterKeyDialogData = {
       ministryID: 123,
-      memberID: null,
-      songID: null,
+      memberID: undefined,
+      songID: undefined,
     };
 
     dialog
@@ -50,8 +50,8 @@ describe('[DI Function] - injectMinisterKeyDialogData', () => {
     const dialog = TestBed.inject(MatDialog);
     const dialogData: MinisterKeyDialogData = {
       ministryID: 123,
-      memberID: null,
-      songID: null,
+      memberID: undefined,
+      songID: undefined,
       mode: eDialogMode.EDIT,
     };
 

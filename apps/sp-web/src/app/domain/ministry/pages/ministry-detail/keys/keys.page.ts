@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { IMinisterSongKeyListItemResponse } from '@sp/shared-interfaces';
 import { MinisterKeyDialogComponent } from '@sp/web/domain/ministry/components';
@@ -31,6 +32,7 @@ import { Observable, of } from 'rxjs';
     MatFormFieldModule,
     CommonModule,
     MatDialogModule,
+    MatToolbarModule,
   ],
 })
 export class KeysPage implements OnInit {
@@ -46,12 +48,12 @@ export class KeysPage implements OnInit {
     this.ministerSongKeyStore.remove(this.ministryID, songID, memberID).subscribe();
   }
 
-  edit(key: IMinisterSongKeyListItemResponse): void {
+  showDialog(key?: IMinisterSongKeyListItemResponse): void {
     const data: MinisterKeyDialogData = {
       ministryID: this.ministryID,
-      memberID: key.memberID,
-      songID: key.songID,
-      mode: eDialogMode.EDIT,
+      memberID: key?.memberID,
+      songID: key?.songID,
+      mode: key ? eDialogMode.EDIT : eDialogMode.CREATE,
     };
 
     this.matDialog.open(MinisterKeyDialogComponent, {

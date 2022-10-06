@@ -1,0 +1,48 @@
+<form [formGroup]="ministryKeyForm">
+  <h2>Trocar Ministro</h2>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Ministro</mat-label>
+    <mat-select formControlName="memberID">
+      <mat-option
+        *ngFor="let participant of participantMinisters$ | async"
+        [value]="participant.memberID"
+      >
+        {{ participant.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Música</mat-label>
+    <mat-select formControlName="songID">
+      <mat-option [value]="data.song.songID">
+        {{ data.song.title + ' / ' + data.song.artistName }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Tom</mat-label>
+    <mat-select [formControl]="keyIDControl">
+      <mat-option *ngFor="let key of sntKeys$ | async" [value]="key.songKeyID">
+        {{ key.notation }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div class="buttons-container">
+    <button
+      type="button"
+      color="accent"
+      mat-raised-button
+      (click)="submitForm()"
+      [disabled]="this.ministryKeyForm.invalid"
+    >
+      Confirmar
+    </button>
+    <button type="button" [mat-dialog-close]="false" mat-raised-button>Cancelar</button>
+  </div>
+
+  <p>{{ this.ministryKeyForm.getRawValue() | json }}</p>
+</form>

@@ -1,48 +1,56 @@
 <ng-container>
-  <h2 mat-dialog-title>Músicas</h2>
+  <mat-toolbar>
+    <h2 mat-dialog-title>Músicas</h2>
+
+    <button data-testid="create-ministry-button" mat-raised-button>Nova Música</button>
+  </mat-toolbar>
 
   <mat-dialog-content class="mat-typography">
     <mat-form-field class="search" appearance="outline">
       <mat-label>Pesquisar por nome</mat-label>
-      <input matInput placeholder="Nome da música" />
+      <input
+        [formControl]="searchControl"
+        matInput
+        placeholderLabel="Nome da música ou artista"
+      />
     </mat-form-field>
 
     <div class="songs-container">
       <div
         class="song"
         [style.display]="'grid'"
-        *spFor="let song of songListItems$ else 'Ainda não foi cadastrada nenhuma música' let length=length let index=index"
+        *ngFor="let item of songListItems$ | async | spPropertyFilter : 'song.title' : searchControl.value "
         (click)="checkboxRef.toggle()"
-        [formGroup]="scaleSongFormArray.controls[index]"
+        [formGroup]="item.formGroup"
       >
         <div class="icon">
           <mat-icon class="font-color" mat-list-icon>music_note</mat-icon>
         </div>
 
         <div class="description">
-          <span> Artista: {{ song.artistName }}</span>
-          <span> Nome: {{ song.title }}</span>
-          <span class="key"> Tom: {{ song.key }} </span>
+          <span> Artista: {{ item.song.artistName }}</span>
+          <span> Nome: {{ item.song.title }}</span>
+          <span class="key"> Tom: {{ item.song.key }} </span>
         </div>
 
         <div class="links">
-          <mat-icon [ngStyle]="{ color: song.hasLyricLink ? '#f0f086' : '' }"
+          <mat-icon [ngStyle]="{ color: item.song.hasLyricLink ? '#f0f086' : '' }"
             >format_color_text</mat-icon
           >
-          <mat-icon [ngStyle]="{ color: song.hasChordsLink ? '#5ce85c' : '' }"
+          <mat-icon [ngStyle]="{ color: item.song.hasChordsLink ? '#5ce85c' : '' }"
             >format_indent_increase</mat-icon
           >
-          <mat-icon [ngStyle]="{ color: song.hasYoutubeLink ? '#f46161' : '' }"
+          <mat-icon [ngStyle]="{ color: item.song.hasYoutubeLink ? '#f46161' : '' }"
             >live_tv</mat-icon
           >
-          <mat-icon [ngStyle]="{ color: song.hasAudioLink ? 'rgb(78 165 255)' : '' }"
+          <mat-icon [ngStyle]="{ color: item.song.hasAudioLink ? 'rgb(78 165 255)' : '' }"
             >music_note</mat-icon
           >
         </div>
 
         <mat-checkbox
-          [checked]="song.isChecked"
-          [formControl]="scaleSongFormArray.controls[index].controls.isChecked"
+          [checked]="item.song.isChecked"
+          [formControl]="item.formGroup.controls.isChecked"
           (click)="$event.stopPropagation()"
           #checkboxRef
         ></mat-checkbox>
@@ -54,9 +62,9 @@
         >
           <mat-label>Ministro</mat-label>
           <mat-select
-            [formControl]="scaleSongFormArray.controls[index].controls.memberID"
+            [formControl]="item.formGroup.controls.memberID"
             [spDisableControl]="!checkboxRef.checked"
-            [spSetOnSelect]="scaleSongFormArray.controls[index].controls.ministerName"
+            [spSetOnSelect]="item.formGroup.controls.ministerName"
           >
             <mat-option
               *ngFor="let minister of participantMinisters$ | async"
@@ -76,5 +84,6 @@
     <button [disabled]="!canSubmit" (click)="submitForm()" mat-button color="primary">
       Salvar
     </button>
+    <button (click)="submitForm()" mat-button color="primary">Salvar</button>
   </mat-dialog-actions>
 </ng-container>

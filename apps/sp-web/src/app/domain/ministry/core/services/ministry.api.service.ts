@@ -47,6 +47,16 @@ export class MinistryApiService extends BaseApiService {
     return this.http.get<IMinisterSongKeyListItemResponse[]>(url);
   }
 
+  getMinisterSongKeyBySongID(
+    ministryID: number,
+    songID: number,
+    memberID: number
+  ): Observable<IMinisterSongKeyListItemResponse> {
+    const url = `${this.URL}/${ministryID}/minister-song-key/${songID}`;
+    const params = new HttpParams().set('memberID', memberID.toString());
+    return this.http.get<IMinisterSongKeyListItemResponse>(url, { params });
+  }
+
   hasMinisterSongKey(ministryID: number, memberID: number, songID: number) {
     const url = `${this.URL}/${ministryID}/has-minister-song-key`;
     const params = new HttpParams().set('memberID', memberID.toString()).set('songID', songID.toString());

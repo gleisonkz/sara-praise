@@ -15,7 +15,7 @@
 
   <mat-form-field appearance="fill">
     <mat-label>Música</mat-label>
-    <mat-select formControlName="songID" placeholder="Bank" #singleSelect>
+    <mat-select formControlName="songID" #singleSelect>
       <mat-option>
         <ngx-mat-select-search
           placeholderLabel="Buscar Música"
@@ -39,14 +39,20 @@
     </mat-select>
   </mat-form-field>
 
-  <button
-    type="button"
-    color="accent"
-    mat-raised-button
-    (click)="submitForm()"
-    [disabled]="this.ministryKeyForm.invalid"
-  >
-    Confirmar
-  </button>
-  <button type="button" mat-dialog-close mat-raised-button>Cancelar</button>
+  <div class="buttons-container">
+    <button
+      type="button"
+      color="accent"
+      mat-raised-button
+      (click)="submitForm()"
+      [disabled]="this.ministryKeyForm.invalid"
+    >
+      Confirmar
+    </button>
+    <button type="button" mat-dialog-close mat-raised-button>Cancelar</button>
+  </div>
+
+  <p>
+    {{ this.ministryKeyForm.value | json }}
+  </p>
 </form>

@@ -8,6 +8,7 @@
       "rules": {
         "no-restricted-syntax": ["off", "console"],
         "eslint@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
         "@angular-eslint/no-input-rename": "off",
         "@angular-eslint/component-class-suffix": [
           "error",
